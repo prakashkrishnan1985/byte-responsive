@@ -1,0 +1,61 @@
+.text-node {
+    position: relative;
+    padding: 0 5px;
+    /* border-radius: 5px; */
+    overflow: hidden;
+    word-wrap: break-word;
+    box-sizing: border-box;
+    max-height:'1000px',
+  }
+
+  .border-black-dotted{
+    border: 0.1rem dotted #227ebb;
+  }
+  
+  .text-node-editing {
+    height: auto; /* Allow auto height adjustment */
+  }
+  
+  .text-node-title {
+    cursor: text;
+    padding: 0 5px;
+    height: auto; /* Allow for dynamic height */
+    font-size: 10px;
+  }
+
+  .text-node-title strong{
+    
+  }
+
+  .text-node-input{
+    font-weight: 600;
+  }
+  
+  .text-node-input,
+  .text-node-textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0;
+    font-size: 10px;
+    overflow: hidden;
+    word-wrap: break-word;
+  }
+  
+  .text-node-textarea {
+    resize: none; /* Disable resizing */
+    border: none; /* Remove border */
+    outline: none; /* Remove outline */
+    line-height: 1.5; /* Line height for better readability */
+  }
+  
+  .resize-handle {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    cursor: nwse-resize; /* Resize cursor */
+    width: 20px; /* Size of the resize handle */
+    height: 20px; /* Size of the resize handle */
+    background: transparent; /* Transparent background */
+    z-index: 10; /* Ensure it is on top */
+  }
+  

@@ -1,0 +1,34 @@
+/* Add this CSS to your stylesheets */
+
+.rendered-content {
+    color: white; /* Ensure text is white */
+    background-color: black; /* Set background to black */
+  }
+  
+  .rendered-content h1,
+  .rendered-content p {
+    color: white; /* Ensure headings and paragraphs are white */
+  }
+  
+  /* Optional: Style any specific elements further as needed */
+  /* .rendered-content img {
+    max-width: 100%;
+    height: auto;
+  } */
+
+.ql-editor{
+  .h2{
+    color:black;
+  }
+  
+}
+
+.quill-description{
+  p{
+    margin:0;
+    padding:0;
+    span{
+      color:#ffffff !important;
+    }
+  }
+}

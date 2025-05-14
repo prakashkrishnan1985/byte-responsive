@@ -1,0 +1,28 @@
+.section-PERSONAS {
+    color: #800080;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.section {
+    color: #800080;
+    font-size: 18px;
+    padding: 5px;
+    font-weight: 500;
+}
+
+.title2 {
+    font-size: 38px;
+    padding: 5px 0px;
+    text-transform: uppercase;
+}
+
+.title span {
+    font-weight: 1000;
+}
+
+.fullText {
+    font-size: 18px;
+    padding: 10px;
+
+}

@@ -1,0 +1,111 @@
+.dndflow {
+    flex-direction: column;
+    display: flex;
+    flex-grow: 1;
+    height: 100%;
+  }
+  
+  .dndflow aside {
+    padding: 0px 10px;
+    font-size: 12px;
+    color: #fcfcfc;
+    background-color: transparent;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .dndflow .sidebar{
+    border: 1px solid #eee;
+    border-radius: 10px;
+    margin-top: auto;
+    padding: 2px;
+  }
+
+  .dndflow .sidebar .toolbox-title{
+    text-align: left;
+    padding: 5px 0px 0px 30px;
+  }
+
+  .toolbox-description{
+    padding-top: 10px;
+    padding-left: 10px;
+  }
+
+  .dndflow .sidebar .toolbox-title{
+    font-weight: 600;
+    font-size: 20px;
+  }
+  
+  .dndflow aside .description {
+    margin-bottom: 10px;
+  }
+  
+  .dndflow .dndnode {
+    padding: 9px;
+    border: 2px dotted #fcfcfc;
+    border-radius: 2px;
+    margin-bottom: 10px;
+    display: flex;
+    cursor: grab;
+    margin: 15px;
+    width: auto;
+    border-radius:15px;
+    flex-direction: column;
+    align-items: flex-start;
+    align-content: flex-start;
+    font-size: 13px;
+    /* line-height: 19.5px; */
+    text-align: center;
+  }
+
+  .dndflow .dndnode .title{
+    font-weight: 600;
+    font-size: 15px;
+  }
+  
+  .dndflow .dndnode.input {
+    border-color: #0041d0;
+  }
+  
+  .dndflow .dndnode.output {
+    border-color: #ff0072;
+  }
+  
+  .dndflow .reactflow-wrapper {
+    flex-grow: 1;
+    height: 100%;
+    transition: height 0.3s ease; /* Smooth transition */
+  }
+  
+  .dndflow .selectall {
+    margin-top: 10px;
+  }
+  .react-flow__panel a{
+    display: none;
+  }
+
+  .glowing-border {
+    border: 2px solid #4a90e2;
+    box-shadow: 0 0 5px #4a90e2, 0 0 25px #4a90e2, 0 0 50px #4a90e2, 0 0 100px #4a90e2;
+    transition: box-shadow 0.5s;
+  }
+  
+  
+  @media screen and (min-width: 768px) {
+    .dndflow {
+      /* flex-direction: row; */
+    }
+  
+    .dndflow aside {
+      /* width: 20%;
+      max-width: 250px; */
+    }
+
+    .dndflow .sidebar {
+      position: relative;
+      width: 100%;
+      /* max-width: 1050px; */
+    }
+  }
+

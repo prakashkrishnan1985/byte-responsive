@@ -1,0 +1,174 @@
+/* Purchase container */
+.purchase-credits-container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0px 20px 20px 20px;
+    background-color: #1a1a1a;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    min-height: 100vh; /* Make the container take at least full height */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    position: relative;
+}
+
+/* Title */
+.purchase-credit {
+    font-size: 28px;
+    margin-bottom: 0px;
+    color: #fff;
+    position: relative;
+    top: 0; /* Fix it to the top of the container */
+    z-index: 2; /* Ensure it is above the other content */
+}
+
+/* Centering the radio buttons */
+.purchase-type-selector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    position: relative;
+    top: 0px; /* Position below the title */
+    z-index: 1; /* Ensure it is above the cards */
+    padding: 10px 0;
+}
+
+/* Radio option styling */
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Adjust the gap between radio and label */
+}
+
+/* Modern radio button design */
+.radio-option input {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #6700C3;
+    margin-right: 8px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+    background-color: #2c2c2c;
+    padding: 10px;
+}
+
+.radio-option input:checked {
+    background-color: #6700C3;
+    border-color: #6700C3;
+}
+
+.radio-option input:checked::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #fff;
+}
+
+.radio-option label {
+    font-size: 16px;
+    cursor: pointer;
+    color: #fff;
+    margin: 0;
+    line-height: 20px;
+}
+
+/* Fancy separator line after radio buttons */
+.separator {
+    width: 80%;
+    height: 3px;
+    background: linear-gradient(90deg, #6700C3, #ff7f50, #6700C3); /* Fancy gradient effect */
+    margin: 0px 0 20px 0px;
+    position: relative;
+}
+
+/* Credit options grid */
+.credit-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 30px;
+    width: 100%;
+    max-width: 1000px;
+}
+
+/* Styling individual credit option cards */
+.credit-option-card {
+    background-color: #3c3c3c;
+    border: 2px solid #6700C3;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.credit-option-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.credit-option-card h3 {
+    font-size: 20px;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.credit-option-card .price {
+    font-size: 18px;
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.credit-option-card .credits {
+    font-size: 16px;
+    color: #b0b0b0;
+    margin-bottom: 20px;
+}
+
+.credit-option-card button {
+    background-color: #6700C3;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    display: inline-block;
+}
+
+.credit-option-card button:disabled {
+    background-color: #b0b0b0;
+    cursor: not-allowed;
+}
+
+.credit-option-card button:hover {
+    background-color: #8b00d1;
+}
+
+/* Error message styling */
+.error {
+    color: #ff4d4d;
+    font-size: 16px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* General text styling for Customer ID */
+.purchase-credits-container p {
+    font-size: 18px;
+    color: #fff;
+}

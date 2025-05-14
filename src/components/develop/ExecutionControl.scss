@@ -1,0 +1,24 @@
+.execution-control {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px;
+  }
+  
+  .execution-control__button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .execution-control__button:hover {
+    background-color: #45a049;
+  }
+  
+  .execution-control__button:focus {
+    outline: none;
+  }
+  

@@ -1,0 +1,193 @@
+.big-container{
+    background-color: black;
+    height: auto;
+    width: auto;
+}
+.container1{
+    background-color: transparent;
+    height: auto;
+    width:500px;
+    padding:  80px;
+    margin-left: 20px;
+}
+.title{
+    height: 100px;
+    width: 200px;
+}
+.text{
+    height: 200px;
+    width: 400px;
+}
+.head2{
+    color: white;
+    text-transform: uppercase;
+    font-size: 40px;
+}
+.head{
+    color: white;
+    font-size: 40px;
+}
+p{
+    color: gray;
+}
+.pic{
+    width: 380px;
+    height: 240px;
+}
+ #container2{
+    height: 200px;
+    width: 250px;;
+    background-color: transparent;
+    margin-left: 35px;
+}
+.container3{
+    height: 200px;
+    width: 750px;;
+    background-color: transparent;
+    margin-left: 250px;
+}
+.container4{
+    height: 200px;
+    width: 700px;;
+    background-color: transparent;
+    margin-left: 150px;
+}
+#ctr2{
+    height: 400px;
+    width: auto;
+    background-color: transparent;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+#form1{
+    height: auto;
+    width: auto;
+    margin-left: 70px;
+    margin-bottom: 30px;
+}
+label{
+    color: white;
+    margin-bottom: 20px;
+}
+.title{
+    width:400px;
+    height: 50px;
+}
+
+.author{
+    width:400px;
+    height: 50px;
+}
+
+.title_0{
+    width:400px;
+    height: 50px;
+}
+.description{
+    width:400px;
+    height: 150px;
+}
+
+.im_title{
+    width:400px;
+    height: 50px;
+}
+.im_description{
+    width:400px;
+    height: 150px;
+}
+
+.last_title{
+    width:400px;
+    height: 50px;
+}
+.last_description{
+    width:400px;
+    height: 150px;
+}
+
+.img2_title{
+    width:400px;
+    height: 50px;
+}
+.img2_description{
+    width:400px;
+    height: 150px;
+}
+
+.con2_title{
+    width:400px;
+    height: 50px;
+}
+.con2_description{
+    width:400px;
+    height: 150px;
+}
+
+.description_0{
+    width:400px;
+    height: 150px;
+}
+
+.card{
+    height:450px;
+    width:auto;
+    margin: 40px;
+    background: linear-gradient(261.49deg, #3E3E3E 0%, #101010 31.14%, #000000 52.18%, #101010 76.66%, #3E3E3E 99.88%);
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+
+}
+
+.growth{
+    height: 20px;
+    width:50px;
+    background-color:white;
+}
+
+#heading{
+    font-size: 45px;
+    color: white;
+}
+
+.para{
+  color: grey;
+}
+
+.para1{
+    color: white;
+}
+
+.box1{
+    height: 400px;
+    width: 700px;
+    margin-left: 40px;
+    margin-top: 40px
+}
+
+
+.box2{
+    height: 400px;
+    width: 700px;
+    margin-top: 250px;
+    margin-left: 110px;
+}
+
+.written{
+    color: gray;
+
+}
+
+#jack{
+    color: white;
+}
+
+#btn{
+    height: 50px;
+    width: 250px;
+    background-color: black;
+    color: white;
+    margin-left: 600px;
+}

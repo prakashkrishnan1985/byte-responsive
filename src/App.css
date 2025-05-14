@@ -1,0 +1,56 @@
+.copyright {
+  bottom: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+  border: 1px solid blue;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.02);
+    opacity: 0.9;
+    border: 1px solid green;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+input {
+  padding: 12px 16px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  margin: 0px;
+  background: var(--colors-command);
+  color: rgb(11, 14, 20);
+}
+
+/* override toast css */
+.custom-toast {
+  background-color: #2d6414 !important;
+  color: white !important;
+}
+
+@media (max-width: 768px) {
+  #root {
+    width: 100%;
+    overflow: hidden;
+  }
+}

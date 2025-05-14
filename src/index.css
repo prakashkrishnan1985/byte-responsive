@@ -1,0 +1,79 @@
+
+ body {
+  font-family: 'LilGrotesk', sans-serif; /* Apply the font globally */
+  /* background-color: black; */
+  overflow-x: hidden;
+}
+
+h1 {
+  font-family: 'LilGrotesk', sans-serif;
+  font-weight: normal; /* Regular weight */
+}
+
+h2 {
+  font-family: 'LilGrotesk', sans-serif;
+  font-weight: normal; /* Bold weight */
+}
+
+h3 {
+  font-family: 'LilGrotesk', sans-serif;
+  font-weight: normal; /* Black weight */
+}
+
+h4 {
+  font-family: 'LilGrotesk', sans-serif;
+  font-weight: normal; /* Medium weight */
+}
+
+h5 {
+  font-family: 'LilGrotesk', sans-serif;
+  font-weight: normal; /* Thin weight */
+}
+
+/* Light weight */
+p {
+  font-family: 'LilGrotesk', sans-serif;
+  font-weight: normal;  /* Light weight */
+}
+
+
+
+body {
+  margin: 0;
+  font-family: 'LilGrotesk', sans-serif; 
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.chatbot__button{
+  display:none;
+}
+
+.custom-toast-website{
+  background-color: #000 !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+  padding: 10px !important;
+  font-size: 16px !important;
+  border-color: #800080 !important;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+.custom-toast-website .Toastify__progress-bar--success{
+  background-color: #800080 !important;
+}
+
+.custom-toast-website svg{
+  fill:#800080 !important;
+}
+
+
+
+/* .MuiContainer-root {
+  padding: 0 !important;
+} */

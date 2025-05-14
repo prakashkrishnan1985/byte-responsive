@@ -1,0 +1,295 @@
+/* Hero Section */
+.hero {
+  display: flex;
+  text-align: end;
+  width: 402px;
+  max-width: 100%;
+  background: linear-gradient(261.82deg, #000000 5.01%, #666666 99.55%);
+  border-radius: 10px;
+  padding: 25px 20px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  color: white;
+  text-align: center;
+  height: 283px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.hero:hover {
+  transform: translateY(-10px); 
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
+  cursor: pointer;
+}
+.rightAlign {
+  display: inline-flex;
+}
+
+.hero .container {
+  display: block;
+  text-align: end;
+}
+
+.hero .icon {
+  margin: auto;
+}
+
+.hero .title_ {
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 10px;
+  width: 105px;
+}
+
+.hero .sub-title {
+  font-size: 16px;
+  font-weight: 400;
+  color: #fff;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.hero .subtext {
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 10px;
+  width: 230px;
+}
+
+.hero .buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.hero .primary-button {
+  background-color: #800080;
+  color: white;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 30px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.hero .secondary-button {
+  background-color: transparent;
+  color: #800080;
+  padding: 15px 30px;
+  border: 2px solid #800080;
+  border-radius: 30px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* Features Section */
+.features {
+  display: flex;
+  text-align: end;
+  width: 471px;
+  max-width: 100%;
+  background: linear-gradient(261.82deg, #000000 5.01%, #666666 99.55%);
+  border-radius: 10px;
+  padding: 18px 18px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  color: white;
+  text-align: center;
+  height: 235px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.features:hover {
+  transform: translateY(-10px); 
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
+  cursor: pointer;
+}
+
+.features .container {
+  display: block;
+  text-align: end;
+}
+
+.features .icon {
+  margin: auto;
+}
+
+.features .feature {
+  width: 48%;
+}
+
+.features .title_ {
+  font-size: 28px;
+  color: #fff;
+  margin-bottom: 12px;
+  width: 200px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.features p {
+  margin: 0;
+  font-size: 16px;
+  color: #ffff;
+  width: 300px;
+}
+
+.features .subtext {
+  font-size: 16px;
+  font-weight: 400;
+  color: #fff;
+  text-transform: uppercase;
+  margin: 15px 0;
+}
+
+/* Languages Section */
+.languages {
+  display: flex;
+  text-align: end;
+  width: 404px;
+  max-width: 100%;
+  background: linear-gradient(261.82deg, #000000 5.01%, #666666 99.55%);
+  border-radius: 10px;
+  padding: 15px 18px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  color: white;
+  text-align: center;
+  height: 296px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.languages:hover {
+  transform: translateY(-10px); 
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
+  cursor: pointer;
+}
+
+.languages .icon {
+  padding: 20px 12px 0 0;
+  height: 100px;
+}
+
+.languages .container {
+  display: block;
+  text-align: end;
+  position: relative;
+  right: 142px;
+  padding-bottom: 2px;
+}
+
+.languages .title_ {
+  font-size: 28px;
+  color: #fff;
+  width: 200px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.languages h3 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+
+}
+
+.languages p {
+  padding: 0px;
+  font-size: 16px;
+  color: #ffff;
+  width: 400px;
+}
+
+.languages .bottomText {
+  font-weight: 400;
+  text-transform: uppercase;
+  color: #fff;
+  margin-left: -10px;
+}
+
+.m0 {
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero{
+    height:auto;
+    flex-direction: column;
+  }
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero h2 {
+    font-size: 1.5rem;
+  }
+
+  .hero .subtext {
+    font-size: 1rem;
+  }
+
+  .features {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .features .feature {
+    width: 100%;
+  }
+
+  .languages h3 {
+    font-size: 1.5rem;
+  }
+  .hero .container {
+    text-align: justify;
+  }
+  .hero .title_{
+    width: 100%;
+  }
+  .features .title_{
+    width: 100%;
+  }
+  .features p {
+    width: 100%;
+    justify-content: justify;
+  } 
+
+  .hero .subtext {
+    width: 100%;
+  }
+  
+
+  .languages{
+    height:auto;
+    flex-direction: column;
+  }
+  .languages .container {
+    text-align: justify;
+    position: relative;
+    right: 0px;
+  }
+  .languages .title_{
+    width: 100%;
+  }
+  .languages p {
+    width: 100%;
+  }
+  .languages .bottomText{
+    margin-left: 0px;
+  }
+
+  
+.languages .icon {
+  height: auto;
+}
+
+
+}
+
+@media (min-width: 1600px) {
+  .hero,
+  .features,
+  .languages {
+    width: 100%;
+  }
+  .languages .container {
+    right: 0px;
+  }
+}

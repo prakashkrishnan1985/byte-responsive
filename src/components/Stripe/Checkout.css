@@ -1,0 +1,36 @@
+.filling-box-container {
+    display: inline-block;
+    perspective: 1000px; /* Create a 3D space for any possible future rotation effects */
+    padding: 40px;
+    background-color: #f0f0f0;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 300px; /* Limit the width */
+    height: 60px; /* Set the height for the filling bar */
+    position: relative;
+  }
+  
+  .filling-box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%; /* Start with width 0% */
+    height: 100%;
+    background-color: #6700C3; /* Color of the filling */
+    border-radius: 15px; /* Rounded corners */
+    animation: fillBox 3s infinite linear; /* Filling animation */
+  }
+  
+  @keyframes fillBox {
+    0% {
+      width: 0%; /* Start at 0% width */
+    }
+    50% {
+      width: 50%; /* Fill to 50% at halfway through the animation */
+    }
+    100% {
+      width: 100%; /* Full width at the end of the animation */
+    }
+  }
+  

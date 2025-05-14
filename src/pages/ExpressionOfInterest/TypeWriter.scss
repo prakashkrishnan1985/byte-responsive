@@ -1,0 +1,21 @@
+.typewriter {
+    transition: opacity 1s ease-in-out;
+    opacity: 1;
+  }
+  
+  .typewriter-enter {
+    opacity: 0;
+  }
+  
+  .typewriter-enter-active {
+    opacity: 1;
+  }
+  
+  .typewriter-exit {
+    opacity: 1;
+  }
+  
+  .typewriter-exit-active {
+    opacity: 0;
+  }
+  

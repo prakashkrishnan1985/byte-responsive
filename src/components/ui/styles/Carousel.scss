@@ -1,0 +1,177 @@
+// SASS variable for media query breakpoint
+$breakpoint-desktop: 992px;
+$breakpoint-tablet: 768px;
+$breakpoint-mobile: 767px;
+
+// Resetting default styles
+ul {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+// Fix for jumping arrows
+.carousel-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.carousel {
+  position: relative;
+}
+
+// Carousel slides
+.carousel__slide {
+  margin-right: auto;
+  margin-left: auto;
+  display: none;
+  max-width: 900px;
+  list-style-type: none;
+  text-align: center;
+
+  @media (max-width: $breakpoint-tablet) {
+    padding-right: 30px; 
+    padding-left: 30px; 
+  }
+
+  @media (max-width: $breakpoint-mobile) {
+    padding-right: 20px; 
+    padding-left: 20px;
+  }
+
+  &--active {
+    display: block;
+  }
+}
+
+// Content of slides
+.carousel-slide__content {
+  margin-bottom: 19px;
+  font-family: 'LilGrotesk', sans-serif;
+  font-size: 25px;
+  line-height: 36px;
+
+  @media (max-width: $breakpoint-tablet) {
+    font-size: 22px; 
+  }
+
+  @media (max-width: $breakpoint-mobile) {
+    font-size: 18px;
+  }
+}
+
+.carousel-slide__author,
+.carousel-slide__source {
+  font-family: 'LilGrotesk', sans-serif;
+  font-size: 14px;
+
+  @media (min-width: $breakpoint-desktop) {
+    font-size: 16px;
+  }
+
+  @media (max-width: $breakpoint-tablet) {
+    font-size: 15px;
+  }
+
+  @media (max-width: $breakpoint-mobile) {
+    font-size: 14px;
+  }
+}
+
+.carousel-slide__source {
+  font-style: italic;
+  color: #888;
+}
+
+// Carousel arrows
+.carousel__arrow {
+  position: absolute;
+  top: 50%;
+  display: block;
+  color: white;
+  cursor: pointer;
+  opacity: .75;
+  transform: translateY(-50%);
+  transition: opacity .15s cubic-bezier(.4, 0, 1, 1);
+
+  &:focus {
+    outline: 0;
+  }
+
+  &:hover {
+    opacity: .5;
+  }
+
+  &--left {
+    left: 135px;
+    top: 51px;
+
+    @media (max-width: $breakpoint-tablet) {
+      left: 30px;
+    }
+
+    @media (max-width: $breakpoint-mobile) {
+      left: 15px;
+    }
+  }
+
+  &--right {
+    right: 135px;
+    top: 51px;
+
+    @media (max-width: $breakpoint-tablet) {
+      right: 30px;
+    }
+
+    @media (max-width: $breakpoint-mobile) {
+      right: 15px;
+    }
+  }
+}
+
+// Carousel indicators
+.carousel__indicators {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 20px;
+
+  li {
+    &:nth-of-type(n + 2) {
+      margin-left: 9px;
+    }
+  }
+}
+
+.carousel__indicator {
+  display: block;
+  width: 33px;
+  height: 3px;
+  background-color: #7BFF00;
+  cursor: pointer;
+  opacity: .15;
+  transition: opacity .15s cubic-bezier(.4, 0, 1, 1);
+
+  &:hover {
+    opacity: .5;
+  }
+
+  &--active {
+    &,
+    &:hover {
+      opacity: .75;
+      width: 60px;
+    }
+  }
+
+  @media (max-width: $breakpoint-tablet) {
+    width: 40px;
+    height: 4px;
+  }
+
+  @media (max-width: $breakpoint-mobile) {
+    width: 50px;
+    height: 5px;
+  }
+}
