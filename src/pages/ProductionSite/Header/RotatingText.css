@@ -24,11 +24,15 @@
   .text-rotate-lines {
     display: flex;
     flex-direction: column;
+    align-items: center;
     width: 100%;
   }
   
   .text-rotate-element {
-    display: inline-block;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
   
   .text-rotate-space {

@@ -20,7 +20,7 @@ const Header: React.FC = () => {
 
   // Use MUI's useTheme and useMediaQuery for responsive design
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
   const actionEvent1 = async () => {
     await dispatch(setTypeOfUser("Customer"));
     navigate("/beta");
@@ -33,7 +33,9 @@ const Header: React.FC = () => {
     <>
       <Box
         sx={{
-          height: { xs: "auto", sm: "300px", md: "480px", lg:'480px', xl:'480px' },
+          height: {
+            xs: "auto",
+          },
           width: "100%",
           display: "flex",
           flexDirection: "column",
@@ -41,8 +43,9 @@ const Header: React.FC = () => {
           justifyContent: "center",
           textAlign: "center",
           position: "relative",
-          pt: { xs: 0, sm: 0 },
           pb: { xs: 2, sm: 0 },
+          paddingTop: { xs: "50px", sm: "90px", md: "100px" },
+          paddingX: { xs: 0, md: 6 },
         }}
       >
         <Typography
@@ -63,7 +66,13 @@ const Header: React.FC = () => {
             gap: isMobile ? "0.5rem" : 0, // Add spacing for stacked items
           }}
         >
-          {isMobile? <Box component="span" sx={{fontSize:'5rem'}}>AI CURATED</Box> : <Box component="span">AI CURATED&nbsp;</Box>}
+          {isMobile ? (
+            <Box component="span" sx={{ fontSize: "5rem" }}>
+              AI CURATED
+            </Box>
+          ) : (
+            <Box component="span">AI CURATED&nbsp;</Box>
+          )}
           <Box component="span">
             <TrueFocus
               sentence="BY&nbsp;YOU FOR&nbsp;YOU"
@@ -78,13 +87,6 @@ const Header: React.FC = () => {
 
         <Typography
           sx={{
-            // position: isMobile ? "static" : "absolute", // Remove position for mobile
-            // top: isMobile ? "auto" : "50%", // Adjust top for mobile
-            // left: isMobile ? "auto" : "80%", // Adjust left for mobile
-            // transform: isMobile ? "none" : "translate(-50%, -50%)", // Remove transform for mobile
-            // width: "300px",
-            // textAlign: "right",
-            // color: "#800080",
             fontSize: isMobile ? "1.5rem" : "2.5rem",
             fontWeight: "bold",
             textAlign: isMobile ? "center" : "right",
@@ -96,11 +98,13 @@ const Header: React.FC = () => {
             sx={{
               display: "flex",
               justifyContent: isMobile ? "center" : "flex-end",
+              gap: "0.5rem",
               flexWrap: "wrap",
               color: "#000",
             }}
           >
-            <span style={{paddingBottom: isMobile?'10px':'0px'}}>Build AI Agents&nbsp;&nbsp;</span>
+            <span>Build AI Agents</span>
+
             <RotatingText
               texts={[" in minutes", " zero code", " on prem", " on cloud"]}
               mainClassName="flex justify-center items-center px-2 sm:px-2 md:px-3 bg-cyan-300 text-black overflow-hidden py-0.5 sm:py-1 md:py-2 rounded-lg text-center w-full"
@@ -114,35 +118,7 @@ const Header: React.FC = () => {
               rotationInterval={2000}
             />
           </Box>
-          <div
-            style={{
-              marginTop: "0.4rem",
-              fontSize: "0.9rem",
-              fontWeight: "400",
-              textAlign: "center",
-              color: "#000",
-            }}
-          >
-            {/* <DecryptedText
-              text="Your products, your agents. Your AI"
-              animateOn="view"
-              revealDirection="center"
-              speed={100}
-            /> */}
-          </div>
         </Typography>
-        {/* Adjust image size for mobile */}
-        {/* <Typography
-          variant={isMobile ? "h4" : "h2"} // Adjust typography for mobile
-          sx={{
-            color: "black",
-            font: "Mulish",
-            size: isMobile ? "2rem" : "3.35rem", // Adjust font size for mobile
-            marginTop: isMobile ? "15px" : "0px", // Adjust margin for mobile
-          }}
-        >
-          <b>FOR YOU</b>
-        </Typography> */}
         <Typography
           variant="h1"
           sx={{
@@ -153,7 +129,7 @@ const Header: React.FC = () => {
             width: "100%",
             textAlign: "center",
             color: "#F5F1F9",
-            fontSize: { xs: "4rem", sm: "8rem", md: "14rem" },
+            fontSize: { xs: "4rem", sm: "6rem", md: "12rem", lg: "14rem" },
             fontWeight: "bold",
             zIndex: -1,
             letterSpacing: { xs: "5px", sm: "10px" },
@@ -162,81 +138,17 @@ const Header: React.FC = () => {
         >
           AI STUDIO
         </Typography>
-        {/* <Typography
-          variant="h1"
-          sx={{
-            position: isMobile ? "static" : "absolute", // Remove position for mobile
-            top: isMobile ? "auto" : "50%", // Adjust top for mobile
-            left: isMobile ? "auto" : "50%", // Adjust left for mobile
-            transform: isMobile ? "none" : "translate(-50%, -50%)", // Remove transform for mobile
-            width: "100%",
-            textAlign: "center",
-            color: "#F5F1F9",
-            fontSize: isMobile ? "4rem" : "14rem", // Adjust font size for mobile
-            fontWeight: "bold",
-            zIndex: isMobile ? "auto" : -1, // Adjust zIndex for mobile
-            letterSpacing: isMobile ? "5px" : "10px", // Adjust letter spacing for mobile
-          }}
-        >
-          AI STUDIO
-        </Typography> */}
-        <Typography
-          sx={{
-            position: isMobile ? "static" : "absolute",
-            top: isMobile ? "auto" : "50%",
-            left: isMobile ? "auto" : "80%",
-            transform: isMobile ? "none" : "translate(-50%, -50%)",
-            width: "300px",
-            textAlign: "right",
-            color: "#800080",
-            fontSize: "1.5rem",
-            fontWeight: "bold",
-          }}
-        >
-          {/* <Box
-            sx={{ display: "flex", justifyContent: "flex-end", color: "#000" }}
-          >
-            <span>Build AI Agents&nbsp;</span>
-            <RotatingText
-              texts={[" in minutes", " zero code", " on prem", " on cloud"]}
-              mainClassName="px-2 sm:px-2 md:px-3 bg-cyan-300 text-black overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
-              staggerFrom={"last"}
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              exit={{ y: "-120%" }}
-              staggerDuration={0.025}
-              splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
-              transition={{ type: "spring", damping: 30, stiffness: 400 }}
-              rotationInterval={2000}
-            />
-          </Box> */}
-          {/* <div
-            style={{
-              marginTop: "0.4rem",
-              fontSize: "0.9rem",
-              fontWeight: "400",
-              textAlign: "center",
-              color: "#000",
-            }}
-          >
-            <DecryptedText
-              text="Your products, your agents. Your AI"
-              animateOn="view"
-              revealDirection="center"
-              speed={100}
-            />
-          </div> */}
-        </Typography>
       </Box>
-      <Box
+      {/* <Box
         sx={{
           width: "auto",
           display: "flex",
-          flexDirection: { xs: "column", sm: "row" },
+          flexDirection: { xs: "column", md: "row" },
           alignItems: "center",
           justifyContent: "space-between",
           padding: { xs: 2, sm: 0 },
           gap: { xs: 4, sm: 0 },
+          position: "relative",
         }}
       >
         <Box
@@ -299,7 +211,7 @@ const Header: React.FC = () => {
             />
           </Box>
         </Box>
-      </Box>
+      </Box> */}
     </>
   );
 };
