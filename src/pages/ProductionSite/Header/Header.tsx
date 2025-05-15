@@ -146,7 +146,7 @@ const Header: React.FC = () => {
           flexDirection: { xs: "column", md: "row" },
           alignItems: "center",
           justifyContent: "space-between",
-          paddingX: 2,
+          paddingX: "20px",
           paddingTop: { xs: 6, sm: 8, md: 10, lg: 24 },
           gap: { xs: 4, sm: 0 },
           position: "relative",
