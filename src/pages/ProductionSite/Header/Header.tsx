@@ -139,14 +139,15 @@ const Header: React.FC = () => {
           AI STUDIO
         </Typography>
       </Box>
-      {/* <Box
+      <Box
         sx={{
           width: "auto",
           display: "flex",
           flexDirection: { xs: "column", md: "row" },
           alignItems: "center",
           justifyContent: "space-between",
-          padding: { xs: 2, sm: 0 },
+          paddingX: 2,
+          paddingTop: { xs: 6, sm: 8, md: 10, lg: 24 },
           gap: { xs: 4, sm: 0 },
           position: "relative",
         }}
@@ -211,7 +212,7 @@ const Header: React.FC = () => {
             />
           </Box>
         </Box>
-      </Box> */}
+      </Box>
     </>
   );
 };
