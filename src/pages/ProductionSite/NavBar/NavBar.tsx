@@ -69,7 +69,7 @@ const Navbar: React.FC = () => {
             widget.style.zIndex = "9999";
             if (innerContainer) {
               el.style.position = "fixed";
-              el.style.top = "-40px";
+              el.style.top = "40px";
               el.style.bottom = "auto";
               el.style.right = "20px";
               el.style.left = "auto";
@@ -85,26 +85,26 @@ const Navbar: React.FC = () => {
       return;
     }
 
-    if (!document.querySelector(`script[src="${SCRIPT_SRC}"]`)) {
-      const script = document.createElement("script");
-      script.src = SCRIPT_SRC;
-      script.async = true;
-      script.type = "text/javascript";
+    // if (!document.querySelector(`script[src="${SCRIPT_SRC}"]`)) {
+    //   const script = document.createElement("script");
+    //   script.src = SCRIPT_SRC;
+    //   script.async = true;
+    //   script.type = "text/javascript";
 
-      script.onload = () => {
-        const waitForDefinition = setInterval(() => {
-          if (customElements.get(WIDGET_TAG)) {
-            const widget = document.createElement(WIDGET_TAG);
-            widget.setAttribute("agent-id", AGENT_ID);
-            document.body.appendChild(widget);
-            styleWidget();
-            clearInterval(waitForDefinition);
-          }
-        }, 100);
-      };
+    //   script.onload = () => {
+    //     const waitForDefinition = setInterval(() => {
+    //       if (customElements.get(WIDGET_TAG)) {
+    //         const widget = document.createElement(WIDGET_TAG);
+    //         widget.setAttribute("agent-id", AGENT_ID);
+    //         document.body.appendChild(widget);
+    //         styleWidget();
+    //         clearInterval(waitForDefinition);
+    //       }
+    //     }, 100);
+    //   };
 
-      document.body.appendChild(script);
-    }
+    //   document.body.appendChild(script);
+    // }
   }, []);
 
   return (
@@ -120,16 +120,17 @@ const Navbar: React.FC = () => {
               location.pathname.startsWith("/blog/")
                 ? "#000"
                 : headerColor,
-            paddingLeft: "20px",
             border: "none",
             boxShadow: "none",
-            padding: "10px 0",
+            padding: "10px 10px 10px 20px",
           }}
         >
           <Toolbar
+            disableGutters
             sx={{
               display: "flex",
               justifyContent: "space-between",
+              alignItems: "center",
               width: "100%",
             }}
           >
@@ -144,7 +145,6 @@ const Navbar: React.FC = () => {
                   : "black"
               }
             />
-            {/* <GetInTouch /> */}
           </Toolbar>
         </AppBar>
       </Box>
