@@ -5,7 +5,7 @@ import IMG3 from "../../../assets/noaicodeneeded.png";
 import TwoTabComponent from "./tab";
 import RotatingImage from "../Sppiner/RotatingImage";
 import "./personas.css";
-import { Box, Grid, useMediaQuery } from "@mui/material";
+import { Box, Grid, Typography, useMediaQuery } from "@mui/material";
 import theme from "../../../components/theme/theme";
 
 const MovingBackground: React.FC = () => {
@@ -22,49 +22,83 @@ const MovingBackground: React.FC = () => {
   }, []);
 
   return (
-    <Box id="parsonas">
-      <Box sx={{ width: "689px" }}>
-        <Box>
-          <Box
-            className="section-PERSONAS"
+    <Box
+      id="parsonas"
+      sx={{
+        paddingTop: "80px",
+        position: "relative",
+      }}
+    >
+      <Box>
+        <Box sx={{ position: "relative" }}>
+          <Typography
             sx={{
               marginTop: { xs: "0rem", md: "4rem" },
-              padding: { xs: "0px 0px 0px 25px", md: "42px 0px 0px 32px" },
+              color: "#800080",
+              fontSize: { xs: "32px", md: "42px" },
+              fontWeight: "500",
+              textAlign: {
+                xs: "center",
+                md: "left",
+              },
+              paddingX: "20px",
             }}
           >
             PERSONAS
-          </Box>
+          </Typography>
           <Box
             id="All"
             sx={{
               display: "flex",
-              position: "absolute",
-              padding: { xs: "0", md: "20px 10px" },
-              margin: { xs: "0", md: "0rem 20px" },
+              position: "relative",
+              padding: { xs: "0" },
               zIndex: 2,
+              width: "100%",
+              justifyContent: "center",
             }}
           >
             <Grid
               container
               spacing={3}
-              sx={{ width: "100%", paddingLeft: { xs: "24px", sm: "0px" } }}
+              sx={{
+                width: "100%",
+                margin: "0 !important",
+              }}
             >
-              <Grid item xs={12} md={6} lg={6}>
-                <Box id="right" sx={{ width: "100%" }}>
-                  <div className="title2">
+              <Grid
+                item
+                xs={12}
+                md={6}
+                lg={6}
+                sx={{
+                  padding: "0 !important",
+                }}
+              >
+                <Box
+                  id="right"
+                  sx={{
+                    width: "100%",
+                    paddingX: "20px",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      paddingY: "5px",
+                    }}
+                  >
                     <span style={{ fontWeight: "600" }}>
                       BUILD AI YOUR WAY{" "}
                     </span>{" "}
                     <i>Your Infra or Cloud. ByteSized Agents Works Anywhere.</i>
-                  </div>
-                  <div className="fullText">
+                  </Typography>
+                  <Typography sx={{ fontSize: "18px" }}>
                     ByteSizedAI gives you the power to create and deploy
                     AI-driven solutions wherever you need them — whether your
                     agents are running on-premises, in the cloud, or seamlessly
                     transitioning between both. From innovative brainstorming to
                     robust deployment, ByteSizedAI adapts to your needs, helping
                     you unlock new possibilities without limitations.
-                  </div>
+                  </Typography>
                   <div style={{ display: "flex", justifyContent: "center" }}>
                     <RotatingImage height="290" />
                   </div>
@@ -75,39 +109,35 @@ const MovingBackground: React.FC = () => {
                 xs={12}
                 md={6}
                 lg={6}
-                sx={{
-                  width: { xs: "100vw", md: "auto" },
-                  padding: 0,
-                  margin: 0,
-                  maxWidth:{xs:"93vw !important", md:"auto"},
-                  // paddingLeft: {xs:"0px !important", sm:'auto'},
-                  // paddingRight: "-24px !important",
-                }}
                 spacing={0}
+                sx={{
+                  padding: {
+                    xs: "20px 0 !important",
+                    sm: "20px 20px !important",
+                  },
+                  margin: "0 !important",
+                }}
               >
-                <Box
-                  id="left"
-                  sx={{
-                    width: { sm: "100%", md: "100%", padding: 0, margin: 0 },
+                <div
+                  style={{
+                    background: "#0000001A",
+                    borderRadius: "10px",
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    padding: "20px",
+                    overflow: "scroll",
                   }}
                 >
-                  <div
-                    style={{
-                      background: "#0000001A",
-                      padding: isMobile ? "0px 0px 30px 0px" : "30px",
-                      borderRadius: "10px",
+                  <Box
+                    sx={{
+                      background: "#FFFFFF33",
+                      paddingRight: { xs: "0px", sm: "0" },
                     }}
                   >
-                    <Box
-                      sx={{
-                        background: "#FFFFFF33",
-                        paddingRight: { xs: "0px", sm: "0" },
-                      }}
-                    >
-                      <TwoTabComponent />
-                    </Box>
-                  </div>
-                </Box>
+                    <TwoTabComponent />
+                  </Box>
+                </div>
               </Grid>
             </Grid>
           </Box>
@@ -117,9 +147,8 @@ const MovingBackground: React.FC = () => {
       {/* Background image section */}
       <Box
         sx={{
-          width: "100vw",
           height: { xs: "90vh", sm: "90vh" },
-          position: { xs: "fixed", sm: "relative" }, // fixed only on mobile
+          position: { xs: "fixed", sm: "absolute" }, // fixed only on mobile
           top: 0,
           left: 0,
           backgroundImage: `url(${IMG1})`,
@@ -128,6 +157,8 @@ const MovingBackground: React.FC = () => {
           filter: "blur(1rem)",
           zIndex: -1,
           pointerEvents: "none",
+          width: "100%",
+          overflow: "hidden",
         }}
       >
         <Box
@@ -149,19 +180,20 @@ const MovingBackground: React.FC = () => {
       <Box
         sx={{
           display: { xs: "block", sm: "none" },
-          height: { xs: "75vh", sm: "90vh", md: "90vh" },
         }}
       />
 
       {/* Next content (noaicodeneeded image) */}
       <Box
         sx={{
-          position: "relative",
-          bottom: {xs:"150px", sm:"150px", md:"150px", lg:"120px", xl:"280px"},
-          width: {xs:"100%", sm:"80%", md:"80%", lg:"80%", xl:"80%"},
-          
-          padding: {xs:"10px", sm:"0 100px", md:"0 100px", lg:"0 130px", xl:"0 280px"},
-          margin: "20px",
+          position: {
+            xs: "absolute",
+            md: "relative",
+          },
+          top: {
+            xs: "45%",
+          },
+          padding: "20px",
         }}
       >
         <img src={IMG3} width="100%" />
