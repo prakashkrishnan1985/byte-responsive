@@ -5,7 +5,6 @@ import IMG1 from "../../../assets/bg-blur.png";
 import IMG3 from "../../../assets/noaicodeneeded.png";
 import "./personas.css";
 const BackgroundBox = ({
-
   blur = "20%", // Blur intensity
   opacity = 0, // Opacity of the background
   rotate = 0, // Rotation angle in degrees
@@ -22,15 +21,15 @@ const BackgroundBox = ({
   return (
     <Box
       sx={{
-
-        height: {xs:"80vh", md:"50vh"},
+        height: { xs: "100vh", md: "58vh" },
         position: "relative",
         backgroundImage: `url(${IMG1})`,
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
         backgroundPosition: "center",
         padding: "180px",
-         
+        width: "100%",
+        overflow: "auto",
       }}
     >
       {/* Overlay with rotation and opacity */}
@@ -46,10 +45,9 @@ const BackgroundBox = ({
           transition: "transform 10s ease-out",
           filter: `blur(${blur})`,
           opacity: opacity,
-
         }}
       />
-     
+
       {/* Content */}
       <Box
         sx={{
@@ -67,11 +65,7 @@ const BackgroundBox = ({
         {children}
       </Box>
     </Box>
-    
   );
 };
 
 export default BackgroundBox;
-
-
-
