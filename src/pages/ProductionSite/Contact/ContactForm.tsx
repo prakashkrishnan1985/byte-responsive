@@ -11,7 +11,9 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 import { postInquiry } from "../CallOfAction/userAgentService";
-import PhoneInputWithCountrySelect, { isValidPhoneNumber } from "react-phone-number-input";
+import PhoneInputWithCountrySelect, {
+  isValidPhoneNumber,
+} from "react-phone-number-input";
 import { BorderBottom } from "@mui/icons-material";
 
 interface InquiryPayload {
@@ -58,7 +60,7 @@ const ContactForm: React.FC = () => {
         email: "",
         message: "",
         user_type: "",
-        mobile:"",
+        mobile: "",
       });
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
@@ -67,13 +69,13 @@ const ContactForm: React.FC = () => {
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     if (mobile) {
       setFormData((prev) => ({ ...prev, mobile }));
     } else {
       setFormData((prev) => ({ ...prev, mobile: "" }));
     }
-  },[mobile])
+  }, [mobile]);
 
   return (
     <Container
@@ -82,9 +84,12 @@ const ContactForm: React.FC = () => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        minHeight: { xs: "auto", sm: "100vh" },
+        minHeight: { xs: "auto", sm: "100%" },
         backgroundColor: "#fff",
-        padding: 4,
+        marginTop: "50px",
+        padding: "20px !important",
+        width: "100%",
+        maxWidth: "2400px !important",
       }}
     >
       <Typography
@@ -141,7 +146,6 @@ const ContactForm: React.FC = () => {
         component="form"
         onSubmit={handleSubmit}
         sx={{
-          maxWidth: 852,
           width: "100%",
           backgroundColor: "#000",
           padding: 4,
@@ -214,7 +218,9 @@ const ContactForm: React.FC = () => {
             placeholder="Enter your mobile number"
             defaultCountry="US"
             value={mobile}
-            onChange={(value) => {setMobile(value || "");}}
+            onChange={(value) => {
+              setMobile(value || "");
+            }}
             className="custom-phone-input"
             style={{
               borderBottom: "1px solid gray",
