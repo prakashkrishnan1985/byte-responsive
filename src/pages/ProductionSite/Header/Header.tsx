@@ -44,7 +44,6 @@ const Header: React.FC = () => {
           textAlign: "center",
           position: "relative",
           pb: { xs: 2, sm: 0 },
-          paddingTop: { xs: "50px", sm: "90px", md: "100px" },
           paddingX: { xs: 0, md: 6 },
         }}
       >

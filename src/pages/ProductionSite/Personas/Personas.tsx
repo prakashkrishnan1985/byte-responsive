@@ -25,7 +25,6 @@ const MovingBackground: React.FC = () => {
     <Box
       id="parsonas"
       sx={{
-        paddingTop: "80px",
         position: "relative",
       }}
     >
@@ -91,7 +90,7 @@ const MovingBackground: React.FC = () => {
                     </span>{" "}
                     <i>Your Infra or Cloud. ByteSized Agents Works Anywhere.</i>
                   </Typography>
-                  <Typography sx={{ fontSize: "18px" }}>
+                  <Typography sx={{ fontSize: "18px", paddingTop: "20px" }}>
                     ByteSizedAI gives you the power to create and deploy
                     AI-driven solutions wherever you need them — whether your
                     agents are running on-premises, in the cloud, or seamlessly
@@ -126,7 +125,7 @@ const MovingBackground: React.FC = () => {
                     display: "flex",
                     justifyContent: "center",
                     padding: "20px",
-                    overflow: "scroll",
+                    overflow: "hidden",
                   }}
                 >
                   <Box
