@@ -4,7 +4,7 @@ import RotatingImage from "../Sppiner/RotatingImage";
 
 const features = [
   {
-    id: "01",
+    id: "00",
     title: "Bring Your Own Application (BYOA)",
     description:
       "Our BYOA architecture helps you identify opportunities in your product stack to build AI agents that integrate seamlessly into your products.",
@@ -56,12 +56,25 @@ const AboutPage = () => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        minHeight: "100vh",
+        minHeight: "900px",
         backgroundColor: "#000",
         color: "#fff",
         padding: 4,
-        maxWidth:{xs:"100%", sm:"1400px", md:"1400px", lg:"1300px", xl:"1600px"},
-        borderRadius:{xs:"0px", sm:"0px", md:"10px", lg:"10px", xl:"10px"},
+        marginTop: "50px",
+        maxWidth: {
+          xs: "100%",
+          sm: "1400px",
+          md: "1400px",
+          lg: "1300px",
+          xl: "100%",
+        },
+        borderRadius: {
+          xs: "0px",
+          sm: "0px",
+          md: "10px",
+          lg: "10px",
+          xl: "10px",
+        },
       }}
       id="about"
     >
@@ -99,108 +112,102 @@ const AboutPage = () => {
           <RotatingImage height="220" />
         </Grid>
       </Grid>
-      <Grid container spacing={4} sx={{ xs:{mt:2}, sm:{mt: 6}}}>
-        {features.map((feature, index) =>
-          index === 0 ? (
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              md={3}
-              key={index}
-              sx={{ width: "10px", marginLeft: "-2rem" }}
-            ></Grid>
-          ) : (
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              md={3}
-              key={feature.id}
-              sx={{
-                width: "100%",
-                maxWidth: { xs: "100%", sm: "48%", md: "24%" },
-                marginLeft: index === 4 ? { xs: 0, md: "8rem" } : 0,
-              }}
-            >
-              <Box sx={{ display: "flex", flexDirection: "column" }}>
-                <Box
+      <Grid container spacing={4} sx={{ xs: { mt: 2 }, sm: { mt: 6 } }}>
+        {features.map((feature, index) => (
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={3}
+            key={feature.id}
+            sx={{
+              width: "100%",
+              maxWidth: { xs: "100%", sm: "48%", md: "24%" },
+              marginLeft: index === 4 ? { xs: 0, md: "8rem" } : 0,
+            }}
+          >
+            <Box sx={{ display: "flex", flexDirection: "column" }}>
+              <Box
+                sx={{
+                  display: { xs: "flex", md: "block", sm: "flex" },
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                  width: "100%",
+                  gap: 1,
+                }}
+              >
+                <Typography
+                  variant="h6"
                   sx={{
-                    display: { xs: "flex", md: "block", sm: "flex" },
-                    alignItems: "center",
-                    justifyContent: "flex-start",
-                    width: "100%",
-                    gap: 1,
+                    mt: 1,
+                    display: { xs: "none", md: "block" },
                   }}
                 >
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      mt: 1,
-                      display: { xs: "none", md: "block" }
-                    }}
-                  >
-                    {feature.id}
-                  </Typography>
-                  <Typography
-                    variant="h4"
-                    sx={{
-                      fontWeight: "bold",
-                      opacity: 0.8,
-                      position: "relative",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        width: 10,
-                        height: 10,
-                        borderRadius: "50%",
-                        backgroundColor: "#fff",
-                        mr: 1,
-                      }}
-                    />
-                    <Box
-                      sx={{
-                        flexGrow: 0.5,
-                        height: "0.5px",
-                        backgroundColor: "#323232",
-                        mx: 0,
-                      }}
-                    />
-                    <Box
-                      sx={{
-                        flexGrow: 0.5,
-                        height: "0.5px",
-                        backgroundColor: "#323232",
-                        mx: 0,
-                      }}
-                    />
-                  </Typography>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      maxWidth: { md: "75%", sm: "0" },
-                      lineHeight: 1.1,
-                      margin: { xs: "15px 0", sm: "0" },
-                      minHeight: { md: "45px", sm: "0" },
-                    }}
-                  >
-                    {feature.title}
-                  </Typography>
-                </Box>
-
+                  {feature.id}
+                </Typography>
                 <Typography
-                  variant="body2"
-                  sx={{ opacity: 0.8, mt: 1, color: "#fff", paddingLeft:{xs:'22px', sm:'0px'} }}
+                  variant="h4"
+                  sx={{
+                    fontWeight: "bold",
+                    opacity: 0.8,
+                    position: "relative",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
                 >
-                  {feature.description}
+                  <Box
+                    sx={{
+                      width: 10,
+                      height: 10,
+                      borderRadius: "50%",
+                      backgroundColor: "#fff",
+                      mr: 1,
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      flexGrow: 0.5,
+                      height: "0.5px",
+                      backgroundColor: "#323232",
+                      mx: 0,
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      flexGrow: 0.5,
+                      height: "0.5px",
+                      backgroundColor: "#323232",
+                      mx: 0,
+                    }}
+                  />
+                </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    maxWidth: { md: "75%", sm: "100%" },
+                    lineHeight: 1.1,
+                    margin: { xs: "15px 0", sm: "0" },
+                    minHeight: { md: "45px", sm: "0" },
+                  }}
+                >
+                  {feature.title}
                 </Typography>
               </Box>
-            </Grid>
-          )
-        )}
+
+              <Typography
+                variant="body2"
+                sx={{
+                  opacity: 0.8,
+                  mt: 1,
+                  color: "#fff",
+                  paddingLeft: { xs: "22px", sm: "0px" },
+                }}
+              >
+                {feature.description}
+              </Typography>
+            </Box>
+          </Grid>
+        ))}
       </Grid>
     </Container>
     // </Box>
