@@ -88,6 +88,7 @@ const UseCaseSite = () => {
             py: { xs: 4, lg: 6, xl: 8 },
             position: "relative",
             maxWidth: "100% !important",
+            width: "100%",
             px: { xs: 2, sm: 4, lg: 10, xl: 10 },
           }}
         >
@@ -96,6 +97,8 @@ const UseCaseSite = () => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+              flexDirection: { xs: "column", lg: "row" },
+              width: "100%",
             }}
           >
             <Box
@@ -110,6 +113,7 @@ const UseCaseSite = () => {
                   lg: "100%",
                   xl: "70%",
                 },
+                width: "100%",
                 margin: "0 auto",
               }}
             >
