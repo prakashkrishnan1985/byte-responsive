@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 
 interface CardProps {
   title: string;
@@ -8,6 +8,8 @@ interface CardProps {
 }
 
 const CardComponent = ({ title, description, imageSrc }: CardProps) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
   return (
     <>
       <Box
@@ -28,7 +30,7 @@ const CardComponent = ({ title, description, imageSrc }: CardProps) => {
             xs: "100%",
             md: "30%",
           },
-          height: { xs: "512px", sm: "266px", lg: "340px" },
+          height: { xs: "auto", sm: "auto", lg: "auto" },
         }}
       >
         <div
@@ -50,10 +52,19 @@ const CardComponent = ({ title, description, imageSrc }: CardProps) => {
           />
         </div>
         <div>
-          <Typography variant="h6" sx={{ fontSize: "28px", fontWeight: 700 }}>
+          <Typography
+            variant="h6"
+            sx={{ fontSize: isMobile ? "2rem" : "2.3rem", fontWeight: 700 }}
+          >
             {title}
           </Typography>
-          <Typography>{description}</Typography>
+          <Typography
+            sx={{
+              fontSize: isMobile ? "1rem" : "1.5rem",
+            }}
+          >
+            {description}
+          </Typography>
           <Typography
             sx={{
               fontSize: "16px",

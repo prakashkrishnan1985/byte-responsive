@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { AppBar, Box, Toolbar, Typography, Button } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  Typography,
+  Button,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 import logoWithText from "../../../assets/logo-black.png";
 import logoWithText1 from "../../../assets/logo/ByteSizedAI.png";
 import logoWithText2 from "../../../assets/logo/ByteSizedAI2.png";
@@ -9,7 +17,8 @@ const HomeLogo: React.FC = () => {
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
   const location = useLocation();
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
   return (
     <Typography
       variant="h6"
@@ -31,7 +40,8 @@ const HomeLogo: React.FC = () => {
             ? logoWithText2
             : logoWithText1
         }
-        height="65"
+        height={isMobile ? "65" : "85"}
+        alt="logo"
       />
     </Typography>
   );

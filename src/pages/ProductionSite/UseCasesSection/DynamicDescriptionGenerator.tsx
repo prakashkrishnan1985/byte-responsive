@@ -19,6 +19,7 @@ import C7 from "../../../assets/cards-template/glass-purple.png";
 
 import PopupModal from "../DialogBox/DialogBox";
 import theme from "../../../components/theme/theme";
+import zIndex from "@mui/material/styles/zIndex";
 
 const DynamicDescriptionGenerator: React.FC = () => {
   const ref = useRef(null);
@@ -28,7 +29,7 @@ const DynamicDescriptionGenerator: React.FC = () => {
   });
 
   // const yText = useTransform(scrollYProgress, [0, 0.7], ["-600%", "80%"]); // ↓ reduce from "230%" to "150%"
-  const yyText = useTransform(scrollYProgress, [0, 1], ["20%", "280%"]);
+  const yyText = useTransform(scrollYProgress, [0, 1], ["-750%", "790%"]);
   const yCards = useTransform(scrollYProgress, [0, 1], ["0%", "-50%"]);
 
   const [data, setData] = useState([]);
@@ -36,7 +37,17 @@ const DynamicDescriptionGenerator: React.FC = () => {
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
   const [content, setContent]: any = useState({});
+  const [isScrolled, setIsScrolled] = useState(false);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setIsScrolled(scrollTop > 100); // adjust the 100 value to trigger earlier/later
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   const handleEvent = (item: any) => {
     setContent(() => item);
     setOpen(true);
@@ -164,38 +175,37 @@ const DynamicDescriptionGenerator: React.FC = () => {
           alignItems: "center",
           position: "relative",
           margin: "0 !important",
+          height: "150vh",
         }}
       >
         {/* Parallax Header Text */}
-        {/* <motion.div
+        <motion.div
           style={{
-            y: yText,
+            y: yyText, // controlled by scrollYProgress
             position: "absolute",
-            transform: "translate(-50%, -50%)",
-            zIndex: 1,
-            width: "50%",
-          }}
-        > */}
-        <Typography
-          variant="h5"
-          sx={{
-            color: "#000",
-            textAlign: "center",
-            textTransform: "uppercase",
-            fontStyle: "italic",
-            fontSize: { xs: "24px", sm: "32px", md: "40px", lg: "52px" },
-            fontWeight: 800,
-            background: "rgba(255, 255, 255, 0.7)",
-            padding: { xs: "5px 10px", sm: "7px 15px", md: "10px 20px" },
-            borderRadius: "10px",
+            zIndex: 2,
           }}
         >
-          <span style={{ fontWeight: "800", fontStyle: "normal" }}>
-            Build and Deploy{" "}
-          </span>
-          AI Agents Effortlessly
-        </Typography>
-        {/* </motion.div> */}
+          <Typography
+            variant="h5"
+            sx={{
+              color: "#000",
+              textAlign: "center",
+              textTransform: "uppercase",
+              fontStyle: "italic",
+              fontSize: { xs: "24px", sm: "32px", md: "40px", lg: "52px" },
+              fontWeight: 800,
+              background: "rgba(255, 255, 255, 0.7)",
+              padding: { xs: "5px 10px", sm: "7px 15px", md: "10px 20px" },
+              borderRadius: "10px",
+            }}
+          >
+            <span style={{ fontWeight: "800", fontStyle: "normal" }}>
+              Build and Deploy{" "}
+            </span>
+            AI Agents Effortlessly
+          </Typography>
+        </motion.div>
 
         {/* Subheading */}
         {/* <motion.div
@@ -222,6 +232,8 @@ const DynamicDescriptionGenerator: React.FC = () => {
             width: "100%",
             paddingTop: "0 !important",
             margin: "0 !important",
+            position: "relative",
+            zIndex: 3,
           }}
         >
           {(loading ? cards : data).map((card: any, index: any) => (
@@ -266,7 +278,7 @@ const DynamicDescriptionGenerator: React.FC = () => {
           borderRadius: "10px",
           width: "100%",
           overflow: "hidden",
-          paddingTop: "50px",
+          paddingTop: "120px",
         }}
       >
         What Do You Want to Create Today?

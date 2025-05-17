@@ -126,6 +126,7 @@ const Nav: React.FC<NavProps> = (props: NavProps) => {
           "&:hover::after": {
             backgroundColor: "#800080", // Show underline on hover
           },
+          fontSize: "1.5rem",
         }}
         onClick={(e: any) => {
           e.preventDefault();
@@ -147,6 +148,7 @@ const Nav: React.FC<NavProps> = (props: NavProps) => {
             gap: 3,
             padding: "0 6rem",
             width: "100%",
+            justifyContent: "center",
           }}
         >
           {renderNavItems()}

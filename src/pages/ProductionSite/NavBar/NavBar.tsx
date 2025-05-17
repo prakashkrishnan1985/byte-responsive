@@ -19,7 +19,7 @@ const Navbar: React.FC = () => {
   const location = useLocation();
   const widgetRef = useRef<HTMLDivElement | null>(null);
 
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Check if mobile screen
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg")); // Check if mobile screen
   const headerColor = isMobile ? "#bb86fc0a" : "white"; // Set color based on screen size
 
   useEffect(() => {
@@ -45,22 +45,22 @@ const Navbar: React.FC = () => {
           );
           const el = innerContainer as HTMLElement;
 
-          if (isMobile && innerContainer) {
-            el.style.display = "none";
+          if (innerContainer) {
+            // el.style.display = "none";
 
-            window.addEventListener("scroll", () => {
-              if (window.scrollY >= window.innerHeight) {
-                el.style.position = "fixed";
-                el.style.left = "50%";
-                el.style.transform = "translateX(-50%)";
-                el.style.zIndex = "9999";
-                el.style.bottom = "0px";
-                el.style.display = "block";
-              } else {
-                el.style.display = "none";
-              }
-            });
-          } else {
+            //   window.addEventListener("scroll", () => {
+            //     if (window.scrollY >= window.innerHeight) {
+            //       el.style.position = "fixed";
+            //       el.style.left = "50%";
+            //       el.style.transform = "translateX(-50%)";
+            //       el.style.zIndex = "9999";
+            //       el.style.bottom = "0px";
+            //       el.style.display = "block";
+            //     } else {
+            //       // el.style.display = "none";
+            //     }
+            //   });
+            // } else {
             widget.style.position = "fixed";
             widget.style.top = "0";
             widget.style.bottom = "auto";
@@ -68,12 +68,22 @@ const Navbar: React.FC = () => {
             widget.style.left = "auto";
             widget.style.zIndex = "9999";
             if (innerContainer) {
-              el.style.position = "fixed";
-              el.style.top = "40px";
-              el.style.bottom = "auto";
-              el.style.right = "20px";
-              el.style.left = "auto";
-              el.style.zIndex = "9999";
+              if (isMobile) {
+                el.style.position = "fixed";
+                el.style.top = "auto";
+                el.style.bottom = "20px";
+                el.style.right = "auto";
+                el.style.left = "50%";
+                el.style.transform = "translateX(-50%)";
+                el.style.zIndex = "9999";
+              } else {
+                el.style.position = "fixed";
+                el.style.top = "-20px";
+                el.style.bottom = "auto";
+                el.style.right = "20px";
+                el.style.left = "auto";
+                el.style.zIndex = "9999";
+              }
             }
           }
         }
@@ -85,26 +95,26 @@ const Navbar: React.FC = () => {
       return;
     }
 
-    // if (!document.querySelector(`script[src="${SCRIPT_SRC}"]`)) {
-    //   const script = document.createElement("script");
-    //   script.src = SCRIPT_SRC;
-    //   script.async = true;
-    //   script.type = "text/javascript";
+    if (!document.querySelector(`script[src="${SCRIPT_SRC}"]`)) {
+      const script = document.createElement("script");
+      script.src = SCRIPT_SRC;
+      script.async = true;
+      script.type = "text/javascript";
 
-    //   script.onload = () => {
-    //     const waitForDefinition = setInterval(() => {
-    //       if (customElements.get(WIDGET_TAG)) {
-    //         const widget = document.createElement(WIDGET_TAG);
-    //         widget.setAttribute("agent-id", AGENT_ID);
-    //         document.body.appendChild(widget);
-    //         styleWidget();
-    //         clearInterval(waitForDefinition);
-    //       }
-    //     }, 100);
-    //   };
+      script.onload = () => {
+        const waitForDefinition = setInterval(() => {
+          if (customElements.get(WIDGET_TAG)) {
+            const widget = document.createElement(WIDGET_TAG);
+            widget.setAttribute("agent-id", AGENT_ID);
+            document.body.appendChild(widget);
+            styleWidget();
+            clearInterval(waitForDefinition);
+          }
+        }, 100);
+      };
 
-    //   document.body.appendChild(script);
-    // }
+      document.body.appendChild(script);
+    }
   }, []);
 
   return (

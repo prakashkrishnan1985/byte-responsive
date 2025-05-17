@@ -30,7 +30,7 @@ import "./tab.css";
 const TwoTabComponent = () => {
   const [tabValue, setTabValue] = useState(0); // State for active tab
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Detect mobile screens
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg")); // Detect mobile screens
   const [expandedAccordion, setExpandedAccordion] = useState<number | null>(0);
 
   // Handle tab change
@@ -131,9 +131,24 @@ const TwoTabComponent = () => {
           }}
         >
           <Tabs value={tabValue} onChange={handleTabChange}>
-            <Tab label="Innovators" />
-            <Tab label="Developers" />
-            <Tab label="AI Developers" />
+            <Tab
+              label="Innovators"
+              sx={{
+                fontSize: { xs: "0.9rem", lg: "1.8rem" },
+              }}
+            />
+            <Tab
+              label="Developers"
+              sx={{
+                fontSize: { xs: "0.9rem", lg: "1.8rem" },
+              }}
+            />
+            <Tab
+              label="AI Developers"
+              sx={{
+                fontSize: { xs: "0.9rem", lg: "1.8rem" },
+              }}
+            />
           </Tabs>
         </Toolbar>
       </AppBar>
@@ -178,8 +193,20 @@ const TwoTabComponent = () => {
                     <div className="section1" key={index}>
                       <img src={item.icon} alt={item.title} />
                       <div>
-                        <h2>{item.title}</h2>
-                        <p>{item.description}</p>
+                        <h2
+                          style={{
+                            fontSize: "48px",
+                          }}
+                        >
+                          {item.title}
+                        </h2>
+                        <p
+                          style={{
+                            fontSize: "32px",
+                          }}
+                        >
+                          {item.description}
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -227,8 +254,20 @@ const TwoTabComponent = () => {
                     <div className="section1" key={index}>
                       <img src={item.icon} alt={item.title} />
                       <div>
-                        <h2>{item.title}</h2>
-                        <p>{item.description}</p>
+                        <h2
+                          style={{
+                            fontSize: "48px",
+                          }}
+                        >
+                          {item.title}
+                        </h2>
+                        <p
+                          style={{
+                            fontSize: "32px",
+                          }}
+                        >
+                          {item.description}
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -305,12 +344,31 @@ const TwoTabComponent = () => {
                         <img
                           src={item.icon}
                           alt={item.title}
-                          style={{ width: "40px", height: "40px" }}
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                          }}
                         />
                       )}
-                      <div>
-                        <h2>{item.title}</h2>
-                        <p>{item.description}</p>
+                      <div
+                        style={{
+                          width: "80%",
+                        }}
+                      >
+                        <h2
+                          style={{
+                            fontSize: "48px",
+                          }}
+                        >
+                          {item.title}
+                        </h2>
+                        <p
+                          style={{
+                            fontSize: "32px",
+                          }}
+                        >
+                          {item.description}
+                        </p>
                       </div>
                     </div>
                   ))}

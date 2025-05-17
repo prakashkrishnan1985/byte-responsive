@@ -45,6 +45,7 @@ const Header: React.FC = () => {
           position: "relative",
           pb: { xs: 2, sm: 0 },
           paddingX: { xs: 0, md: 6 },
+          marginTop: "8rem",
         }}
       >
         <Typography
@@ -160,18 +161,34 @@ const Header: React.FC = () => {
             padding: isMobile ? "10px" : "0",
           }}
         >
-          <Typography variant="h6" style={{ marginBottom: "10px" }}>
+          <Typography
+            variant="h6"
+            style={{
+              marginBottom: "10px",
+              fontSize: isMobile ? "1.5rem" : "2.5rem",
+            }}
+          >
             You’ve Seen AI Work{" "}
             <span style={{ color: "purple" }}>—Now Make AI Agents</span> Work
             for You
           </Typography>
-          <Typography style={{ marginBottom: "10px" }}>
+          <Typography
+            style={{
+              marginBottom: "10px",
+              fontSize: isMobile ? "1.5rem" : "2rem",
+            }}
+          >
             AI Agents use AI to automate tasks, make decisions, and improve your
             product stack. With ByteSized AI Studio, drag and drop pre-trained
             models to create, adapt, and deploy tailored agents for your unique
             business needs.
           </Typography>
-          <Typography style={{ marginBottom: "40px" }}>
+          <Typography
+            style={{
+              marginBottom: "40px",
+              fontSize: isMobile ? "1.5rem" : "2rem",
+            }}
+          >
             Forget one-size-fits-all solutions; these agents work the way you
             do, empowering your vision. Let’s build smarter, together!
           </Typography>
@@ -196,15 +213,15 @@ const Header: React.FC = () => {
             }}
           >
             <MagneticCircleButton
-              size={isMobile ? 100 : 160}
+              size={isMobile ? 120 : 320}
               name="Apply for Beta"
               defaultColor="#800080"
               actionEvent={actionEvent1}
               isMob={isMobile}
             />
             <MagneticCircleButton
-              size={isMobile ? 80 : 125}
-              name="INTERESTED AS AI DEV"
+              size={isMobile ? 80 : 200}
+              name="Interested as AI Dev"
               defaultColor="#000000"
               actionEvent={actionEvent2}
               isMob={isMobile}

@@ -23,6 +23,7 @@ import MovingBackground from "./Personas/Personas";
 import Header from "./Header/Header";
 import CardContainer from "./Cards/CafrdContainer";
 import BackgroundImage from "./Personas/BackImage";
+import IMG1 from "../../assets/bg-blur.png";
 import DynamicDescriptionGeneratorNM from "./UseCasesSection/DynamicDescriptionGeneratorNM";
 import theme from "../../components/theme/theme";
 const BackgroundBox = React.lazy(() => import("./Personas/BackgroundBox"));
@@ -108,7 +109,13 @@ const ProductionSite: React.FC = () => {
   const [widthSize, setWidthSize] = useState<number>(600);
 
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
+  const [angle, setAngle] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAngle((prevAngle) => (prevAngle + 1) % 360);
+    }, 10);
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
   const handleChange =
     (panel: number) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : false);
@@ -170,22 +177,24 @@ const ProductionSite: React.FC = () => {
   // }, []);
 
   return (
-<Container
-  maxWidth={false}
-  disableGutters
-  sx={{
-    // width: "100vw", // full viewport width
-    py: 5,
-    p: 0,
-    m: 0,
-  }}
->
+    <Container
+      maxWidth={false}
+      disableGutters
+      sx={{
+        // width: "100vw", // full viewport width
+        py: 5,
+        p: 0,
+        m: 0,
+      }}
+    >
       <Header />
       <CardContainer />
-      <div>
-        <MovingBackground />
-      </div>
-      <div>
+      <MovingBackground />
+      <Box
+        sx={{
+          marginTop: { xs: "50px", md: "250px" },
+        }}
+      >
         <Suspense
           fallback={
             <Box
@@ -193,7 +202,6 @@ const ProductionSite: React.FC = () => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                minHeight: "100vh",
               }}
             >
               <CircularProgress />
@@ -213,14 +221,20 @@ const ProductionSite: React.FC = () => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                minHeight: "100vh",
               }}
             >
               <CircularProgress />
             </Box>
           }
         >
-          <AboutPage />
+          <Box
+            sx={{
+              paddingX: "20px",
+              width: "100%",
+            }}
+          >
+            <AboutPage />
+          </Box>
         </Suspense>
         <Suspense
           fallback={
@@ -254,82 +268,136 @@ const ProductionSite: React.FC = () => {
         >
           <CalendarEmbed />
         </Suspense>
-
-        {/* <HoverCard /> */}
-      </div>
-      <Box id="faq">
+      </Box>
       <Box
-          sx={{ color: "#800080", fontSize: "18px", fontWeight: "500",
-            alignSelf: "flex-start",
+        id="faq"
+        sx={{
+          position: "relative",
+        }}
+      >
+        <Box
+          sx={{
+            color: "#800080",
+            fontSize: { xs: "2rem", lg: "3rem" },
+            fontWeight: "500",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
+            alignItems: "center",
             position: { xs: "relative", md: "relative" },
-            top:{xs:'0px',md:'0'},
+            top: { xs: "0px", md: "0" },
             left: { xs: "0px", md: "0px" },
-            padding: {xs:"20px 16px 10px 20px", md:"60px 16px 0px 0px", lg:"60px 16px 0px 19px", xl:"30px 16px 30px 20px"},
-            }}
+            padding: {
+              xs: "20px 16px 10px 20px",
+              md: "60px 16px 0px 0px",
+              lg: "60px 16px 0px 19px",
+              xl: "30px 16px 30px 20px",
+            },
+            zIndex: "3",
+          }}
         >
           FAQ
-      </Box>
-      <Box >
-        <BackgroundBox blur="1rem" opacity={0.2} rotate={10}>
-          <Grid container spacing={isMobile? 0: 5}>
-            <Grid item xs={12} md={6} ref={textSectionRef}>
-              <Box
-                sx={{
-                  top: 0,
-                  alignSelf: "flex-start",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  padding: "16px",
-                  position: { xs: "relative", md: "sticky" },
-                  marginLeft: { xs: "0px", md: "0px" },
-                }}
-              >
-                <Typography variant="h4" fontWeight="bold">
-                  YOUR QUESTIONS,{" "}
-                  <span style={{ fontStyle: "italic" }}>ANSWERED</span>
-                </Typography>
-                <Typography variant="body1" sx={{ mt: 2, color: "#000000" }}>
-                  Revolutionize your product with ultra-fast AI optimization
-                  today! ByteStackAI enhances your product with AI capabilities.
-                </Typography>
-              </Box>
-            </Grid>
-
-            <Grid
-              item
-              xs={12}
-              md={6}
+        </Box>
+        <Box
+          sx={{
+            position: "absolute",
+            backgroundImage: `url(${IMG1})`,
+            backgroundRepeat: "repeat",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            padding: "180px",
+            width: "100%",
+            height: "100%",
+            overflow: "hidden",
+            filter: `blur(${1})`,
+            opacity: "0.5",
+            top: 0,
+          }}
+        />
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: {
+              xs: "column",
+              lg: "row",
+            },
+            paddingBottom: "50px",
+            position: "relative",
+          }}
+        >
+          <Box
+            sx={{
+              top: 0,
+              alignSelf: "flex-start",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              padding: "16px",
+              marginLeft: { xs: "0px", md: "0px" },
+              position: "relative",
+            }}
+          >
+            <Typography
+              variant="h4"
+              fontWeight="bold"
               sx={{
-                background: "transparent",
-                overflow: { xs: "scroll", md: "visible" },
-                height: { xs: "100vh", md: "auto" },
-                marginLeft: { xs: "0px", md: "0px" },
+                fontSize: { xs: "2rem", lg: "2.5rem" },
               }}
             >
-              {faqs.map((faq, index) => (
-                <Accordion
-                  key={index}
-                  expanded={expanded === index}
-                  onChange={handleChange(index)}
-                  sx={{ background: "transparent" }}
-                >
-                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography variant="h6">{faq.question}</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Typography sx={{ color: "#000" }}>{faq.answer}</Typography>
-                  </AccordionDetails>
-                </Accordion>
-              ))}
-            </Grid>
-          </Grid>
-        </BackgroundBox>
+              YOUR QUESTIONS,{" "}
+              <span style={{ fontStyle: "italic" }}>ANSWERED</span>
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                mt: 2,
+                color: "#000000",
+                fontSize: { xs: "1.5rem", lg: "2rem" },
+              }}
+            >
+              Revolutionize your product with ultra-fast AI optimization today!
+              ByteStackAI enhances your product with AI capabilities.
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              background: "transparent",
+              marginLeft: { xs: "0px", md: "0px" },
+              paddingX: "20px",
+            }}
+          >
+            {faqs.map((faq, index) => (
+              <Accordion
+                key={index}
+                expanded={expanded === index}
+                onChange={handleChange(index)}
+                sx={{ background: "transparent" }}
+              >
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontSize: { xs: "1.5rem", lg: "2rem" },
+                    }}
+                  >
+                    {faq.question}
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography
+                    sx={{
+                      color: "#000",
+                      fontSize: { xs: "1.5rem", lg: "2rem" },
+                    }}
+                  >
+                    {faq.answer}
+                  </Typography>
+                </AccordionDetails>
+              </Accordion>
+            ))}
+          </Box>
+        </Box>
       </Box>
-    </Box>
     </Container>
   );
 };

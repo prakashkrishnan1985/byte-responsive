@@ -34,7 +34,7 @@ const MovingBackground: React.FC = () => {
             sx={{
               marginTop: { xs: "0rem", md: "4rem" },
               color: "#800080",
-              fontSize: { xs: "32px", md: "42px" },
+              fontSize: { xs: "2rem", lg: "3rem" },
               fontWeight: "500",
               textAlign: {
                 xs: "center",
@@ -83,14 +83,24 @@ const MovingBackground: React.FC = () => {
                   <Typography
                     sx={{
                       paddingY: "5px",
+                      fontSize: { xs: "1.5rem", lg: "3rem" },
                     }}
                   >
-                    <span style={{ fontWeight: "600" }}>
+                    <span
+                      style={{
+                        fontWeight: "600",
+                      }}
+                    >
                       BUILD AI YOUR WAY{" "}
                     </span>{" "}
                     <i>Your Infra or Cloud. ByteSized Agents Works Anywhere.</i>
                   </Typography>
-                  <Typography sx={{ fontSize: "18px", paddingTop: "20px" }}>
+                  <Typography
+                    sx={{
+                      fontSize: { xs: "1.5rem", lg: "2.5rem" },
+                      paddingTop: "20px",
+                    }}
+                  >
                     ByteSizedAI gives you the power to create and deploy
                     AI-driven solutions wherever you need them — whether your
                     agents are running on-premises, in the cloud, or seamlessly
@@ -176,23 +186,21 @@ const MovingBackground: React.FC = () => {
       </Box>
 
       {/* Spacer for mobile to offset fixed background */}
-      <Box
-        sx={{
-          display: { xs: "block", sm: "none" },
-        }}
-      />
-
       {/* Next content (noaicodeneeded image) */}
       <Box
         sx={{
           position: {
-            xs: "absolute",
-            md: "relative",
+            xs: "relative",
+            width: "100%",
           },
           top: {
-            xs: "45%",
+            xs: "150px",
           },
           padding: "20px",
+          display: {
+            xs: "none",
+            lg: "block",
+          },
         }}
       >
         <img src={IMG3} width="100%" />

@@ -36,7 +36,7 @@ const CalendarEmbed = () => {
             textTransform: "uppercase",
             fontStyle: "italic",
             width: "min(100%, 530px)",
-            fontSize: "52px",
+            fontSize: { xs: "1.3rem", lg: "2.5rem" },
             margin: "0 auto;",
           }}
         >
@@ -51,7 +51,7 @@ const CalendarEmbed = () => {
             marginBottom: 4,
             color: "#666",
             textAlign: "center",
-            fontSize: "18px",
+            fontSize: { xs: "1.3rem", lg: "2rem" },
           }}
         >
           Book a time that works for you, and let’s dive into something exciting
@@ -68,14 +68,26 @@ const CalendarEmbed = () => {
         ></Typography>
       </Box>
       <div
-        style={{ width: "100%", height: "800px", border: "none" }}
+        style={{
+          width: "100%",
+          height: "800px",
+          border: "none",
+          display: "flex",
+          justifyContent: "center",
+          borderRadius: "8px",
+        }}
         ref={mainRef}
       >
         <iframe
           src="https://cal.com/bytesized"
-          width="100%"
+          width="80%"
           height="800px"
-          style={{ border: "none", background: "#fff", display: "block" }}
+          style={{
+            border: "none",
+            background: "#fff",
+            borderRadius: "12px",
+            display: "block",
+          }}
           title="Cal.com Scheduler"
         ></iframe>
       </div>

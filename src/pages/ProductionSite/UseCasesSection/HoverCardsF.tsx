@@ -89,8 +89,8 @@ const HoverCardF: React.FC<HeaderProps> = (props: HeaderProps) => {
       onMouseLeave={() => setIsHovered(false)}
       sx={{
         width: { xs: "95%", sm: "80%", md: `${width}px` },
-        height: { xs: "auto", sm: "auto", md: `${height}px` },
-        minHeight: "200px",
+        height: { xs: "auto", sm: "auto" },
+        minHeight: `${height}px`,
         display: "flex",
         flexDirection: "column",
         backgroundColor: isHovered ? "#000" : "#fff",
@@ -108,28 +108,32 @@ const HoverCardF: React.FC<HeaderProps> = (props: HeaderProps) => {
         overflow: "hidden",
       }}
     >
-      <CardContent sx={{
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-        padding: "16px",
-        justifyContent: isHovered ? "space-between" : "center",
-      }}>
-        {/* Title - Always visible */}
-        <Box sx={{
-          flex: isHovered ? 0 : 1,
+      <CardContent
+        sx={{
+          flex: 1,
           display: "flex",
-          alignItems: isHovered ? "flex-start" : "center",
-          justifyContent: isHovered? "flex-start" :"center",
-          minHeight: isHovered ? "auto" : "100%",
-        }}>
+          flexDirection: "column",
+          height: "100%",
+          padding: "16px",
+          justifyContent: isHovered ? "space-between" : "center",
+        }}
+      >
+        {/* Title - Always visible */}
+        <Box
+          sx={{
+            flex: isHovered ? 0 : 1,
+            display: "flex",
+            alignItems: isHovered ? "flex-start" : "center",
+            justifyContent: isHovered ? "flex-start" : "center",
+            minHeight: isHovered ? "auto" : "100%",
+          }}
+        >
           <Typography
             variant="h5"
             component="div"
             sx={{
               color: "#fff",
-              fontSize: {xs:"1.2rem",sm:"2.2rem"},
+              fontSize: { xs: "1.2rem", lg: "2.5rem" },
               fontWeight: "800",
               textTransform: "uppercase",
               textAlign: isHovered ? "left" : "center",
@@ -143,20 +147,22 @@ const HoverCardF: React.FC<HeaderProps> = (props: HeaderProps) => {
         </Box>
 
         {isHovered && (
-          <Box sx={{
-            flex: 1,
-            overflow: "auto",
-            mb: 2,
-            justifyContent: "center",
-            alignItems: "center",
-            display: "flex",
-          }}>
+          <Box
+            sx={{
+              flex: 1,
+              overflow: "auto",
+              mb: 2,
+              justifyContent: "center",
+              alignItems: "center",
+              display: "flex",
+            }}
+          >
             <Typography
               variant="body1"
               component="div"
               sx={{
                 color: "#fff",
-                fontSize: "1.1rem",
+                fontSize: { xs: "1.2rem", lg: "1.6rem" },
                 lineHeight: "normal",
               }}
             >
@@ -166,10 +172,12 @@ const HoverCardF: React.FC<HeaderProps> = (props: HeaderProps) => {
         )}
 
         {isHovered && (
-          <Box sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-          }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
+          >
             <Button
               onClick={() => action(props)}
               sx={{
@@ -181,6 +189,7 @@ const HoverCardF: React.FC<HeaderProps> = (props: HeaderProps) => {
                   backgroundColor: "transparent",
                   textDecoration: "underline",
                 },
+                fontSize: { xs: "1.2rem", lg: "1.6rem" },
               }}
             >
               {"See Detail ->"}
