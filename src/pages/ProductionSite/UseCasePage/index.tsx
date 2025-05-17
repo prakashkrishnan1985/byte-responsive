@@ -91,7 +91,13 @@ const UseCaseSite = () => {
             px: { xs: 2, sm: 4, lg: 10, xl: 10 },
           }}
         >
-          <Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <Box
               display="flex"
               flexDirection="column"
@@ -111,12 +117,9 @@ const UseCaseSite = () => {
             </Box>
             <Box
               sx={{
-                position: { xs: "static", md: "absolute" },
+                position: { xs: "static", md: "relative" },
                 top: {
                   xs: "auto",
-                  md: "calc(100vh - 600px)",
-                  lg: "calc(100vh - 15%)",
-                  xl: "calc(100vh - 18%)",
                 },
                 right: {
                   xs: "auto",
