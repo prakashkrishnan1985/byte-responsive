@@ -11,11 +11,14 @@ import {
   useTheme,
 } from "@mui/material";
 import { useDataFlow } from "../../providers/FlowDataProvider";
-import { getArticlesById, getArticlesList } from "../../services/articleService";
+import {
+  getArticlesById,
+  getArticlesList,
+} from "../../services/articleService";
 import { useParams } from "react-router-dom";
 import { formatDate } from "../../utils/commonUtils";
 import SimilarTopics from "./SimilarTopics";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 export interface Blog {
   id: string;
@@ -33,17 +36,15 @@ const ArticlePage: React.FC = () => {
   const [blog, setBlog] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Check if mobile screen
+  const isMobile = useMediaQuery(theme.breakpoints.down("md")); // Check if mobile screen
   const [blogs, setBlogs] = useState<Blog[]>([]);
-  
 
   const { blogId } = useParams();
   const navigate = useNavigate();
-  
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    setLoading(true)
+    setLoading(true);
     const fetchBlog = async () => {
       try {
         const response = await getArticlesById(blogId as any);
@@ -57,20 +58,19 @@ const ArticlePage: React.FC = () => {
     fetchBlog();
   }, [blogId]);
 
-    useEffect(() => {
-      const fetchBlogs = async () => {
-        try {
-          const response = await getArticlesList();
-          setBlogs((response as any).data);
-        } catch (error) {
-          console.error("Error fetching blog data", error);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchBlogs();
-    }, []);
-
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const response = await getArticlesList();
+        setBlogs((response as any).data);
+      } catch (error) {
+        console.error("Error fetching blog data", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBlogs();
+  }, []);
 
   if (loading) {
     return (
@@ -192,7 +192,8 @@ const ArticlePage: React.FC = () => {
                 fontSize: "13px",
               }}
             >
-              {blog?.reading_time_minutes} mins read &emsp; {formatDate(blog?.updated_at)}
+              {blog?.reading_time_minutes} mins read &emsp;{" "}
+              {formatDate(blog?.updated_at)}
             </Typography>
           </Box>
 
@@ -200,7 +201,12 @@ const ArticlePage: React.FC = () => {
             sx={{
               width: isMobile ? "100%" : "25%",
               textAlign: isMobile ? "left" : "left",
-              marginLeft: { xs:"0", sm:"152px", md:"152px", lg:'152px', xl:'300px' },
+              marginLeft: {
+                xs: "0",
+                md: "152px",
+                lg: "152px",
+                xl: "300px",
+              },
             }}
           >
             <Typography
@@ -241,7 +247,10 @@ const ArticlePage: React.FC = () => {
           }}
         />
       </Box>
-      <SimilarTopics blogList={blogs} onCardClick={(id) => navigate(`/blog/${id}`)}/>
+      <SimilarTopics
+        blogList={blogs}
+        onCardClick={(id) => navigate(`/blog/${id}`)}
+      />
     </Box>
   );
 };

@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Typography,
-  useMediaQuery,
-  Card,
-  CardMedia,
-} from "@mui/material";
+import { Box, Typography, useMediaQuery, Card, CardMedia } from "@mui/material";
 import { IoArrowForwardOutline } from "react-icons/io5";
 import { AnimatePresence, motion } from "framer-motion";
 import { Blog } from "./article";
@@ -31,7 +25,7 @@ const SimilarTopics: React.FC<SimilarTopicsProps> = ({
   return (
     <Box
       sx={{
-        width: { xs: "95%", sm: "1331px", md:"90%" },
+        width: { xs: "95%", sm: "1331px", md: "90%" },
         height: { xs: "auto", sm: "auto" },
         background:
           "linear-gradient(261.49deg, #3E3E3E 0%, #101010 31.14%, #000000 52.18%, #101010 76.66%, #3E3E3E 99.88%)",
@@ -41,7 +35,7 @@ const SimilarTopics: React.FC<SimilarTopicsProps> = ({
         position: "relative",
         marginTop: "60px",
         marginBottom: "60px",
-        marginLeft: { sm: "60px", md:"3%" },
+        marginLeft: { sm: "60px", md: "3%" },
         display: "flex",
         flexDirection: "column",
         gap: "20px",

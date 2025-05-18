@@ -129,7 +129,7 @@ const Navbar: React.FC = () => {
               location.pathname === "/beta" ||
               location.pathname.startsWith("/blog/")
                 ? "#000"
-                : headerColor,
+                : "#fff",
             border: "none",
             boxShadow: "none",
             padding: "10px 10px 10px 20px",
