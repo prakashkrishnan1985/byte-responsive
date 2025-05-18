@@ -133,7 +133,7 @@ const HoverCardF: React.FC<HeaderProps> = (props: HeaderProps) => {
             component="div"
             sx={{
               color: "#fff",
-              fontSize: { xs: "1.2rem", lg: "2.5rem" },
+              fontSize: { xs: "1.6rem", lg: "2.5rem" },
               fontWeight: "800",
               textTransform: "uppercase",
               textAlign: isHovered ? "left" : "center",

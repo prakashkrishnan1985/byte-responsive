@@ -103,7 +103,14 @@ const Header: React.FC = () => {
               color: "#000",
             }}
           >
-            <span>Build AI Agents</span>
+            <Typography
+              sx={{
+                fontWeight: "bold",
+                fontSize: isMobile ? "1.8rem" : "3rem",
+              }}
+            >
+              Build AI Agents
+            </Typography>
 
             <RotatingText
               texts={[" in minutes", " zero code", " on prem", " on cloud"]}
@@ -213,14 +220,14 @@ const Header: React.FC = () => {
             }}
           >
             <MagneticCircleButton
-              size={isMobile ? 120 : 320}
+              size={isMobile ? 120 : 270}
               name="Apply for Beta"
               defaultColor="#800080"
               actionEvent={actionEvent1}
               isMob={isMobile}
             />
             <MagneticCircleButton
-              size={isMobile ? 80 : 200}
+              size={isMobile ? 90 : 200}
               name="Interested as AI Dev"
               defaultColor="#000000"
               actionEvent={actionEvent2}

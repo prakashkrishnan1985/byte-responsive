@@ -214,7 +214,7 @@ const AIJourney = () => {
                   cursor: "pointer",
                   fontSize: {
                     xs: "1rem",
-                    lg: "1.3rem",
+                    lg: "2rem",
                   },
                   ":hover": {
                     color: "#800080",

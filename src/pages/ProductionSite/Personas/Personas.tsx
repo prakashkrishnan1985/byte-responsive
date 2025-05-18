@@ -83,7 +83,7 @@ const MovingBackground: React.FC = () => {
                   <Typography
                     sx={{
                       paddingY: "5px",
-                      fontSize: { xs: "1.5rem", lg: "3rem" },
+                      fontSize: { xs: "1.5rem", lg: "2.5rem" },
                     }}
                   >
                     <span
@@ -97,7 +97,7 @@ const MovingBackground: React.FC = () => {
                   </Typography>
                   <Typography
                     sx={{
-                      fontSize: { xs: "1.5rem", lg: "2.5rem" },
+                      fontSize: { xs: "1.5rem", lg: "2.3rem" },
                       paddingTop: "20px",
                     }}
                   >
@@ -156,7 +156,7 @@ const MovingBackground: React.FC = () => {
       {/* Background image section */}
       <Box
         sx={{
-          height: { xs: "90vh", sm: "90vh" },
+          height: { xs: "100vh", sm: "100vh" },
           position: { xs: "fixed", sm: "absolute" }, // fixed only on mobile
           top: 0,
           left: 0,
@@ -173,7 +173,7 @@ const MovingBackground: React.FC = () => {
         <Box
           sx={{
             width: "100%",
-            height: "100%",
+            height: "70%",
             backgroundImage: `url(${IMG})`,
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
@@ -184,7 +184,6 @@ const MovingBackground: React.FC = () => {
           }}
         />
       </Box>
-
       {/* Spacer for mobile to offset fixed background */}
       {/* Next content (noaicodeneeded image) */}
       <Box

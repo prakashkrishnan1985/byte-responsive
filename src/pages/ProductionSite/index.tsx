@@ -323,6 +323,7 @@ const ProductionSite: React.FC = () => {
             },
             paddingBottom: "50px",
             position: "relative",
+            justifyContent: "space-between",
           }}
         >
           <Box
@@ -335,6 +336,7 @@ const ProductionSite: React.FC = () => {
               padding: "16px",
               marginLeft: { xs: "0px", md: "0px" },
               position: "relative",
+              width: "100%",
             }}
           >
             <Typography
@@ -364,6 +366,7 @@ const ProductionSite: React.FC = () => {
               background: "transparent",
               marginLeft: { xs: "0px", md: "0px" },
               paddingX: "20px",
+              width: { xs: "100%", lg: "90%" },
             }}
           >
             {faqs.map((faq, index) => (
