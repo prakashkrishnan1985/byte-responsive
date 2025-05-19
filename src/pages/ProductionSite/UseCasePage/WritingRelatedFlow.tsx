@@ -105,7 +105,7 @@ const WritingRelatedFlow: React.FC<cardProps> = (props: cardProps) => {
         <Typography
           variant="h4"
           sx={{
-            fontSize: "2.625rem",
+            fontSize: "3rem",
             fontWeight: 600,
             marginBottom: "1rem",
             textAlign: { xs: "center", md: "left" },
@@ -122,12 +122,12 @@ const WritingRelatedFlow: React.FC<cardProps> = (props: cardProps) => {
           sx={{
             color: "#000",
             marginBottom: "2rem",
-            maxWidth: "600px",
+            maxWidth: "800px",
             textAlign: { xs: "center", md: "left" },
             marginLeft: { xs: "auto", md: "0" },
             marginRight: { xs: "auto", md: "0" },
             paddingX: "1rem",
-            fontSize: { xs: "1.5rem" },
+            fontSize: { xs: "2rem" },
           }}
         >
           {item?.section_description}

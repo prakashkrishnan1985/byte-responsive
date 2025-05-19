@@ -14,7 +14,7 @@ const SimilarTopics: React.FC<SimilarTopicsProps> = ({
   onCardClick,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const isMobile = useMediaQuery("(max-width:600px)");
+  const isMobile = useMediaQuery("(max-width:800px)");
 
   const handleNext = () => {
     setCurrentIndex((prev) => (prev + 1) % blogList.length);
@@ -25,17 +25,18 @@ const SimilarTopics: React.FC<SimilarTopicsProps> = ({
   return (
     <Box
       sx={{
-        width: { xs: "95%", sm: "1331px", md: "90%" },
+        width: { xs: "95%", md: "1331px", lg: "90%" },
         height: { xs: "auto", sm: "auto" },
         background:
           "linear-gradient(261.49deg, #3E3E3E 0%, #101010 31.14%, #000000 52.18%, #101010 76.66%, #3E3E3E 99.88%)",
         borderRadius: "6px",
-        padding: { xs: "10px", sm: "30px" },
+        padding: { xs: "10px", lg: "30px" },
         overflow: "hidden",
         position: "relative",
         marginTop: "60px",
         marginBottom: "60px",
-        marginLeft: { sm: "60px", md: "3%" },
+        // marginLeft: { xs: "10px", sm: "20px", lg: "60px" },
+        margin: "auto",
         display: "flex",
         flexDirection: "column",
         gap: "20px",

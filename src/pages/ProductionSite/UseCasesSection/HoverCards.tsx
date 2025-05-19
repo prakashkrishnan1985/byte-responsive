@@ -28,6 +28,7 @@ const HoverCard: React.FC<HeaderProps> = (props) => {
         height: "auto",
         perspective: "1000px", // Adds perspective for the 3D effect
         cursor: "pointer",
+        position: "relative",
       }}
     >
       <Box
@@ -71,6 +72,7 @@ const HoverCard: React.FC<HeaderProps> = (props) => {
                 fontWeight: "800",
                 textTransform: "uppercase",
                 textAlign: "center",
+                fontSize: { xs: "1.7rem", lg: "2.2rem" },
               }}
             >
               {article_name || "DYNAMIC DESCRIPTION"}
@@ -83,7 +85,7 @@ const HoverCard: React.FC<HeaderProps> = (props) => {
           sx={{
             position: "absolute",
             width: "100%",
-            height: "100%",
+            height: "auto",
             backfaceVisibility: "hidden",
             transform: "rotateY(180deg)",
             display: "flex",
@@ -101,7 +103,7 @@ const HoverCard: React.FC<HeaderProps> = (props) => {
               sx={{
                 color: "#fff",
                 margin: { xs: "0", sm: "0", md: "20px 25px 10px 4px" }, // Margin for desktop only
-                fontSize: { xs: "1rem", sm: "1.5rem" },
+                fontSize: { xs: "1.7rem", lg: "2.2rem" },
                 fontWeight: "800",
                 textTransform: "uppercase",
                 textAlign: "left",
@@ -115,7 +117,7 @@ const HoverCard: React.FC<HeaderProps> = (props) => {
               sx={{
                 color: { xs: "#fff", sm: "#fff", md: "#fff" }, // Ensures font color is white for all devices
                 margin: "10px 10px 10px 4px",
-                fontSize: { xs: "1rem", sm: "1.5rem" },
+                fontSize: { xs: "1.2rem", lg: "1.8rem" },
                 lineHeight: "normal",
                 textAlign: "left",
               }}
@@ -135,7 +137,7 @@ const HoverCard: React.FC<HeaderProps> = (props) => {
                 rel="noopener noreferrer"
                 sx={{
                   textTransform: "none",
-                  fontSize: { xs: "1rem", sm: "0.9rem" },
+                  fontSize: { xs: "1rem", lg: "1.2rem" },
                   padding: 0,
                   minWidth: "auto",
                   color: "#fff",

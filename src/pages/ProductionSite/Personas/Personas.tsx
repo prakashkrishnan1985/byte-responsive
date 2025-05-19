@@ -156,7 +156,7 @@ const MovingBackground: React.FC = () => {
       {/* Background image section */}
       <Box
         sx={{
-          height: { xs: "100vh", sm: "100vh" },
+          height: { xs: "100vh", sm: "150vh" },
           position: { xs: "fixed", sm: "absolute" }, // fixed only on mobile
           top: 0,
           left: 0,
@@ -202,6 +202,7 @@ const MovingBackground: React.FC = () => {
           },
         }}
       >
+        {" "}
         <img src={IMG3} width="100%" />
       </Box>
     </Box>

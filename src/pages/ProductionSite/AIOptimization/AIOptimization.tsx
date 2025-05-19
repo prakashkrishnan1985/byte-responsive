@@ -19,7 +19,7 @@ const AIOptimization = () => {
           color: "#A020F0",
           fontWeight: "bold",
           mb: 2,
-          fontSize: { xs: "1.5rem" },
+          fontSize: { xs: "2rem" },
         }}
       >
         EMAILS? ANALYTICS? REPORTS?
@@ -30,7 +30,7 @@ const AIOptimization = () => {
         variant="h4"
         sx={{
           fontWeight: "bold",
-          fontSize: { xs: "2.5rem" },
+          fontSize: { xs: "3.5rem" },
         }}
       >
         ONLY ONE TOOL <i>FOR ALL</i>
@@ -40,7 +40,7 @@ const AIOptimization = () => {
         sx={{
           fontStyle: "italic",
           fontWeight: "bold",
-          fontSize: { xs: "2.5rem" },
+          fontSize: { xs: "3.5rem" },
         }}
       >
         THE TASKS
@@ -52,10 +52,11 @@ const AIOptimization = () => {
         sx={{
           mt: 2,
           color: "gray",
-          width: "300px",
+          maxWidth: "700px",
+          width: "100%",
           textAlign: "center",
           margin: "0 auto",
-          fontSize: { xs: "1.5rem" },
+          fontSize: { xs: "2.2rem" },
         }}
       >
         Agents That Just Get It Done From chats to claims, carts to contracts,

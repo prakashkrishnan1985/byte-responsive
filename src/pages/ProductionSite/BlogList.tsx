@@ -164,7 +164,7 @@ const BlogList: React.FC = () => {
               width: "100%",
               flexDirection: isMobile ? "column" : "row",
               alignItems: isMobile ? "stretch" : "center",
-              minHeight: isMobile ? "auto" : "500px",
+              minHeight: isMobile ? "500px" : "500px",
               position: "relative",
             }}
           >
@@ -208,7 +208,7 @@ const BlogList: React.FC = () => {
                 overflow: "hidden",
                 marginLeft: { xs: 0, md: "6%" },
                 padding: {
-                  xs: "10px 30px 0px 10px",
+                  xs: "10px 30px 40px 10px",
                   md: "0px 0px",
                   lg: "0px 0px",
                   xl: "0px 0px",
@@ -235,6 +235,7 @@ const BlogList: React.FC = () => {
                   textAlign: { xs: "left", sm: "left" },
                   alignSelf: { xs: "flex-start", sm: "flex-start" },
                   fontSize: "1.3rem",
+                  display: { xs: "none", lg: "block" },
                 }}
               >
                 {blogs[currentIndex]?.reading_time_minutes} mins read
@@ -245,20 +246,44 @@ const BlogList: React.FC = () => {
             <Box
               sx={{
                 position: "absolute",
-                bottom: { xs: "0px", md: "20px" },
-                right: "20px",
+                bottom: { xs: "20px", sm: "0px", md: "20px" },
                 display: { xs: "flex", md: "flex" },
                 alignItems: "center",
                 cursor: "pointer",
+                width: "100%",
+                justifyContent: { xs: "space-between", lg: "end" },
               }}
               onClick={() => handleCardClick(blogs[currentIndex]?.id)}
             >
-              <Typography sx={{ fontSize: "1.3rem", color: "white" }}>
-                Go to Article
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "white",
+                  textAlign: { xs: "left", sm: "left" },
+                  alignSelf: { xs: "flex-start", sm: "flex-start" },
+                  fontSize: "1.3rem",
+                  display: { xs: "flex", lg: "none" },
+                  justifyContent: "start",
+                  alignItems: "center",
+                  paddingLeft: "10px",
+                }}
+              >
+                {blogs[currentIndex]?.reading_time_minutes} mins read
               </Typography>
-              <IoArrowForwardOutline
-                style={{ color: "white", marginLeft: "8px" }}
-              />
+              <Typography
+                sx={{
+                  fontSize: "1.3rem",
+                  color: "white",
+                  display: "flex",
+                  justifyContent: { xs: "start", lg: "end" },
+                  alignItems: "center",
+                }}
+              >
+                Go to Article
+                <IoArrowForwardOutline
+                  style={{ color: "white", marginLeft: "8px" }}
+                />
+              </Typography>
             </Box>
           </motion.div>
         </AnimatePresence>
@@ -279,6 +304,7 @@ const BlogList: React.FC = () => {
             padding: { xs: "20px 0px 0px 0", lg: "0px 0px", xl: "0px 0px" },
             position: "relative",
             fontSize: { xs: "2rem" },
+            textAlign: { xs: "center", lg: "left" },
           }}
         >
           Topics
@@ -289,6 +315,7 @@ const BlogList: React.FC = () => {
             gap: "8px",
             flexWrap: "wrap",
             marginTop: "20px",
+            justifyContent: { xs: "center", lg: "start" },
           }}
         >
           <Box
@@ -298,7 +325,7 @@ const BlogList: React.FC = () => {
               color: "white",
               padding: "6px 12px",
               borderRadius: "4px",
-              fontSize: "1.3rem",
+              fontSize: { xs: "1.3rem", md: "1.8rem" },
               cursor: "pointer",
             }}
           >
@@ -314,7 +341,7 @@ const BlogList: React.FC = () => {
                 color: "white",
                 padding: "6px 12px",
                 borderRadius: "4px",
-                fontSize: "1.3rem",
+                fontSize: { xs: "1.3rem", md: "1.8rem" },
                 maxWidth: "150px",
                 whiteSpace: "nowrap",
                 overflow: "hidden",
@@ -382,7 +409,7 @@ const BlogList: React.FC = () => {
                     WebkitLineClamp: 2,
                     overflow: "hidden",
                     textOverflow: "ellipsis",
-                    fontSize: { xs: "1.5rem", md: "1.5rem" },
+                    fontSize: { xs: "1.5rem", md: "2rem" },
                     textAlign: "left",
                     fontWeight: 700,
                   }}
@@ -394,7 +421,7 @@ const BlogList: React.FC = () => {
                   sx={{
                     paddingTop: "15px",
                     color: "black",
-                    fontSize: "1.2rem",
+                    fontSize: { xs: "1.2rem", md: "1.5rem" },
                   }}
                 >
                   {blog?.reading_time_minutes} mins read
@@ -469,7 +496,7 @@ const BlogList: React.FC = () => {
 
           <Typography
             variant="body2"
-            sx={{ fontSize: "1.3rem", textAlign: "center" }}
+            sx={{ fontSize: { xs: "1.3rem", md: "2rem" }, textAlign: "center" }}
           >
             We’re here to deliver value straight to your inbox every two weeks.
           </Typography>
@@ -479,7 +506,7 @@ const BlogList: React.FC = () => {
             onSubmit={handleSubmit}
             sx={{
               backgroundColor: "rgba(214, 214, 214, 1)",
-              width: { xs: "100%", sm: "400px" },
+              width: { xs: "100%", sm: "600px", md: "40%" },
               borderRadius: "4px",
               display: "flex",
               justifyContent: "space-between",

@@ -343,7 +343,7 @@ const ProductionSite: React.FC = () => {
               variant="h4"
               fontWeight="bold"
               sx={{
-                fontSize: { xs: "2rem", lg: "2.5rem" },
+                fontSize: { xs: "2rem", lg: "2rem" },
               }}
             >
               YOUR QUESTIONS,{" "}
@@ -354,7 +354,7 @@ const ProductionSite: React.FC = () => {
               sx={{
                 mt: 2,
                 color: "#000000",
-                fontSize: { xs: "1.5rem", lg: "2rem" },
+                fontSize: { xs: "1.5rem", lg: "1.5rem" },
               }}
             >
               Revolutionize your product with ultra-fast AI optimization today!
@@ -380,7 +380,7 @@ const ProductionSite: React.FC = () => {
                   <Typography
                     variant="h6"
                     sx={{
-                      fontSize: { xs: "1.5rem", lg: "2rem" },
+                      fontSize: { xs: "1.5rem", lg: "1.5rem" },
                     }}
                   >
                     {faq.question}
@@ -390,7 +390,7 @@ const ProductionSite: React.FC = () => {
                   <Typography
                     sx={{
                       color: "#000",
-                      fontSize: { xs: "1.5rem", lg: "2rem" },
+                      fontSize: { xs: "1.5rem", lg: "1.3rem" },
                     }}
                   >
                     {faq.answer}

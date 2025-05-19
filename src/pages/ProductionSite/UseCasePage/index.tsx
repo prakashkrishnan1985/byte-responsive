@@ -90,12 +90,13 @@ const UseCaseSite = () => {
             maxWidth: "100% !important",
             width: "100%",
             px: { xs: 2, sm: 4, lg: 10, xl: 10 },
+            paddingLeft: "60px",
           }}
         >
           <Box
             sx={{
               display: "flex",
-              justifyContent: "center",
+              justifyContent: "end",
               alignItems: "center",
               flexDirection: { xs: "column", lg: "row" },
               width: "100%",
@@ -115,6 +116,7 @@ const UseCaseSite = () => {
                 },
                 width: "100%",
                 margin: "0 auto",
+                paddingLeft: { lg: "220px" },
               }}
             >
               <AIOptimization />
@@ -129,7 +131,7 @@ const UseCaseSite = () => {
                   xs: "auto",
                   md: "15rem",
                   lg: "20rem",
-                  xl: "30rem",
+                  xl: "25rem",
                 },
                 zIndex: { xs: "auto", md: 0 },
               }}
