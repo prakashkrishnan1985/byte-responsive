@@ -1,56 +1,137 @@
-.copyright {
-  bottom: 0;
+body {
+  font-family: sans-serif;
+  background-color: #f5f5f5;
   margin: 0;
   padding: 0;
-}
-
-.circle {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  animation: pulse 2s infinite;
-  border: 1px solid blue;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-
-  50% {
-    transform: scale(1.02);
-    opacity: 0.9;
-    border: 1px solid green;
-  }
-
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-input {
-  padding: 12px 16px;
-  font-size: 16px;
+  color: #333;
+  display: inline-table;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
   width: 100%;
-  box-sizing: border-box;
-  outline: none;
+}
+
+.container {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.heading {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.card {
+  background-color: white;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  width: 100%;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.input-field {
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+  color: #333;
+}
+
+.transcription-box {
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 6px;
+  border: 1px dashed #ccc;
+  min-height: 60px;
+  margin-top: 0.5rem;
+}
+
+.status-text {
+  margin-top: 1rem;
+  font-style: italic;
+  color: #555;
+}
+
+/* Button styling for MicListener */
+button {
+  background-color: #4361ee;
+  color: white;
   border: none;
-  margin: 0px;
-  background: var(--colors-command);
-  color: rgb(11, 14, 20);
+  border-radius: 4px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
 }
 
-/* override toast css */
-.custom-toast {
-  background-color: #2d6414 !important;
-  color: white !important;
+button:hover {
+  background-color: #3a56d4;
 }
 
-@media (max-width: 768px) {
-  #root {
-    width: 100%;
-    overflow: hidden;
+button:active {
+  background-color: #2a46c4;
+}
+
+.transcription-box {
+  min-height: 120px;
+  padding: 1rem;
+  border: 1px dashed #ccc;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  white-space: pre-wrap; /* preserve line breaks */
+}
+
+
+/* Override dark mode styles from index.css */
+:root {
+  color-scheme: light;
+  color: #333;
+  background-color: #f5f5f5;
+}
+
+/* App.css or global */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: #333;
+    background-color: #f5f5f5;
+  }
+  button {
+    background-color: #4361ee;
   }
 }
