@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, RefObject } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import "./TrueFocus.css";
 
@@ -31,8 +31,10 @@ const TrueFocus: React.FC<TrueFocusProps> = ({
     const words = sentence.split(" ");
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [lastActiveIndex, setLastActiveIndex] = useState<number | null>(null);
-    const containerRef: RefObject<HTMLDivElement> = useRef(null);
-    const wordRefs: React.MutableRefObject<(HTMLSpanElement | null)[]> = useRef([]);
+    // Fixed: Remove explicit RefObject type
+    const containerRef = useRef<HTMLDivElement>(null);
+    const wordRefs = useRef<(HTMLSpanElement | null)[]>([]);
+
     const [focusRect, setFocusRect] = useState<FocusRect>({ x: 0, y: 0, width: 0, height: 0 });
 
     useEffect(() => {
@@ -75,6 +77,11 @@ const TrueFocus: React.FC<TrueFocusProps> = ({
         }
     };
 
+    // Create a proper ref callback function - removed comment to avoid JSX parsing issues
+    const setWordRef = (index: number) => (element: HTMLSpanElement | null) => {
+        wordRefs.current[index] = element;
+    };
+
     return (
         <div className="focus-container" ref={containerRef}>
             {words.map((word, index) => {
@@ -82,7 +89,7 @@ const TrueFocus: React.FC<TrueFocusProps> = ({
                 return (
                     <span
                         key={index}
-                        ref={(el) => (wordRefs.current[index] = el)}
+                        ref={setWordRef(index)}
                         className={`focus-word ${manualMode ? "manual" : ""} ${isActive && !manualMode ? "active" : ""
                             }`}
                         style={{

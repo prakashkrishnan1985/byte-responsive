@@ -51,7 +51,7 @@ type CategoryMap = {
     position: number;
     tooltip: string;
     use_cases: string[];
-    icon: JSX.Element | null;
+    icon: React.ReactElement | null; // Changed from JSX.Element to React.ReactElement
   }[];
 };
 
@@ -226,7 +226,7 @@ const ExpressionOfInterest: React.FC = () => {
 
   const carouselSlidesData = mapAgentDataToCarouselSlides(mappedAgentsData);
 
-  const divs: JSX.Element[] = [
+  const divs: React.ReactElement[] = [ // Changed from JSX.Element[] to React.ReactElement[]
     <div key="1" className="eoi-page">
       <div className="logo">
         <Box
@@ -388,7 +388,7 @@ const ExpressionOfInterest: React.FC = () => {
 
   const sentences = [
       <TypeWriterEffect
-      text="Let’s get started…"
+      text="Let's get started…"
       speed={50}
       customFontsize={isMobile ? "18px" : "33px"}
     />

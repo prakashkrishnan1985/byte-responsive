@@ -13,7 +13,7 @@ import * as LuIcons from 'react-icons/lu';
 import * as AIIcons from 'react-icons/ai';
 import * as IOIcons from 'react-icons/io';
 
-export const iconRegistry: { [key: string]: JSX.Element } = {
+export const iconRegistry: { [key: string]: React.ReactElement } = {
     // Material Design
     'md/MdOutlineSentimentVeryDissatisfied': <MdIcons.MdOutlineSentimentVeryDissatisfied />,
     'md/MdTextRotationAngleup': <MdIcons.MdTextRotationAngleup />,
@@ -79,10 +79,12 @@ export const iconRegistry: { [key: string]: JSX.Element } = {
     'ai/AiTwotoneInteraction': <AIIcons.AiTwotoneInteraction />,
 
     "io/IoIosImages": <IOIcons.IoIosImages />
-  };
+};
   
-export const getIconFromRegistry = (iconLink: string, size: number = 24, color: string = "black"): JSX.Element | null => {
+// Fixed type error with cloneElement by adding proper type assertion
+export const getIconFromRegistry = (iconLink: string, size: number = 24, color: string = "black"): React.ReactElement | null => {
     const Icon = iconRegistry[iconLink]; 
     if (!Icon) return null;
-    return React.cloneElement(Icon, { size, color });
+    // Use type assertion to tell TypeScript that the props are valid for this element
+    return React.cloneElement(Icon, { size, color } as React.SVGAttributes<SVGElement>);
 };
