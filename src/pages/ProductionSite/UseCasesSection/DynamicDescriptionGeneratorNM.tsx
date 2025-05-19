@@ -95,7 +95,6 @@ const DynamicDescriptionGeneratorNM: React.FC = () => {
           sx={{
             width: { xs: "90%", sm: "70%", md: "60%", lg: "50%" },
             margin: "auto",
-            marginTop: "50rem",
           }}
         >
           <Typography

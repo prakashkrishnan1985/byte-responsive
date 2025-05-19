@@ -23,7 +23,8 @@ const CalendarEmbed = () => {
           justifyContent: "center",
           background: "#0000",
           color: "#fff",
-          marginBottom: '-3.4rem'
+          marginBottom: "-3.4rem",
+          marginTop: "50px",
         }}
       >
         <Typography
@@ -35,13 +36,12 @@ const CalendarEmbed = () => {
             textTransform: "uppercase",
             fontStyle: "italic",
             width: "min(100%, 530px)",
-            fontSize: "52px",
+            fontSize: { xs: "1.3rem", lg: "2.5rem" },
             margin: "0 auto;",
-            
           }}
         >
           <span style={{ fontWeight: "800", fontStyle: "normal" }}>
-            Your Time, Your Schedule – {" "}
+            Your Time, Your Schedule –{" "}
           </span>
           let's talk!
         </Typography>
@@ -51,10 +51,11 @@ const CalendarEmbed = () => {
             marginBottom: 4,
             color: "#666",
             textAlign: "center",
-            fontSize: "18px",
+            fontSize: { xs: "1.3rem", lg: "2rem" },
           }}
         >
-          Book a time that works for you, and let’s dive into something exciting together...
+          Book a time that works for you, and let’s dive into something exciting
+          together...
         </Typography>
         <Typography
           variant="body1"
@@ -64,18 +65,29 @@ const CalendarEmbed = () => {
             textAlign: "center",
             fontSize: "18px",
           }}
-        >
-        </Typography>
+        ></Typography>
       </Box>
       <div
-        style={{ width: "100%", height: "800px", border: "none"}}
+        style={{
+          width: "100%",
+          height: "800px",
+          border: "none",
+          display: "flex",
+          justifyContent: "center",
+          borderRadius: "8px",
+        }}
         ref={mainRef}
       >
         <iframe
           src="https://cal.com/bytesized"
-          width="100%"
+          width="80%"
           height="800px"
-          style={{ border: "none", background: "#fff", display: "block" }}
+          style={{
+            border: "none",
+            background: "#fff",
+            borderRadius: "12px",
+            display: "block",
+          }}
           title="Cal.com Scheduler"
         ></iframe>
       </div>

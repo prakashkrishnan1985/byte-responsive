@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { AppBar, Box, Toolbar, Typography, Button } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  Typography,
+  Button,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 import logoWithText from "../../../assets/logo-black.png";
 import logoWithText1 from "../../../assets/logo/ByteSizedAI.png";
 import logoWithText2 from "../../../assets/logo/ByteSizedAI2.png";
@@ -9,19 +17,32 @@ const HomeLogo: React.FC = () => {
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
   const location = useLocation();
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
   return (
     <Typography
       variant="h6"
-      sx={{ color: "black", fontWeight: "bold", cursor: "pointer" }}
+      sx={{
+        color: "black",
+        fontWeight: "bold",
+        cursor: "pointer",
+        alignItems: "center",
+        display: "flex",
+      }}
       onClick={() => navigate(`/`)}
     >
-       {/* <span style={{fontSize:"10px"}}>v2</span> */}
+      {/* <span style={{fontSize:"10px"}}>v2</span> */}
       <img
-        src={(location.pathname === "/privacy" || location.pathname === "/calltoactions" || location.pathname.startsWith("/blog/") ) ? logoWithText2 : logoWithText1}
-        height="65"
+        src={
+          location.pathname === "/privacy" ||
+          location.pathname === "/calltoactions" ||
+          location.pathname.startsWith("/blog/")
+            ? logoWithText2
+            : logoWithText1
+        }
+        height={isMobile ? "75" : "105"}
+        alt="logo"
       />
-     
     </Typography>
   );
 };

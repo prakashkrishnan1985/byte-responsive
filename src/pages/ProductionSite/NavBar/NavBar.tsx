@@ -19,7 +19,7 @@ const Navbar: React.FC = () => {
   const location = useLocation();
   const widgetRef = useRef<HTMLDivElement | null>(null);
 
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Check if mobile screen
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg")); // Check if mobile screen
   const headerColor = isMobile ? "#bb86fc0a" : "white"; // Set color based on screen size
 
   useEffect(() => {
@@ -45,22 +45,22 @@ const Navbar: React.FC = () => {
           );
           const el = innerContainer as HTMLElement;
 
-          if (isMobile && innerContainer) {
-            el.style.display = "none";
+          if (innerContainer) {
+            // el.style.display = "none";
 
-            window.addEventListener("scroll", () => {
-              if (window.scrollY >= window.innerHeight) {
-                el.style.position = "fixed";
-                el.style.left = "50%";
-                el.style.transform = "translateX(-50%)";
-                el.style.zIndex = "9999";
-                el.style.bottom = "0px";
-                el.style.display = "block";
-              } else {
-                el.style.display = "none";
-              }
-            });
-          } else {
+            //   window.addEventListener("scroll", () => {
+            //     if (window.scrollY >= window.innerHeight) {
+            //       el.style.position = "fixed";
+            //       el.style.left = "50%";
+            //       el.style.transform = "translateX(-50%)";
+            //       el.style.zIndex = "9999";
+            //       el.style.bottom = "0px";
+            //       el.style.display = "block";
+            //     } else {
+            //       // el.style.display = "none";
+            //     }
+            //   });
+            // } else {
             widget.style.position = "fixed";
             widget.style.top = "0";
             widget.style.bottom = "auto";
@@ -68,12 +68,22 @@ const Navbar: React.FC = () => {
             widget.style.left = "auto";
             widget.style.zIndex = "9999";
             if (innerContainer) {
-              el.style.position = "fixed";
-              el.style.top = "-40px";
-              el.style.bottom = "auto";
-              el.style.right = "20px";
-              el.style.left = "auto";
-              el.style.zIndex = "9999";
+              if (isMobile) {
+                el.style.position = "fixed";
+                el.style.top = "auto";
+                el.style.bottom = "20px";
+                el.style.right = "auto";
+                el.style.left = "50%";
+                el.style.transform = "translateX(-50%)";
+                el.style.zIndex = "9999";
+              } else {
+                el.style.position = "fixed";
+                el.style.top = "-20px";
+                el.style.bottom = "auto";
+                el.style.right = "20px";
+                el.style.left = "auto";
+                el.style.zIndex = "9999";
+              }
             }
           }
         }
@@ -119,17 +129,18 @@ const Navbar: React.FC = () => {
               location.pathname === "/beta" ||
               location.pathname.startsWith("/blog/")
                 ? "#000"
-                : headerColor,
-            paddingLeft: "20px",
+                : "#fff",
             border: "none",
             boxShadow: "none",
-            padding: "10px 0",
+            padding: "10px 10px 10px 20px",
           }}
         >
           <Toolbar
+            disableGutters
             sx={{
               display: "flex",
               justifyContent: "space-between",
+              alignItems: "center",
               width: "100%",
             }}
           >
@@ -144,7 +155,6 @@ const Navbar: React.FC = () => {
                   : "black"
               }
             />
-            {/* <GetInTouch /> */}
           </Toolbar>
         </AppBar>
       </Box>

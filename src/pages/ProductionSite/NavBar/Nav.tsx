@@ -33,7 +33,7 @@ const Nav: React.FC<NavProps> = (props: NavProps) => {
   );
   // Use MUI's useTheme and useMediaQuery for responsive design
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   // Open mobile menu
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -55,8 +55,7 @@ const Nav: React.FC<NavProps> = (props: NavProps) => {
       path = "/privacy";
     } else if (item === "USECASES") {
       path = "/usecases";
-    }
-    else if (item === "BLOGS") {
+    } else if (item === "BLOGS") {
       path = "/blogs";
     }
     // else if (item === "ADD BLOG") {
@@ -127,6 +126,7 @@ const Nav: React.FC<NavProps> = (props: NavProps) => {
           "&:hover::after": {
             backgroundColor: "#800080", // Show underline on hover
           },
+          fontSize: "1.5rem",
         }}
         onClick={(e: any) => {
           e.preventDefault();
@@ -145,22 +145,20 @@ const Nav: React.FC<NavProps> = (props: NavProps) => {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "center",
-            flexGrow: 1,
             gap: 3,
-            paddingRight: "5rem",
-            paddingBottom: "1.2rem",
+            padding: "0 6rem",
+            width: "100%",
+            justifyContent: "center",
           }}
         >
           {renderNavItems()}
         </Box>
       )}
 
-
       {isMobile && (
-        <>
+        <div>
           <IconButton
-            sx={{ color: color, top: "0", right: "45px", position: "absolute" }}
+            sx={{ color: color, position: "relative" }}
             onClick={
               mobileMenuAnchor ? handleMobileMenuClose : handleMobileMenuOpen
             } // Toggle the mobile menu on click
@@ -179,9 +177,11 @@ const Nav: React.FC<NavProps> = (props: NavProps) => {
                 maxHeight: "100vh",
                 backgroundColor: theme.palette.background.paper,
                 margin: 0,
+                top: "0 !important",
+                left: "0 !important",
                 padding: 0,
                 overflow: "hidden", // Remove scroll
-                top: 0,
+                borderRadius: "0",
               },
               "& .MuiBackdrop-root": {
                 backgroundColor: "rgba(0, 0, 0, 0.5)", // Gray background behind the popup
@@ -199,15 +199,18 @@ const Nav: React.FC<NavProps> = (props: NavProps) => {
                 position: "relative",
                 padding: "0.5rem", // Add padding around the content
                 marginTop: "0", // Remove margin from the top
-                top: 0,
+                left: 0,
+                right: 0,
                 overflow: "hidden", // Remove scroll
+                backgroundColor: "transparent",
+                borderRadius: "0", // Remove border radius
               }}
             >
               <IconButton
                 sx={{
                   position: "absolute",
-                  top: "1.5rem", // Adjusted position for close button
-                  right: "1rem",
+                  top: "1rem", // Adjusted position for close button
+                  right: "1.6rem",
                   color: color,
                 }}
                 onClick={handleMobileMenuClose}
@@ -267,9 +270,8 @@ const Nav: React.FC<NavProps> = (props: NavProps) => {
               ))}
             </Box>
           </Menu>
-        </>
+        </div>
       )}
-
     </>
   );
 };

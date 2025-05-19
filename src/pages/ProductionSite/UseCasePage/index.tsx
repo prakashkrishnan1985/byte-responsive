@@ -88,10 +88,20 @@ const UseCaseSite = () => {
             py: { xs: 4, lg: 6, xl: 8 },
             position: "relative",
             maxWidth: "100% !important",
+            width: "100%",
             px: { xs: 2, sm: 4, lg: 10, xl: 10 },
+            paddingLeft: "60px",
           }}
         >
-          <Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "end",
+              alignItems: "center",
+              flexDirection: { xs: "column", lg: "row" },
+              width: "100%",
+            }}
+          >
             <Box
               display="flex"
               flexDirection="column"
@@ -104,25 +114,24 @@ const UseCaseSite = () => {
                   lg: "100%",
                   xl: "70%",
                 },
+                width: "100%",
                 margin: "0 auto",
+                paddingLeft: { lg: "220px" },
               }}
             >
               <AIOptimization />
             </Box>
             <Box
               sx={{
-                position: { xs: "static", md: "absolute" },
+                position: { xs: "static", md: "relative" },
                 top: {
                   xs: "auto",
-                  md: "calc(100vh - 600px)",
-                  lg: "calc(100vh - 15%)",
-                  xl: "calc(100vh - 18%)",
                 },
                 right: {
                   xs: "auto",
                   md: "15rem",
                   lg: "20rem",
-                  xl: "30rem",
+                  xl: "25rem",
                 },
                 zIndex: { xs: "auto", md: 0 },
               }}

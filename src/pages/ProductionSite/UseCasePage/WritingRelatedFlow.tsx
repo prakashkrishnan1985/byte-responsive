@@ -95,23 +95,25 @@ const WritingRelatedFlow: React.FC<cardProps> = (props: cardProps) => {
             sm: "100%",
             md: "100%",
             lg: "100%",
-            xl: "70%",
           },
           mx: "auto", // center horizontally
           textAlign: "left", // align text to the left if needed
+          width: "100%",
         }}
       >
         {/* Header */}
-        <Typography 
-          variant="h4" 
-          sx={{ 
-            fontSize: "2.625rem",
+        <Typography
+          variant="h4"
+          sx={{
+            fontSize: "3rem",
             fontWeight: 600,
             marginBottom: "1rem",
-            textAlign: { xs: "center", md: "left" }
+            textAlign: { xs: "center", md: "left" },
+            width: "100%",
+            paddingX: "1rem",
           }}
         >
-          {item?.section_header} 
+          {item?.section_header}
         </Typography>
 
         {/* Description */}
@@ -120,10 +122,12 @@ const WritingRelatedFlow: React.FC<cardProps> = (props: cardProps) => {
           sx={{
             color: "#000",
             marginBottom: "2rem",
-            maxWidth: "600px",
+            maxWidth: "800px",
             textAlign: { xs: "center", md: "left" },
             marginLeft: { xs: "auto", md: "0" },
             marginRight: { xs: "auto", md: "0" },
+            paddingX: "1rem",
+            fontSize: { xs: "2rem" },
           }}
         >
           {item?.section_description}
@@ -132,8 +136,14 @@ const WritingRelatedFlow: React.FC<cardProps> = (props: cardProps) => {
         {/* Grid Layout */}
         <Grid
           container
-          spacing={{ xs: 2, md: 4 }}
           justifyContent="left"
+          sx={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "start",
+            alignItems: "center",
+            flexDirection: { xs: "column", md: "row" },
+          }}
         >
           {item?.articles.map((card: any, index: any) => (
             <Grid
@@ -161,7 +171,12 @@ const WritingRelatedFlow: React.FC<cardProps> = (props: cardProps) => {
           ))}
         </Grid>
       </Box>
-      <PopupModal title="Test" content={content} setOpen={setOpen} open={open} />
+      <PopupModal
+        title="Test"
+        content={content}
+        setOpen={setOpen}
+        open={open}
+      />
     </>
   );
 };

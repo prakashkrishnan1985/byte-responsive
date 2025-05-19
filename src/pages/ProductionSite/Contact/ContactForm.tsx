@@ -8,10 +8,14 @@ import {
   Container,
   CircularProgress,
   FormControl,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import { toast } from "react-toastify";
 import { postInquiry } from "../CallOfAction/userAgentService";
-import PhoneInputWithCountrySelect, { isValidPhoneNumber } from "react-phone-number-input";
+import PhoneInputWithCountrySelect, {
+  isValidPhoneNumber,
+} from "react-phone-number-input";
 import { BorderBottom } from "@mui/icons-material";
 
 interface InquiryPayload {
@@ -58,7 +62,7 @@ const ContactForm: React.FC = () => {
         email: "",
         message: "",
         user_type: "",
-        mobile:"",
+        mobile: "",
       });
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
@@ -67,13 +71,17 @@ const ContactForm: React.FC = () => {
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     if (mobile) {
       setFormData((prev) => ({ ...prev, mobile }));
     } else {
       setFormData((prev) => ({ ...prev, mobile: "" }));
     }
-  },[mobile])
+  }, [mobile]);
+
+  const theme = useTheme();
+
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
 
   return (
     <Container
@@ -82,18 +90,20 @@ const ContactForm: React.FC = () => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        minHeight: { xs: "auto", sm: "100vh" },
-        backgroundColor: "#fff",
-        padding: 4,
+        minHeight: { xs: "auto", sm: "100%" },
+        backgroundColor: "transparent",
+        marginTop: "50px",
+        padding: "20px !important",
+        width: "100%",
+        maxWidth: "2400px !important",
       }}
     >
       <Typography
         variant="h4"
         sx={{
-          fontFamily: "Helvetica Neue",
           fontWeight: "500",
           marginBottom: 2,
-          fontSize: "18px",
+          fontSize: { xs: "1.8rem", lg: "3rem" },
           color: "#800080",
         }}
         id="contact"
@@ -107,11 +117,10 @@ const ContactForm: React.FC = () => {
           textAlign: "center",
           textTransform: "uppercase",
           fontStyle: "italic",
-          fontSize: "38px",
           width: "100%",
-          maxWidth: "500px",
           mx: "auto",
           lineHeight: 1.2,
+          fontSize: { xs: "1.5rem", lg: "2.8rem" },
           wordWrap: "break-word",
           // overflowWrap: "break-word",
         }}
@@ -131,7 +140,7 @@ const ContactForm: React.FC = () => {
           marginBottom: 4,
           color: "#666",
           textAlign: "center",
-          fontSize: "18px",
+          fontSize: { xs: "1.3rem", lg: "2rem" },
         }}
       >
         Complete this form with your details and we'll get back to you!
@@ -141,8 +150,7 @@ const ContactForm: React.FC = () => {
         component="form"
         onSubmit={handleSubmit}
         sx={{
-          maxWidth: 852,
-          width: "100%",
+          width: { xs: "90%", lg: "70%" },
           backgroundColor: "#000",
           padding: 4,
           borderRadius: 2,
@@ -151,9 +159,14 @@ const ContactForm: React.FC = () => {
       >
         <Typography
           variant="h6"
-          sx={{ fontWeight: "bold", marginBottom: 2, color: "#fff" }}
+          sx={{
+            fontWeight: "bold",
+            marginBottom: 2,
+            color: "#fff",
+            fontSize: { xs: "1.3rem", lg: "2.5rem" },
+          }}
         >
-          CONTACT INFO*
+          CONTACT INFO
         </Typography>
 
         <Grid container spacing={3}>
@@ -166,8 +179,18 @@ const ContactForm: React.FC = () => {
               placeholder="Full name"
               value={formData.name}
               onChange={handleChange("name")}
-              InputProps={{ style: { color: "#8F8F8F" } }}
-              InputLabelProps={{ style: { color: "#ffffff" } }}
+              InputProps={{
+                style: {
+                  color: "#8F8F8F",
+                  fontSize: isMobile ? "1.3rem" : "1.8rem",
+                },
+              }}
+              InputLabelProps={{
+                style: {
+                  color: "#ffffff",
+                  fontSize: isMobile ? "1.3rem" : "1.8rem",
+                },
+              }}
               sx={{
                 "& .MuiInput-underline:before": { borderBottomColor: "gray" },
                 "& .MuiInput-underline:hover:before": {
@@ -192,8 +215,18 @@ const ContactForm: React.FC = () => {
               placeholder="email@example.com"
               value={formData.email}
               onChange={handleChange("email")}
-              InputProps={{ style: { color: "#8F8F8F" } }}
-              InputLabelProps={{ style: { color: "#ffffff" } }}
+              InputProps={{
+                style: {
+                  color: "#8F8F8F",
+                  fontSize: isMobile ? "1.3rem" : "1.8rem",
+                },
+              }}
+              InputLabelProps={{
+                style: {
+                  color: "#ffffff",
+                  fontSize: isMobile ? "1.3rem" : "1.8rem",
+                },
+              }}
               sx={{
                 "& .MuiInput-underline:before": { borderBottomColor: "gray" },
                 "& .MuiInput-underline:hover:before": {
@@ -214,18 +247,27 @@ const ContactForm: React.FC = () => {
             placeholder="Enter your mobile number"
             defaultCountry="US"
             value={mobile}
-            onChange={(value) => {setMobile(value || "");}}
+            onChange={(value) => {
+              setMobile(value || "");
+            }}
             className="custom-phone-input"
             style={{
               borderBottom: "1px solid gray",
+              fontSize: isMobile ? "1.3rem" : "1.5rem",
+            }}
+            numberInputProps={{
+              style: {
+                color: "#ffffff",
+                fontSize: isMobile ? "1.3rem" : "1.5rem",
+              },
             }}
           />
           {mobile && !isValidPhoneNumber(mobile) && (
             <p
               style={{
                 color: "#d32f2f",
-                fontSize: "0.75rem",
                 textAlign: "left",
+                fontSize: isMobile ? "1rem" : "1.5rem",
               }}
             >
               Please enter a valid mobile number
@@ -240,6 +282,7 @@ const ContactForm: React.FC = () => {
             marginTop: 4,
             marginBottom: 2,
             color: "#fff",
+            fontSize: isMobile ? "1.3rem" : "1.8rem",
           }}
         >
           HOW CAN WE ASSIST YOU?
@@ -257,9 +300,18 @@ const ContactForm: React.FC = () => {
           onChange={handleChange("message")}
           sx={{ backgroundColor: "#1E1E1E", borderRadius: "4px" }}
           InputProps={{
-            style: { backgroundColor: "#1E1E1E", color: "#8F8F8F" },
+            style: {
+              backgroundColor: "#1E1E1E",
+              color: "#8F8F8F",
+              fontSize: isMobile ? "1.3rem" : "1.8rem",
+            },
           }}
-          InputLabelProps={{ style: { color: "#ffffff" } }}
+          InputLabelProps={{
+            style: {
+              color: "#ffffff",
+              fontSize: isMobile ? "1.3rem" : "1.8rem",
+            },
+          }}
         />
 
         <Button
@@ -274,6 +326,7 @@ const ContactForm: React.FC = () => {
             backgroundColor: "#800080",
             "&:hover": { backgroundColor: "#800080" },
             position: "relative",
+            fontSize: isMobile ? "1.3rem" : "1.5rem",
           }}
         >
           {loading ? (
