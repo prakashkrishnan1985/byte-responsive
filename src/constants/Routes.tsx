@@ -35,6 +35,7 @@ export const ROUTES = {
     IDEALISE_CHAT: "/idealisechat",
     DEVELOP: "/develop",
     CHECKOUT_PLAN: "/checkout/:plan",
-    TEST: "/test"
+    TEST: "/test",
+    DEMO: "/byte-demo"
   };
   

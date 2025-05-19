@@ -58,6 +58,9 @@ import CreditDashboard from "./components/StripeDashboard/CreditDashboard";
 import CreditUsageHistory from "./components/Stripe/CreditUsageHistory";
 import PurchaseCreditsPage from "./components/Stripe/PurchaseCreditsPage";
 import { ROUTES } from "./constants/Routes";
+import AutoFaceCapture from "./pages/components/AutoFaceCapture"
+
+{/* <Route path="/" element={<AutoFaceCapture />} /> */}
 
 function normalizePath(pathname) {
   return pathname.toLowerCase();
@@ -262,72 +265,19 @@ function App() {
         <ToastContainer />
         <div className="App">
           <KbarSearch pills={pills} setPills={setPills} />
-          {/* This component will block mobile/tablet users */}
-          {/* <DesktopOnlyView /> */}
 
           <Routes>
-            {/* Public Routes */}
-            {/* <Route path={ROUTES.HOME} element={<SignInSide />} />
-            <Route path={ROUTES.LOGIN} element={<SignInSide />} />
-            <Route path={ROUTES.SIGNUP} element={<SignUp />} /> */}
-            {/* <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPassword />} /> */}
+           
             <Route path={ROUTES.HOME} element={<ProductionSite />} />
             <Route path={ROUTES.USE_CASES_PAGE} element={<UseCaseSite />} />
             <Route path={ROUTES.PRIVACY_PAGE} element={<PrivacyPage />} />
             <Route path={ROUTES.BLOG_DETAIL} element={<ArticlePage />} />
-            {/* <Route path={ROUTES.ADD_BLOG} element={<AddBlog />} /> */}
             <Route path={ROUTES.BLOGS} element={<BlogList />} />
             <Route path={ROUTES.PRIVACY} element={<Privacy />} />
             <Route path={ROUTES.ARTICLE} element={<ArticlePage />} />
             <Route path={ROUTES.CALL_TO_ACTIONS} element={<CallToActions />} />
             <Route path={ROUTES.BETA} element={<CallToActions />} />
-            {/* <Route
-              path={ROUTES.SUBSCRIPTIONS}
-              element={<SubscriptionPlans />}
-            />
-            <Route path={ROUTES.SUCCESS} element={<Success />} />
-            <Route path={ROUTES.PRICING_PLAN} element={<PricingPlans />} />
-            <Route
-              path={ROUTES.CREDIT_DASHBOARD}
-              element={<CreditDashboard />}
-            />
-            <Route
-              path={ROUTES.CREDIT_ADMIN_DASHBOARD}
-              element={<CreditAdminDashboard />}
-            />
-            <Route
-              path={ROUTES.PURCHASE_CREDITS}
-              element={<PurchaseCreditsPage />}
-            />
-            <Route
-              path={ROUTES.CREDIT_HISTORY}
-              element={<CreditUsageHistory />}
-            /> */}
-
-            {/* Protected Routes wrapped with ProtectedRoute */}
-            {/* <Route element={<ProtectedRoute />}>
-              <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
-              <Route path={ROUTES.PROFILE} element={<Profile />} />
-              <Route path={ROUTES.EXPRESSION_OF_INTEREST} element={<ExpressionOfInterest />} />
-              <Route path={ROUTES.WIDGETS} element={<ModalChooseForm />} />
-              <Route path={ROUTES.CHAT_WIDGET} element={<ChatWidget />} />
-              <Route
-                path={ROUTES.SEARCH_WIDGET}
-                element={<SpotlightSearchWidget />}
-              />
-              <Route path={ROUTES.DOCUMENTATION} element={<Documentation />} />
-              <Route path={ROUTES.CONCEPTUALIZE} element={<Dashboard />} />
-              <Route path={ROUTES.LANDING} element={<LandingPage />} />
-              <Route path={ROUTES.HOME_PAGE} element={<HomePage />} />
-              <Route path={ROUTES.IDEALISE_CHAT} element={<IdealiseChat />} />
-              <Route path={ROUTES.DEVELOP} element={<Develop />} />
-              <Route
-                path={ROUTES.SUBSCRIPTIONS}
-                element={<SubscriptionPlans />}
-              />
-              <Route path={ROUTES.CHECKOUT_PLAN} element={<Checkout />} />
-              <Route path={ROUTES.SUCCESS} element={<Success />} />
-            </Route> */}
+            <Route path={ROUTES.DEMO} element={<AutoFaceCapture />} />
           </Routes>
 
           {pathname != "/eoi" &&
