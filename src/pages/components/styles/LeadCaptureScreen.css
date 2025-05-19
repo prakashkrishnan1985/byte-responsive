@@ -1,0 +1,316 @@
+.lead-capture-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: sans-serif;
+  }
+  
+  .byte-orb {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    background: radial-gradient(circle, #6366f1, #4f46e5);
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.8; }
+  }
+  
+  .byte-heading {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.5rem;
+  }
+  
+  .lead-form label {
+    display: block;
+    margin-bottom: 1rem;
+  }
+  
+  .lead-form input[type="text"],
+  .lead-form input[type="email"] {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .consent-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .tone-selection button {
+    margin: 0.25rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid #888;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #f3f4f6;
+  }
+  
+  .tone-selection .selected-tone {
+    background-color: #6366f1;
+    color: white;
+    border-color: #4f46e5;
+  }
+  
+  .next-button {
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #4f46e5;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .thinking-box {
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: #f3f4f6;
+    border-left: 4px solid #6366f1;
+    border-radius: 8px;
+    font-style: italic;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.8; }
+  }
+  .lead-capture-layout {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 3rem;
+    padding: 2rem;
+  }
+  
+  .orb-column {
+    width: 300px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .text-column {
+    max-width: 500px;
+  }
+  
+  .byte-question {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+
+  .blinking-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1em;
+    background-color: #333;
+    margin-left: 2px;
+    animation: blink 1s step-end infinite;
+    vertical-align: text-bottom;
+  }
+  
+  @keyframes blink {
+    from, to { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .start-over-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .start-over-button {
+    background-color: transparent;
+    border: 1px solid #ccc;
+    color: #666;
+    padding: 8px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+  }
+  
+  .start-over-button:hover {
+    background-color: #f0f0f0;
+    color: #333;
+    border-color: #999;
+  }
+  
+  .blinking-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1em;
+    background-color: #333;
+    margin-left: 2px;
+    animation: blink 1s step-end infinite;
+    vertical-align: text-bottom;
+  }
+  
+  @keyframes blink {
+    from, to { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .camera-container {
+  margin-top: 20px;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.camera-video {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  display: block;
+}
+
+.camera-status {
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 14px;
+}
+
+.camera-error {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #ffebee;
+  color: #d32f2f;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.photo-container {
+  margin-top: 20px;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.captured-photo {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  display: block;
+}
+
+.photo-status {
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* Captured photo thumbnail at the top */
+.captured-photo-container {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.captured-photo-thumbnail {
+  width: 120px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 3px solid #5d5fef;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Styles for welcome message */
+.welcome-message-container {
+  margin-top: 20px;
+  padding: 0;
+}
+
+.welcome-message {
+  background-color: #f5f9ff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-message p {
+  font-size: 16px;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+.api-error {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #ffebee;
+  color: #d32f2f;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.processing-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 20px;
+  background-color: #f5f9ff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.spinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-top: 3px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.captured-photo-container {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.captured-photo-thumbnail {
+  width: 120px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 3px solid #5d5fef;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}

@@ -21,7 +21,6 @@ import Loader from "../../components/ui/Loader";
 import TypeWriterEffect from "./TypeWriterEffect";
 import theme from "../../components/theme/theme";
 
-// Generate the session ID on the frontend
 const generateSessionId = () => {
   return uuidv4();
 };

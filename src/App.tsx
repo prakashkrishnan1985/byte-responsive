@@ -59,6 +59,7 @@ import CreditUsageHistory from "./components/Stripe/CreditUsageHistory";
 import PurchaseCreditsPage from "./components/Stripe/PurchaseCreditsPage";
 import { ROUTES } from "./constants/Routes";
 import AutoFaceCapture from "./pages/components/AutoFaceCapture"
+import LeadCaptureScreen from "./pages/components/LeadCaptureScreen";
 
 {/* <Route path="/" element={<AutoFaceCapture />} /> */}
 
@@ -278,6 +279,7 @@ function App() {
             <Route path={ROUTES.CALL_TO_ACTIONS} element={<CallToActions />} />
             <Route path={ROUTES.BETA} element={<CallToActions />} />
             <Route path={ROUTES.DEMO} element={<AutoFaceCapture />} />
+            <Route path={ROUTES.LEADCAPTURESCREEN} element={<LeadCaptureScreen />} />
           </Routes>
 
           {pathname != "/eoi" &&

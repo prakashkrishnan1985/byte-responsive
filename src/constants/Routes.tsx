@@ -36,6 +36,7 @@ export const ROUTES = {
     DEVELOP: "/develop",
     CHECKOUT_PLAN: "/checkout/:plan",
     TEST: "/test",
-    DEMO: "/byte-demo"
+    DEMO: "/byte-demo",
+    LEADCAPTURESCREEN: "/intro"
   };
   
