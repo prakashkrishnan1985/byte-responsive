@@ -132,7 +132,7 @@ const ArticlePage: React.FC = () => {
                 color: "#111",
                 padding: isMobile ? "6px 10px" : "8px 12px",
                 borderRadius: "4px",
-                fontSize: isMobile ? "1rem" : "1rem",
+                fontSize: isMobile ? "1rem" : "1.3rem",
                 fontWeight: 500,
                 letterSpacing: "0.5px",
                 lineHeight: 1.4,
@@ -166,7 +166,7 @@ const ArticlePage: React.FC = () => {
               sx={{
                 color: "#ffffff",
                 fontWeight: 700,
-                fontSize: isMobile ? "1.2rem" : "2rem",
+                fontSize: isMobile ? "1.2rem" : "2.3rem",
                 lineHeight: 1.4,
                 marginBottom: "12px",
               }}
@@ -177,7 +177,7 @@ const ArticlePage: React.FC = () => {
             <Typography
               sx={{
                 color: "#dddddd",
-                fontSize: isMobile ? "1rem" : "1.2rem",
+                fontSize: isMobile ? "1rem" : "1.5rem",
                 fontWeight: 400,
                 lineHeight: 1.7,
                 marginBottom: "12px",
@@ -189,7 +189,7 @@ const ArticlePage: React.FC = () => {
             <Typography
               sx={{
                 color: "#bbbbbb",
-                fontSize: isMobile ? "1rem" : "1.2rem",
+                fontSize: isMobile ? "1rem" : "1.4rem",
               }}
             >
               {blog?.reading_time_minutes} mins read &emsp;{" "}
@@ -212,7 +212,7 @@ const ArticlePage: React.FC = () => {
             <Typography
               sx={{
                 color: "#aaaaaa",
-                fontSize: isMobile ? "0.9rem" : "1.2rem",
+                fontSize: isMobile ? "0.9rem" : "1.3rem",
                 letterSpacing: "1px",
                 textTransform: "uppercase",
                 marginBottom: "4px",
@@ -223,7 +223,7 @@ const ArticlePage: React.FC = () => {
             <Typography
               sx={{
                 color: "#ffffff",
-                fontSize: isMobile ? "0.9rem" : "1.2rem",
+                fontSize: isMobile ? "0.9rem" : "1.5rem",
                 fontWeight: 600,
                 lineHeight: 1.5,
               }}

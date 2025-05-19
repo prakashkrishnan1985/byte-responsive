@@ -121,7 +121,7 @@ const SimilarTopics: React.FC<SimilarTopicsProps> = ({
                         WebkitLineClamp: 2,
                         overflow: "hidden",
                         textOverflow: "ellipsis",
-                        fontSize: { xs: "1rem", sm: "1.2rem" },
+                        fontSize: { xs: "1rem", sm: "1.2rem", lg: "1.5rem" },
                         textAlign: "left",
                         paddingRight: { xs: "10px", sm: "0xp" },
                       }}
@@ -130,7 +130,11 @@ const SimilarTopics: React.FC<SimilarTopicsProps> = ({
                     </Typography>
                     <Typography
                       variant="body2"
-                      sx={{ paddingTop: "15px", color: "white" }}
+                      sx={{
+                        paddingTop: "15px",
+                        color: "white",
+                        fontSize: { xs: "1rem", sm: "1rem", lg: "1.2rem" },
+                      }}
                     >
                       {blog?.reading_time_minutes} mins read
                     </Typography>
