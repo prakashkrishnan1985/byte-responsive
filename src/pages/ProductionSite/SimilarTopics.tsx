@@ -14,7 +14,7 @@ const SimilarTopics: React.FC<SimilarTopicsProps> = ({
   onCardClick,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const isMobile = useMediaQuery("(max-width:800px)");
+  const isMobile = useMediaQuery("(max-width:1496px)");
 
   const handleNext = () => {
     setCurrentIndex((prev) => (prev + 1) % blogList.length);

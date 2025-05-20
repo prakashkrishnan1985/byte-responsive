@@ -36,7 +36,7 @@ const ArticlePage: React.FC = () => {
   const [blog, setBlog] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md")); // Check if mobile screen
+  const isMobile = useMediaQuery(theme.breakpoints.down("xl")); // Check if mobile screen
   const [blogs, setBlogs] = useState<Blog[]>([]);
 
   const { blogId } = useParams();
@@ -166,7 +166,7 @@ const ArticlePage: React.FC = () => {
               sx={{
                 color: "#ffffff",
                 fontWeight: 700,
-                fontSize: isMobile ? "1.2rem" : "2.3rem",
+                fontSize: isMobile ? "2.8rem" : "2.5rem",
                 lineHeight: 1.4,
                 marginBottom: "12px",
               }}
@@ -177,7 +177,7 @@ const ArticlePage: React.FC = () => {
             <Typography
               sx={{
                 color: "#dddddd",
-                fontSize: isMobile ? "1rem" : "1.5rem",
+                fontSize: isMobile ? "1.5rem" : "1.8rem",
                 fontWeight: 400,
                 lineHeight: 1.7,
                 marginBottom: "12px",
@@ -189,7 +189,7 @@ const ArticlePage: React.FC = () => {
             <Typography
               sx={{
                 color: "#bbbbbb",
-                fontSize: isMobile ? "1rem" : "1.4rem",
+                fontSize: isMobile ? "1.5rem" : "1.8rem",
               }}
             >
               {blog?.reading_time_minutes} mins read &emsp;{" "}
@@ -203,8 +203,6 @@ const ArticlePage: React.FC = () => {
               textAlign: isMobile ? "left" : "left",
               marginLeft: {
                 xs: "0",
-                md: "152px",
-                lg: "152px",
                 xl: "300px",
               },
             }}
@@ -212,7 +210,7 @@ const ArticlePage: React.FC = () => {
             <Typography
               sx={{
                 color: "#aaaaaa",
-                fontSize: isMobile ? "0.9rem" : "1.3rem",
+                fontSize: isMobile ? "1.5rem" : "1.7rem",
                 letterSpacing: "1px",
                 textTransform: "uppercase",
                 marginBottom: "4px",
@@ -223,7 +221,7 @@ const ArticlePage: React.FC = () => {
             <Typography
               sx={{
                 color: "#ffffff",
-                fontSize: isMobile ? "0.9rem" : "1.5rem",
+                fontSize: isMobile ? "1.5rem" : "1.9rem",
                 fontWeight: 600,
                 lineHeight: 1.5,
               }}
@@ -240,7 +238,7 @@ const ArticlePage: React.FC = () => {
         </Box>
       </Card>
 
-      <Box sx={{ flexGrow: 1 }}>
+      <Box sx={{ flexGrow: 1, paddingTop: "20px" }}>
         <div
           dangerouslySetInnerHTML={{
             __html: blog?.markup,

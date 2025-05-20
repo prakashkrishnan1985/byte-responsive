@@ -146,7 +146,7 @@ const Nav: React.FC<NavProps> = (props: NavProps) => {
           sx={{
             display: "flex",
             gap: 3,
-            padding: "0 6rem",
+            padding: "0 0",
             width: "100%",
             justifyContent: "center",
           }}

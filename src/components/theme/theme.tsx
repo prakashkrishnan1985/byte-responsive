@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme } from "@mui/material/styles";
 
 // Create a theme with customized typography
 const theme = createTheme({
@@ -70,11 +70,20 @@ const theme = createTheme({
 
   palette: {
     primary: {
-      main: '#800080',
+      main: "#800080",
     },
     // secondary: {
     //   main: '#dc004e',
     // },
+  },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 960,
+      lg: 1280,
+      xl: 1920,
+    },
   },
 });
 

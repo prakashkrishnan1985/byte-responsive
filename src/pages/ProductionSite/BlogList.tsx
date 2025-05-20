@@ -128,7 +128,7 @@ const BlogList: React.FC = () => {
       spacing={2}
       sx={{
         backgroundColor: "#fff",
-        padding: { xs: "10px 0px", sm: "100px 50px" },
+        padding: { xs: "10px 0px", sm: "80px 10px", xl: "100px 50px" },
         marginLeft: "auto",
         width: "100%",
       }}
@@ -195,7 +195,6 @@ const BlogList: React.FC = () => {
               />
             </Box>
 
-            {/* Text Section */}
             <Box
               sx={{
                 flex: 1,
@@ -242,7 +241,6 @@ const BlogList: React.FC = () => {
               </Typography>
             </Box>
 
-            {/* CTA Button */}
             <Box
               sx={{
                 position: "absolute",
@@ -463,7 +461,7 @@ const BlogList: React.FC = () => {
 
       <Box
         sx={{
-          width: "100vw",
+          width: "100%",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
