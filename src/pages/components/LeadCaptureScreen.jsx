@@ -10,85 +10,127 @@ const API_BASE_URL = "https://model-api-dev.bytesized.com.au";
 
 const THINKING_MIN_DURATION = 3000;
 const THINKING_TYPING_DURATION = 40;
+const usedThinkingIndices = new Map();
 
 const questions = [
-  { 
-    key: 'inputMethod', 
-    prompt: "Hello there! Before we begin, would you prefer to chat by talking or typing?", 
-    type: 'choice', 
-    options: ['Talk', 'Type'] 
-  },
-  { 
-    key: 'name', 
-    prompt: "Great! And just so I don't call you 'hey you' the whole time... what should I call you?", 
-    type: 'text', 
-    placeholder: 'Your name' 
-  },
-  { 
-    key: 'email', 
-    promptTemplate: "Thanks {name}! Mind sharing your email? Totally optional...just in case you'd like a follow-up later.",
-    prompt: "Mind sharing your email? Totally optional...just in case you'd like a follow-up later.",
-    type: 'email', 
-    placeholder: 'you@example.com' 
-  },
-  { 
-    key: 'consentToPhoto', 
-    promptTemplate: "Quick one, {name}: if you smile, can I snap a picture? Only if you're cool with it.", 
-    prompt: "Quick one: if you smile, can I snap a picture? Only if you're cool with it.",
-    type: 'checkbox'
-  },
-  {
-    key: 'welcomeMessage',
-    prompt: "",
-    type: 'message'
-  },
-  { 
-    key: 'tone', 
-    promptTemplate: "Lastly, {name}, how should I sound? Pick a tone that matches your vibe.", 
-    prompt: "Lastly, how should I sound? Pick a tone that matches your vibe.",
-    type: 'tone' 
-  }
+  { key: 'inputMethod', prompt: "Hello there! Before we begin, would you prefer to chat by talking or typing?", type: 'choice', options: ['Talk', 'Type'] },
+  { key: 'name', prompt: "Great! And just so I don't call you 'hey you' the whole time... what should I call you?", type: 'text', placeholder: 'Your name' },
+  { key: 'email', promptTemplate: "Thanks {name}! Mind sharing your email? Totally optional...just in case you'd like a follow-up later.", prompt: "Mind sharing your email? Totally optional...just in case you'd like a follow-up later.", type: 'email', placeholder: 'you@example.com' },
+  { key: 'consentToPhoto', promptTemplate: "Quick one, {name}: if you smile, can I snap a picture? Only if you're cool with it.", prompt: "Quick one: if you smile, can I snap a picture? Only if you're cool with it.", type: 'checkbox' },
+  { key: 'welcomeMessage', prompt: "", type: 'message' },
+  { key: 'tone', promptTemplate: "Lastly, {name}, how should I sound? Pick a tone that matches your vibe.", prompt: "Lastly, how should I sound? Pick a tone that matches your vibe.", type: 'tone' }
 ];
 
-const tones = [
-  'Joker (Dark Knight)',
-  'David Attenborough',
-  'Corporate Assistant',
-  'GPT Mode',
-];
+const tones = ['Joker (Dark Knight)', 'David Attenborough', 'Corporate Assistant', 'GPT Mode'];
 
-const thinkingMessages = {
-  inputMethod: (value) => {
-    console.log(`inputMethod thinking with value: ${value}`);
-    return `The user prefers to ${value ? value.toLowerCase() : '...'} Now I should get their name so I can personalize our conversation. Names are important for establishing rapport.`;
-  },
-  name: (value) => {
-    console.log(`name thinking with value: ${value}`);
-    return `Great! The user's name is ${value || '...'} Now I should ask for their email to follow up later. This is optional, so I'll make sure they know that.`;
-  },
+const thinkingVariants = {
+  inputMethod: (value) => [
+    `They chose to ${value?.toLowerCase() || '...'} — next up, get their name for a more human touch.`,
+    `${value} selected. Now, what's their name? Makes everything less robotic.`,
+    `Input method locked in: ${value}. Time to ask who I'm talking to.`,
+    `Alright, ${value} it is. Let's follow that up by asking their name.`,
+    `So, ${value.toLowerCase()} it is. I should now make it more personal.`,
+    `They went with ${value}. Names matter — let's get theirs.`,
+    `Got it. They prefer to ${value.toLowerCase()}. Let's build some rapport with a name.`,
+    // Add the problematic string as one of the variants so it's still a valid option
+    // but won't be the only one shown
+    `The user prefers to ${value.toLowerCase()}. Now I should get their name so I can personalize our conversation. Names are important for establishing rapport.`
+  ],
+  name: (value) => [
+    `They go by ${value || '...'} — that's a start! Email next, but no pressure.`,
+    `Name captured: ${value}. A good moment to ask for an email.`,
+    `Cool, ${value} it is. I'll casually ask for an email now.`,
+    `Nice. Now let's gently nudge toward getting an email (optional of course).`,
+    `Logged their name as ${value}. That opens the door to asking for an email.`,
+    `We're on a first-name basis now: ${value}. Let's prompt for email.`,
+    `Step one complete: got their name. Now I'll suggest an optional email.`
+  ],
   email: (value) => {
-    console.log(`email thinking with value: ${value}`);
-    if (!value || value.trim() === '') {
-      return 'They chose not to share their email. Next, I should ask if they\'re comfortable with me taking a photo. It\'s important to get explicit consent for this.';
+    if (!value?.trim()) {
+      return [
+        `They skipped the email. All good — time to ask for photo consent.`,
+        `No email given. I'll move on to asking about the photo.`,
+        `Email's optional anyway — next, ask for photo permission.`,
+        `They chose not to share an email. Let's not hold up the flow.`,
+        `Privacy respected. Onward to checking photo consent.`,
+        `No email input — let's see if they're cool with a snapshot.`,
+        `Blank email field. No worries. Moving to the next interaction point.`
+      ];
     }
-    return `I have their email now (${value}). Next, I should ask if they're comfortable with me taking a photo. It's important to get explicit consent for this.`;
+    return [
+      `Got their email: ${value}. Let's ask if I can take a photo.`,
+      `Email received. I'll check if they're okay with a quick snapshot.`,
+      `Email in the bag — now to see if a smile is in our future.`,
+      `They entered ${value}. Time to ask about photo permission.`,
+      `Now that I have their email, I can prompt for camera access.`,
+      `${value} added. Next step: photo consent.`,
+      `That email works. Let's transition to photo permission.`
+    ];
   },
-  consentToPhoto: (value) => {
-    console.log(`consentToPhoto thinking with value: ${value}`);
-    return value 
-      ? "They've given consent for a photo. I'll process this image to create a personalized welcome message based on what I see."
-      : "They preferred not to take a photo, which is perfectly fine. Let's move on to selecting a voice tone.";
-  },
-  welcomeMessage: () => {
-    console.log('welcomeMessage thinking');
-    return "Now that we've exchanged pleasantries, I should ask which voice tone they'd prefer me to use. This will help personalize our interaction further.";
-  },
-  default: () => {
-    console.log('default thinking message');
-    return "Let me think about what information I need next to provide the best experience...";
-  }
+  consentToPhoto: (value) => value
+    ? [
+        `They agreed to the photo — setting up the camera now.`,
+        `Photo consent granted. Initiating smile detection.`,
+        `Perfect! They're up for a picture. Getting things ready.`,
+        `Got the go-ahead for a photo. Let's see that smile.`,
+        `Photo? Yes. Let's power up the camera.`,
+        `Permission confirmed. Preparing the snapshot sequence.`,
+        `They're okay with the photo. Time to make it work.`
+      ]
+    : [
+        `They'd rather skip the photo — totally fine.`,
+        `No photo? No problem. Let's move on.`,
+        `They declined the photo. Respect that and continue.`,
+        `Skipping the camera step. Plenty more to cover.`,
+        `No photo access — that's their call. Onward.`,
+        `They're not comfortable with a photo. All good.`,
+        `Not taking a photo. I'll pivot to the tone question.`
+      ],
+  welcomeMessage: () => [
+    `Intro done. Time to ask how I should sound.`,
+    `Now that we've met, let's talk tone.`,
+    `We're almost set — just need to pick a voice style.`,
+    `One last bit: picking a tone for how I'll respond.`,
+    `We've covered the basics. Now let's personalize the voice.`,
+    `Great progress. Final step: tone of voice.`,
+    `Now I just need to know how I should *sound*.`
+  ],
+  default: () => [
+    `Thinking about the next best step to keep this flowing...`,
+    `Hmm... figuring out what makes sense to ask next.`,
+    `Just taking a second to plan the next move.`,
+    `Let me process that and decide what's next.`,
+    `A quick moment to reflect before the next question.`,
+    `Mapping out the smoothest way forward...`,
+    `Loading the next thoughtful question...`
+  ]
 };
 
+function getUniqueThinkingMessage(key, value) {
+    console.log(`Getting thinking message for key: ${key}, value: ${value}`);
+    const variants = (thinkingVariants[key] || thinkingVariants.default)(value);
+    if (!variants.length) return '';
+  
+    if (!usedThinkingIndices.has(key)) {
+      usedThinkingIndices.set(key, new Set());
+    }
+  
+    const used = usedThinkingIndices.get(key);
+  
+    if (used.size === variants.length) {
+      used.clear();
+    }
+  
+    let index;
+    do {
+      index = Math.floor(Math.random() * variants.length);
+    } while (used.has(index));
+  
+    used.add(index);
+    console.log(`Selected message: ${variants[index]}`);
+    return variants[index];
+  }
+  
 const LeadCaptureScreen = ({ onNext }) => {
   const [step, setStep] = useState(0);
   const [leadInfo, setLeadInfo] = useState({
@@ -142,6 +184,7 @@ const LeadCaptureScreen = ({ onNext }) => {
   const typewriterKey = `typewriter-${step}`;
   
   const simulateThinkingTyping = (text) => {
+    console.log('Simulating thinking typing with text:', text);
     let i = 0;
     const length = text.length;
     
@@ -174,30 +217,23 @@ const LeadCaptureScreen = ({ onNext }) => {
   
   const goToNextStep = () => {
     if (step + 1 < questions.length) {
-      console.log(`Moving to step ${step + 1}`);
-      
       const key = currentQuestion.key;
       const value = leadInfo[key];
-      
-      console.log(`Current step: ${key}, Value:`, value);
-      
+  
       let thinking;
       if (key === 'consentToPhoto' && leadInfo.consentToPhoto && photoTaken) {
-        thinking = "Thanks for that great smile! Now I'll process your photo and create a personalized welcome message.";
+        thinking = getUniqueThinkingMessage('welcomeMessage', value);
       } else {
-        const thinkingFn = thinkingMessages[key] || thinkingMessages.default;
-        thinking = thinkingFn(value);
+        thinking = getUniqueThinkingMessage(key, value);
       }
-      
+  
       setThinkingText('');
       setIsThinking(true);
       simulateThinkingTyping(thinking);
-      
+  
       setTimeout(() => {
         setStep(prev => prev + 1);
       }, 100);
-    } else {
-      console.log("Reached the end of questions");
     }
   };
   
@@ -223,92 +259,58 @@ const LeadCaptureScreen = ({ onNext }) => {
   
   const handleInputSubmit = () => {
     if (!personalizedQuestion) return;
-    
     const key = personalizedQuestion.key;
-    let value = inputValue;
-    
-    if (key === 'email') {
-      value = inputValue.trim();
-      if (value === '') {
-        console.log('User skipped email field');
-      }
-    }
-    
-    console.log(`Input submitted for ${key}: ${value}`);
-    
-    const submittedValue = value;
-    
+    const submittedValue = inputValue.trim();
+  
     setInputValue('');
-    
     setLeadInfo(prev => {
-      const newState = {
-        ...prev,
-        [key]: submittedValue
-      };
-      
-      console.log('Updated leadInfo:', newState);
-      
-      let thinkingMsg;
-      if (key === 'name') {
-        thinkingMsg = `Great! The user's name is ${submittedValue}. Now I should ask for their email to follow up later. This is optional, so I'll make sure they know that.`;
-      } else {
-        const thinkingFn = thinkingMessages[key] || thinkingMessages.default;
-        thinkingMsg = thinkingFn(submittedValue);
-      }
-      
-      console.log('Starting thinking with message:', thinkingMsg);
+      const newState = { ...prev, [key]: submittedValue };
+  
+      // Use the unique thinking message function instead of hardcoded message
+      const thinkingMsg = getUniqueThinkingMessage(key, submittedValue);
+  
       setThinkingText('');
       setIsThinking(true);
       simulateThinkingTyping(thinkingMsg);
-      
+  
       setTimeout(() => {
         setStep(step + 1);
       }, 100);
-      
+  
       return newState;
     });
   };
   
   const handleCheckboxChange = async (e) => {
     if (!personalizedQuestion) return;
-    
     const key = personalizedQuestion.key;
-    const checked = e.target.checked;
-    
-    console.log(`Checkbox changed for ${key}. New value: ${checked}`);
-    
-    const isChecked = checked;
-    
-    setLeadInfo(prev => ({
-      ...prev,
-      [key]: isChecked
-    }));
-    
+    const isChecked = e.target.checked;
+  
+    setLeadInfo(prev => ({ ...prev, [key]: isChecked }));
+  
     if (key === 'consentToPhoto') {
       if (isChecked) {
-        console.log('User consented to photo. Initializing camera...');
         setApiOperationComplete(false);
         initializeCamera();
       } else {
-        console.log('User did not consent to photo. Moving to next step...');
-        const thinkingMsg = "They preferred not to take a photo, which is perfectly fine. Let's move on to selecting a voice tone.";
-        
+        // Use the unique thinking message function instead of hardcoded message
+        const thinkingMsg = getUniqueThinkingMessage(key, isChecked);
+  
         setThinkingText('');
         setIsThinking(true);
         simulateThinkingTyping(thinkingMsg);
-        
+  
         setTimeout(() => {
           setStep(step + 1);
         }, 100);
       }
     } else {
-      const thinkingFn = thinkingMessages[key] || thinkingMessages.default;
-      const thinkingMsg = thinkingFn(isChecked);
-      
+      const thinkingMsg = getUniqueThinkingMessage(key, isChecked);
+  
       setThinkingText('');
       setIsThinking(true);
       simulateThinkingTyping(thinkingMsg);
-      
+  
       setTimeout(() => {
         setStep(step + 1);
       }, 100);
@@ -317,38 +319,22 @@ const LeadCaptureScreen = ({ onNext }) => {
   
   const handleChoiceSelect = (value) => {
     if (!personalizedQuestion) return;
-    
     const key = personalizedQuestion.key;
-    
-    console.log(`Choice selected for ${key}: ${value}`);
-    
-    const selectedOption = value;
-    
+  
     setLeadInfo(prev => {
-      const newState = {
-        ...prev,
-        [key]: selectedOption
-      };
-      
-      console.log('Updated leadInfo:', newState);
-      
-      let thinkingMsg;
-      if (key === 'inputMethod') {
-        thinkingMsg = `The user prefers to ${selectedOption.toLowerCase()}. Now I should get their name so I can personalize our conversation. Names are important for establishing rapport.`;
-      } else {
-        const thinkingFn = thinkingMessages[key] || thinkingMessages.default;
-        thinkingMsg = thinkingFn(selectedOption);
-      }
-      
-      console.log('Starting thinking with message:', thinkingMsg);
+      const newState = { ...prev, [key]: value };
+  
+      // Use the unique thinking message function instead of hardcoded message
+      const thinkingMsg = getUniqueThinkingMessage(key, value);
+  
       setThinkingText('');
       setIsThinking(true);
       simulateThinkingTyping(thinkingMsg);
-      
+  
       setTimeout(() => {
         setStep(step + 1);
       }, 100);
-      
+  
       return newState;
     });
   };
