@@ -184,3 +184,25 @@
     color: #007bff;
     font-weight: bold;
   }
+  
+  /* Speaking indicator */
+  .byte-question.speaking:after {
+    content: '🔊';
+    display: inline-block;
+    margin-left: 8px;
+    animation: pulse 1s infinite;
+    position: relative;
+    top: 2px;
+    font-size: 20px;
+  }
+  
+  /* Thinking box with speech indicator */
+  .thinking-box.speaking .thinking-text:after {
+    content: '🔊';
+    display: inline-block;
+    margin-left: 8px;
+    animation: pulse 1s infinite;
+    position: relative;
+    top: 2px;
+    font-size: 16px;
+  }

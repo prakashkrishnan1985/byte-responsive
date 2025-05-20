@@ -1,6 +1,13 @@
-/* LeadCaptureScreen.css - Complete consolidated file */
+body, html {
+  background-color: #0d0d0d; /* Deep black background */
+  color: #f2f2f2; /* Light text for readability */
+}
 
-/* Layout structure */
+.lead-capture-layout {
+  background-color: #0d0d0d;
+  color: #f2f2f2;
+}
+
 .lead-capture-layout {
   display: flex;
   flex-direction: row;
@@ -393,4 +400,12 @@
     transform: scale(1.3);
     opacity: 1;
   }
+}
+
+.thinking-header {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: #888;
+    text-align: center;
 }
