@@ -5,6 +5,11 @@ import Typewriter from 'typewriter-effect';
 import axios from 'axios';
 import * as faceapi from '@vladmandic/face-api';
 
+// Import MicListener from the AutoFaceCapture component
+import MicListener from './DemoMicListener';
+// Import API service
+import { sendQuery, processAudio } from './api';
+
 const MODEL_URL = "/models";
 const API_BASE_URL = "https://model-api-dev.bytesized.com.au";
 
@@ -107,29 +112,29 @@ const thinkingVariants = {
 };
 
 function getUniqueThinkingMessage(key, value) {
-    console.log(`Getting thinking message for key: ${key}, value: ${value}`);
-    const variants = (thinkingVariants[key] || thinkingVariants.default)(value);
-    if (!variants.length) return '';
+  console.log(`Getting thinking message for key: ${key}, value: ${value}`);
+  const variants = (thinkingVariants[key] || thinkingVariants.default)(value);
+  if (!variants.length) return '';
   
-    if (!usedThinkingIndices.has(key)) {
-      usedThinkingIndices.set(key, new Set());
-    }
-  
-    const used = usedThinkingIndices.get(key);
-  
-    if (used.size === variants.length) {
-      used.clear();
-    }
-  
-    let index;
-    do {
-      index = Math.floor(Math.random() * variants.length);
-    } while (used.has(index));
-  
-    used.add(index);
-    console.log(`Selected message: ${variants[index]}`);
-    return variants[index];
+  if (!usedThinkingIndices.has(key)) {
+    usedThinkingIndices.set(key, new Set());
   }
+  
+  const used = usedThinkingIndices.get(key);
+  
+  if (used.size === variants.length) {
+    used.clear();
+  }
+  
+  let index;
+  do {
+    index = Math.floor(Math.random() * variants.length);
+  } while (used.has(index));
+  
+  used.add(index);
+  console.log(`Selected message: ${variants[index]}`);
+  return variants[index];
+}
   
 const LeadCaptureScreen = ({ onNext }) => {
   const [step, setStep] = useState(0);
@@ -159,6 +164,11 @@ const LeadCaptureScreen = ({ onNext }) => {
   const [isProcessingImage, setIsProcessingImage] = useState(false);
   const [apiError, setApiError] = useState('');
   const [apiOperationComplete, setApiOperationComplete] = useState(true);
+  
+  // Speech recognition states
+  const [isSpeechMode, setIsSpeechMode] = useState(false);
+  const [currentTranscript, setCurrentTranscript] = useState('');
+  const [isListening, setIsListening] = useState(false);
   
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -221,8 +231,9 @@ const LeadCaptureScreen = ({ onNext }) => {
       const value = leadInfo[key];
   
       let thinking;
-      if (key === 'consentToPhoto' && leadInfo.consentToPhoto && photoTaken) {
-        thinking = getUniqueThinkingMessage('welcomeMessage', value);
+      // Check if this is the consent step and photo was taken
+      if (key === 'consentToPhoto' && value === true && photoTaken) {
+        thinking = getUniqueThinkingMessage('welcomeMessage', '');
       } else {
         thinking = getUniqueThinkingMessage(key, value);
       }
@@ -293,8 +304,8 @@ const LeadCaptureScreen = ({ onNext }) => {
         setApiOperationComplete(false);
         initializeCamera();
       } else {
-        // Use the unique thinking message function instead of hardcoded message
-        const thinkingMsg = getUniqueThinkingMessage(key, isChecked);
+        // Use the unique thinking message function for when photo consent is declined
+        const thinkingMsg = getUniqueThinkingMessage('consentToPhoto', false);
   
         setThinkingText('');
         setIsThinking(true);
@@ -320,6 +331,13 @@ const LeadCaptureScreen = ({ onNext }) => {
   const handleChoiceSelect = (value) => {
     if (!personalizedQuestion) return;
     const key = personalizedQuestion.key;
+  
+    // If selecting Talk option at the input method step
+    if (key === 'inputMethod' && value === 'Talk') {
+      setIsSpeechMode(true);
+    } else {
+      setIsSpeechMode(false);
+    }
   
     setLeadInfo(prev => {
       const newState = { ...prev, [key]: value };
@@ -356,21 +374,6 @@ const LeadCaptureScreen = ({ onNext }) => {
     }
   };
   
-  const handleManualAdvance = () => {
-    if (canProceedToNextStep()) {
-      console.log('Manual advance triggered');
-      
-      setIsThinking(false);
-      setThinkingComplete(false);
-      setThinkingProgress(0);
-      
-      setStep(prevStep => prevStep + 1);
-      setIsTyping(true);
-    } else {
-      console.log('Cannot proceed yet, waiting for operations to complete');
-    }
-  };
-  
   const handleReset = () => {
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop());
@@ -404,6 +407,9 @@ const LeadCaptureScreen = ({ onNext }) => {
     setCameraError('');
     setApiError('');
     setApiOperationComplete(true);
+    setIsSpeechMode(false);
+    setCurrentTranscript('');
+    setIsListening(false);
   };
   
   const initializeCamera = async () => {
@@ -601,7 +607,16 @@ const LeadCaptureScreen = ({ onNext }) => {
       }
       
       console.log('API processing complete. Starting thinking phase');
-      goToNextStep();
+      // Use the welcome message thinking pattern instead of the consent one
+      const thinkingMsg = getUniqueThinkingMessage('welcomeMessage', '');
+      
+      setThinkingText('');
+      setIsThinking(true);
+      simulateThinkingTyping(thinkingMsg);
+      
+      setTimeout(() => {
+        setStep(step + 1);
+      }, 100);
       
     } catch (err) {
       console.error('Error processing image with API:', err);
@@ -615,13 +630,55 @@ const LeadCaptureScreen = ({ onNext }) => {
       questions[4].prompt = defaultMsg;
       
       console.log('Error occurred, but still starting thinking phase');
-      goToNextStep();
+      const thinkingMsg = getUniqueThinkingMessage('welcomeMessage', '');
+      
+      setThinkingText('');
+      setIsThinking(true);
+      simulateThinkingTyping(thinkingMsg);
+      
+      setTimeout(() => {
+        setStep(step + 1);
+      }, 100);
     } finally {
       setIsProcessingImage(false);
       setApiOperationComplete(true);
     }
   };
   
+  // Handle speech transcript for voice input
+  const handleTranscript = (text, isFinal = false) => {
+    setIsListening(true);
+    setCurrentTranscript(text);
+    
+    if (isFinal && text.trim()) {
+      setIsListening(false);
+      setInputValue(text);
+      
+      // Process the transcript based on current question
+      if (personalizedQuestion) {
+        const key = personalizedQuestion.key;
+        
+        // Update the info with transcript
+        setLeadInfo(prev => {
+          const newState = { ...prev, [key]: text };
+          
+          // Get thinking message and start transition
+          const thinkingMsg = getUniqueThinkingMessage(key, text);
+          setThinkingText('');
+          setIsThinking(true);
+          simulateThinkingTyping(thinkingMsg);
+          
+          setTimeout(() => {
+            setStep(step + 1);
+            setCurrentTranscript('');
+          }, 100);
+          
+          return newState;
+        });
+      }
+    }
+  };
+
   useEffect(() => {
     return () => {
       if (streamRef.current) {
@@ -710,22 +767,41 @@ const LeadCaptureScreen = ({ onNext }) => {
                 <>
                   {personalizedQuestion.type === 'text' && (
                     <>
-                      <input
-                        type="text"
-                        value={inputValue}
-                        onChange={e => setInputValue(e.target.value)}
-                        placeholder={personalizedQuestion.placeholder}
-                        onKeyDown={e => {
-                          if (e.key === 'Enter' && inputValue.trim() !== '') handleInputSubmit();
-                        }}
-                      />
-                      <button 
-                        className="next-button" 
-                        onClick={handleInputSubmit} 
-                        disabled={!inputValue.trim()}
-                      >
-                        Next →
-                      </button>
+                      {isSpeechMode ? (
+                        <div className="speech-input-container">
+                          <MicListener 
+                            onTranscript={handleTranscript}
+                            customerId="lead_capture"
+                            namespace="LeadCapture"
+                          />
+                          <div className="transcript-display">
+                            {isListening ? (
+                              <p>Listening... {currentTranscript}</p>
+                            ) : (
+                              <p>{currentTranscript || "Please speak your name..."}</p>
+                            )}
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <input
+                            type="text"
+                            value={inputValue}
+                            onChange={e => setInputValue(e.target.value)}
+                            placeholder={personalizedQuestion.placeholder}
+                            onKeyDown={e => {
+                              if (e.key === 'Enter' && inputValue.trim() !== '') handleInputSubmit();
+                            }}
+                          />
+                          <button 
+                            className="next-button" 
+                            onClick={handleInputSubmit} 
+                            disabled={!inputValue.trim()}
+                          >
+                            Next →
+                          </button>
+                        </>
+                      )}
                     </>
                   )}
                   
@@ -740,7 +816,11 @@ const LeadCaptureScreen = ({ onNext }) => {
                           if (e.key === 'Enter') handleInputSubmit();
                         }}
                       />
-                      <div className="optional-field-note">This field is optional. You can leave it blank and click Next.</div>
+                      <div className="optional-field-note">
+                        {isSpeechMode ? 
+                          "For better accuracy, please type your email. This field is optional." : 
+                          "This field is optional. You can leave it blank and click Next."}
+                      </div>
                       <button 
                         className="next-button" 
                         onClick={handleInputSubmit}
