@@ -5,9 +5,11 @@ import Typewriter from 'typewriter-effect';
 import axios from 'axios';
 import * as faceapi from '@vladmandic/face-api';
 
-// Constants
 const MODEL_URL = "/models";
 const API_BASE_URL = "https://model-api-dev.bytesized.com.au";
+
+const THINKING_MIN_DURATION = 3000;
+const THINKING_TYPING_DURATION = 40;
 
 const questions = [
   { 
@@ -37,7 +39,7 @@ const questions = [
   },
   {
     key: 'welcomeMessage',
-    prompt: "", // Will be dynamically set from API response
+    prompt: "",
     type: 'message'
   },
   { 
@@ -55,9 +57,39 @@ const tones = [
   'GPT Mode',
 ];
 
+const thinkingMessages = {
+  inputMethod: (value) => {
+    console.log(`inputMethod thinking with value: ${value}`);
+    return `The user prefers to ${value ? value.toLowerCase() : '...'} Now I should get their name so I can personalize our conversation. Names are important for establishing rapport.`;
+  },
+  name: (value) => {
+    console.log(`name thinking with value: ${value}`);
+    return `Great! The user's name is ${value || '...'} Now I should ask for their email to follow up later. This is optional, so I'll make sure they know that.`;
+  },
+  email: (value) => {
+    console.log(`email thinking with value: ${value}`);
+    if (!value || value.trim() === '') {
+      return 'They chose not to share their email. Next, I should ask if they\'re comfortable with me taking a photo. It\'s important to get explicit consent for this.';
+    }
+    return `I have their email now (${value}). Next, I should ask if they're comfortable with me taking a photo. It's important to get explicit consent for this.`;
+  },
+  consentToPhoto: (value) => {
+    console.log(`consentToPhoto thinking with value: ${value}`);
+    return value 
+      ? "They've given consent for a photo. I'll process this image to create a personalized welcome message based on what I see."
+      : "They preferred not to take a photo, which is perfectly fine. Let's move on to selecting a voice tone.";
+  },
+  welcomeMessage: () => {
+    console.log('welcomeMessage thinking');
+    return "Now that we've exchanged pleasantries, I should ask which voice tone they'd prefer me to use. This will help personalize our interaction further.";
+  },
+  default: () => {
+    console.log('default thinking message');
+    return "Let me think about what information I need next to provide the best experience...";
+  }
+};
+
 const LeadCaptureScreen = ({ onNext }) => {
-  // =========== STATE =============
-  // Form state
   const [step, setStep] = useState(0);
   const [leadInfo, setLeadInfo] = useState({
     name: '',
@@ -70,33 +102,33 @@ const LeadCaptureScreen = ({ onNext }) => {
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(true);
   
-  // Camera state
+  const [isThinking, setIsThinking] = useState(false);
+  const [thinkingText, setThinkingText] = useState('');
+  const [thinkingProgress, setThinkingProgress] = useState(0);
+  const [thinkingComplete, setThinkingComplete] = useState(false);
+  const thinkingTimerRef = useRef(null);
+  
   const [isModelLoading, setIsModelLoading] = useState(false);
   const [smileDetected, setSmileDetected] = useState(false);
   const [photoTaken, setPhotoTaken] = useState(false);
   const [cameraError, setCameraError] = useState('');
   const [photoData, setPhotoData] = useState(null);
   
-  // API state
   const [isProcessingImage, setIsProcessingImage] = useState(false);
   const [apiError, setApiError] = useState('');
+  const [apiOperationComplete, setApiOperationComplete] = useState(true);
   
-  // =========== REFS =============
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const streamRef = useRef(null);
   const detectionRef = useRef(null);
   const audioRef = useRef(new Audio());
   
-  // =========== DERIVED STATE =============
-  // Get current question
   const currentQuestion = step < questions.length ? questions[step] : null;
   
-  // Get personalized question
-  const personalizedQuestion = React.useMemo(() => {
+  const personalizedQuestion = (() => {
     if (!currentQuestion) return null;
     
-    // If this question has a template and we have the user's name, personalize it
     if (currentQuestion.promptTemplate && leadInfo.name) {
       return {
         ...currentQuestion,
@@ -104,42 +136,139 @@ const LeadCaptureScreen = ({ onNext }) => {
       };
     }
     
-    // Otherwise return the original question
     return currentQuestion;
-  }, [currentQuestion, leadInfo.name]);
+  })();
   
-  // Create a key for the Typewriter to ensure it re-renders
   const typewriterKey = `typewriter-${step}`;
   
-  // =========== HANDLERS =============
-  // Navigate to next step
+  const simulateThinkingTyping = (text) => {
+    let i = 0;
+    const length = text.length;
+    
+    setThinkingProgress(0);
+    setThinkingComplete(false);
+    
+    if (thinkingTimerRef.current) {
+      clearInterval(thinkingTimerRef.current);
+    }
+    
+    const typeNextChar = () => {
+      if (i <= length) {
+        setThinkingText(text.substring(0, i));
+        setThinkingProgress(i / length);
+        i++;
+      } else {
+        clearInterval(thinkingTimerRef.current);
+        
+        const elapsedTime = length * THINKING_TYPING_DURATION;
+        const remainingTime = Math.max(0, THINKING_MIN_DURATION - elapsedTime);
+        
+        setTimeout(() => {
+          setThinkingComplete(true);
+        }, remainingTime);
+      }
+    };
+    
+    thinkingTimerRef.current = setInterval(typeNextChar, THINKING_TYPING_DURATION);
+  };
+  
   const goToNextStep = () => {
     if (step + 1 < questions.length) {
       console.log(`Moving to step ${step + 1}`);
-      setStep(step + 1);
-      setIsTyping(true);
+      
+      const key = currentQuestion.key;
+      const value = leadInfo[key];
+      
+      console.log(`Current step: ${key}, Value:`, value);
+      
+      let thinking;
+      if (key === 'consentToPhoto' && leadInfo.consentToPhoto && photoTaken) {
+        thinking = "Thanks for that great smile! Now I'll process your photo and create a personalized welcome message.";
+      } else {
+        const thinkingFn = thinkingMessages[key] || thinkingMessages.default;
+        thinking = thinkingFn(value);
+      }
+      
+      setThinkingText('');
+      setIsThinking(true);
+      simulateThinkingTyping(thinking);
+      
+      setTimeout(() => {
+        setStep(prev => prev + 1);
+      }, 100);
     } else {
       console.log("Reached the end of questions");
     }
   };
   
-  // Handle text/email input submission
+  const canProceedToNextStep = () => {
+    return thinkingComplete && apiOperationComplete;
+  };
+  
+  useEffect(() => {
+    if (isThinking && canProceedToNextStep()) {
+      console.log('Thinking and API operations complete, proceeding to next step');
+      
+      const visibilityDelay = 1000;
+      
+      setTimeout(() => {
+        setIsThinking(false);
+        setThinkingComplete(false);
+        setThinkingProgress(0);
+        
+        setIsTyping(true);
+      }, visibilityDelay);
+    }
+  }, [isThinking, thinkingComplete, apiOperationComplete]);
+  
   const handleInputSubmit = () => {
     if (!personalizedQuestion) return;
     
     const key = personalizedQuestion.key;
-    const value = key === 'email' ? inputValue.trim() : inputValue;
+    let value = inputValue;
     
-    setLeadInfo(prev => ({
-      ...prev,
-      [key]: value
-    }));
+    if (key === 'email') {
+      value = inputValue.trim();
+      if (value === '') {
+        console.log('User skipped email field');
+      }
+    }
+    
+    console.log(`Input submitted for ${key}: ${value}`);
+    
+    const submittedValue = value;
     
     setInputValue('');
-    goToNextStep();
+    
+    setLeadInfo(prev => {
+      const newState = {
+        ...prev,
+        [key]: submittedValue
+      };
+      
+      console.log('Updated leadInfo:', newState);
+      
+      let thinkingMsg;
+      if (key === 'name') {
+        thinkingMsg = `Great! The user's name is ${submittedValue}. Now I should ask for their email to follow up later. This is optional, so I'll make sure they know that.`;
+      } else {
+        const thinkingFn = thinkingMessages[key] || thinkingMessages.default;
+        thinkingMsg = thinkingFn(submittedValue);
+      }
+      
+      console.log('Starting thinking with message:', thinkingMsg);
+      setThinkingText('');
+      setIsThinking(true);
+      simulateThinkingTyping(thinkingMsg);
+      
+      setTimeout(() => {
+        setStep(step + 1);
+      }, 100);
+      
+      return newState;
+    });
   };
   
-  // Handle checkbox change
   const handleCheckboxChange = async (e) => {
     if (!personalizedQuestion) return;
     
@@ -148,39 +277,82 @@ const LeadCaptureScreen = ({ onNext }) => {
     
     console.log(`Checkbox changed for ${key}. New value: ${checked}`);
     
+    const isChecked = checked;
+    
     setLeadInfo(prev => ({
       ...prev,
-      [key]: checked
+      [key]: isChecked
     }));
     
-    // Handle photo consent checkbox
     if (key === 'consentToPhoto') {
-      if (checked) {
+      if (isChecked) {
         console.log('User consented to photo. Initializing camera...');
+        setApiOperationComplete(false);
         initializeCamera();
       } else {
         console.log('User did not consent to photo. Moving to next step...');
-        goToNextStep();
+        const thinkingMsg = "They preferred not to take a photo, which is perfectly fine. Let's move on to selecting a voice tone.";
+        
+        setThinkingText('');
+        setIsThinking(true);
+        simulateThinkingTyping(thinkingMsg);
+        
+        setTimeout(() => {
+          setStep(step + 1);
+        }, 100);
       }
     } else {
-      goToNextStep();
+      const thinkingFn = thinkingMessages[key] || thinkingMessages.default;
+      const thinkingMsg = thinkingFn(isChecked);
+      
+      setThinkingText('');
+      setIsThinking(true);
+      simulateThinkingTyping(thinkingMsg);
+      
+      setTimeout(() => {
+        setStep(step + 1);
+      }, 100);
     }
   };
   
-  // Handle option selection for first question
   const handleChoiceSelect = (value) => {
     if (!personalizedQuestion) return;
     
     const key = personalizedQuestion.key;
-    setLeadInfo(prev => ({
-      ...prev,
-      [key]: value
-    }));
     
-    goToNextStep();
+    console.log(`Choice selected for ${key}: ${value}`);
+    
+    const selectedOption = value;
+    
+    setLeadInfo(prev => {
+      const newState = {
+        ...prev,
+        [key]: selectedOption
+      };
+      
+      console.log('Updated leadInfo:', newState);
+      
+      let thinkingMsg;
+      if (key === 'inputMethod') {
+        thinkingMsg = `The user prefers to ${selectedOption.toLowerCase()}. Now I should get their name so I can personalize our conversation. Names are important for establishing rapport.`;
+      } else {
+        const thinkingFn = thinkingMessages[key] || thinkingMessages.default;
+        thinkingMsg = thinkingFn(selectedOption);
+      }
+      
+      console.log('Starting thinking with message:', thinkingMsg);
+      setThinkingText('');
+      setIsThinking(true);
+      simulateThinkingTyping(thinkingMsg);
+      
+      setTimeout(() => {
+        setStep(step + 1);
+      }, 100);
+      
+      return newState;
+    });
   };
   
-  // Handle tone selection (final step)
   const handleToneSelect = (tone) => {
     const updatedInfo = {
       ...leadInfo,
@@ -189,26 +361,41 @@ const LeadCaptureScreen = ({ onNext }) => {
     
     setLeadInfo(updatedInfo);
     
-    // Check if onNext exists before calling it
     if (typeof onNext === 'function') {
       console.log('Calling onNext with leadInfo:', updatedInfo);
       onNext(updatedInfo);
     } else {
       console.log('onNext is not a function, cannot proceed. Final data:', updatedInfo);
-      // Just go to next step if there is one
       goToNextStep();
     }
   };
   
-  // Handle reset/start over
+  const handleManualAdvance = () => {
+    if (canProceedToNextStep()) {
+      console.log('Manual advance triggered');
+      
+      setIsThinking(false);
+      setThinkingComplete(false);
+      setThinkingProgress(0);
+      
+      setStep(prevStep => prevStep + 1);
+      setIsTyping(true);
+    } else {
+      console.log('Cannot proceed yet, waiting for operations to complete');
+    }
+  };
+  
   const handleReset = () => {
-    // Clean up camera if active
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop());
     }
     if (detectionRef.current) {
       clearInterval(detectionRef.current);
       detectionRef.current = null;
+    }
+    
+    if (thinkingTimerRef.current) {
+      clearInterval(thinkingTimerRef.current);
     }
     
     setLeadInfo({
@@ -222,22 +409,22 @@ const LeadCaptureScreen = ({ onNext }) => {
     setStep(0);
     setInputValue('');
     setIsTyping(true);
+    setIsThinking(false);
+    setThinkingComplete(false);
+    setThinkingProgress(0);
     setSmileDetected(false);
     setPhotoTaken(false);
     setPhotoData(null);
     setCameraError('');
     setApiError('');
+    setApiOperationComplete(true);
   };
   
-  // =========== CAMERA FUNCTIONS =============
-  // Initialize camera
   const initializeCamera = async () => {
     try {
       console.log('Starting camera initialization...');
       setIsModelLoading(true);
       
-      // Load face detection models
-      console.log('Loading face detection models...');
       try {
         await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
         await faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL);
@@ -245,9 +432,11 @@ const LeadCaptureScreen = ({ onNext }) => {
       } catch (modelErr) {
         console.error('Error loading face detection models:', modelErr);
         setCameraError(`Could not load face detection models: ${modelErr.message}`);
+        setApiOperationComplete(true);
+        goToNextStep();
+        return;
       }
       
-      // Request camera access
       console.log('Requesting camera access...');
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: 'user' },
@@ -260,7 +449,6 @@ const LeadCaptureScreen = ({ onNext }) => {
         videoRef.current.srcObject = stream;
         streamRef.current = stream;
         
-        // Wait for video to be ready
         videoRef.current.onloadedmetadata = () => {
           console.log('Video metadata loaded');
           videoRef.current.play()
@@ -268,35 +456,39 @@ const LeadCaptureScreen = ({ onNext }) => {
               console.log('Video playback started');
               setIsModelLoading(false);
               
-              // Start face detection
               startFaceDetection();
             })
             .catch(playErr => {
               console.error('Error starting video playback:', playErr);
               setCameraError(`Error starting video playback: ${playErr.message}`);
               setIsModelLoading(false);
+              setApiOperationComplete(true);
+              goToNextStep();
             });
         };
       } else {
         console.error('Video ref is not available');
         setCameraError('Video element not found');
         setIsModelLoading(false);
+        setApiOperationComplete(true);
+        goToNextStep();
       }
     } catch (err) {
       console.error('Error initializing camera:', err);
       setCameraError(`Could not initialize camera: ${err.message}`);
       setIsModelLoading(false);
+      setApiOperationComplete(true);
       
-      // If camera fails, proceed to next step after delay
-      setTimeout(() => goToNextStep(), 3000);
+      goToNextStep();
     }
   };
   
-  // Start face detection to detect smile
   const startFaceDetection = () => {
     console.log('Starting face detection...');
     if (!videoRef.current) {
       console.error('Video reference not available for face detection');
+      setApiOperationComplete(true);
+      goToNextStep();
       return;
     }
     
@@ -332,41 +524,51 @@ const LeadCaptureScreen = ({ onNext }) => {
         console.error('Error in face detection:', err);
       }
     }, 500);
+    
+    setTimeout(() => {
+      if (detectionRef.current) {
+        console.log('Smile detection timeout reached. Moving on...');
+        clearInterval(detectionRef.current);
+        detectionRef.current = null;
+        
+        if (!smileDetected) {
+          setCameraError('Could not detect a smile. Moving on...');
+          setApiOperationComplete(true);
+          goToNextStep();
+        }
+      }
+    }, 20000);
   };
   
-  // Capture photo when smile is detected
   const capturePhoto = () => {
     console.log('Capturing photo...');
-    if (!videoRef.current || !canvasRef.current) return;
+    if (!videoRef.current || !canvasRef.current) {
+      setApiOperationComplete(true);
+      goToNextStep();
+      return;
+    }
     
     const video = videoRef.current;
     const canvas = canvasRef.current;
     
-    // Set canvas size to match video
     canvas.width = video.videoWidth || 640;
     canvas.height = video.videoHeight || 480;
     
     try {
-      // Draw the video frame on the canvas
       const context = canvas.getContext('2d');
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
       console.log('Photo captured successfully');
       
-      // Get the base64 image data
       const base64Image = canvas.toDataURL('image/jpeg');
       
-      // Store the image data
       setPhotoData(base64Image);
       
-      // Update state to show photo was taken
       setPhotoTaken(true);
       
-      // Stop the camera stream
       if (streamRef.current) {
         streamRef.current.getTracks().forEach(track => track.stop());
       }
       
-      // Process the image with the API (on next render)
       setTimeout(() => {
         const base64DataPart = base64Image.split(',')[1];
         console.log('Processing image with API...');
@@ -376,21 +578,18 @@ const LeadCaptureScreen = ({ onNext }) => {
     } catch (err) {
       console.error('Error capturing photo:', err);
       setCameraError(`Error capturing photo: ${err.message}`);
+      setApiOperationComplete(true);
       
-      // If photo capture fails, proceed to next step after delay
-      setTimeout(() => goToNextStep(), 2000);
+      goToNextStep();
     }
   };
   
-  // =========== API FUNCTIONS =============
-  // Process image with API
   const processImageWithAPI = async (base64Image) => {
     console.log('Processing image with API...');
     setIsProcessingImage(true);
     setApiError('');
     
     try {
-      // Make the API request
       console.log('Sending API request...');
       const response = await axios.post(`${API_BASE_URL}/process-image-base64`, {
         model: "gpt-4o",
@@ -400,34 +599,28 @@ const LeadCaptureScreen = ({ onNext }) => {
       
       console.log('API response received:', response.data);
       
-      // Extract welcome message
       const welcomeMsg = response.data.message?.content || "Welcome! Nice to meet you.";
       
-      // Update state with welcome message
       setLeadInfo(prev => ({
         ...prev,
         welcomeMessage: welcomeMsg
       }));
       
-      // Update the dynamic question
       questions[4].prompt = welcomeMsg;
       
-      // Play audio if available
       if (response.data.audio_path) {
         const audioUrl = `${API_BASE_URL}${response.data.audio_path}?t=${Date.now()}`;
         audioRef.current.src = audioUrl;
         audioRef.current.play().catch(err => console.error('Error playing audio:', err));
       }
       
-      // Move to welcome message step
-      console.log('Moving to welcome message step');
+      console.log('API processing complete. Starting thinking phase');
       goToNextStep();
       
     } catch (err) {
       console.error('Error processing image with API:', err);
       setApiError(`Error processing image: ${err.message}`);
       
-      // Set a default welcome message
       const defaultMsg = "Thanks for the photo! Great to meet you.";
       setLeadInfo(prev => ({
         ...prev,
@@ -435,16 +628,14 @@ const LeadCaptureScreen = ({ onNext }) => {
       }));
       questions[4].prompt = defaultMsg;
       
-      // Still proceed to next step
-      console.log('Error occurred, but still moving to next step');
+      console.log('Error occurred, but still starting thinking phase');
       goToNextStep();
     } finally {
       setIsProcessingImage(false);
+      setApiOperationComplete(true);
     }
   };
   
-  // =========== EFFECTS =============
-  // Clean up resources on unmount
   useEffect(() => {
     return () => {
       if (streamRef.current) {
@@ -453,10 +644,12 @@ const LeadCaptureScreen = ({ onNext }) => {
       if (detectionRef.current) {
         clearInterval(detectionRef.current);
       }
+      if (thinkingTimerRef.current) {
+        clearInterval(thinkingTimerRef.current);
+      }
     };
   }, []);
   
-  // =========== RENDER =============
   return (
     <div className="lead-capture-layout">
       <div className="orb-column">
@@ -464,14 +657,13 @@ const LeadCaptureScreen = ({ onNext }) => {
           hoverIntensity={0.5}
           rotateOnHover={true}
           hue={0}
-          forceHoverState={isTyping}
+          forceHoverState={isTyping || isThinking}
         />
       </div>
 
       <div className="text-column">
         <h1 className="byte-heading">Hi, I'm Byte. Let's play a quick game!</h1>
         
-        {/* Display photo thumbnail at the top if available */}
         {photoTaken && photoData && (
           <div className="captured-photo-container">
             <img 
@@ -483,8 +675,7 @@ const LeadCaptureScreen = ({ onNext }) => {
         )}
 
         <div className="lead-form">
-          {/* Question text with typewriter effect */}
-          {personalizedQuestion && (
+          {personalizedQuestion && !isThinking ? (
             <div className="byte-question">
               <Typewriter
                 key={typewriterKey}
@@ -504,11 +695,17 @@ const LeadCaptureScreen = ({ onNext }) => {
                 }}
               />
             </div>
+          ) : (
+            <div className="byte-question-loading">
+              <div className="spinner-container">
+                <div className="spinner"></div>
+                <p>Thinking...</p>
+              </div>
+            </div>
           )}
 
-          {personalizedQuestion && (
+          {personalizedQuestion && !isThinking && (
             <>
-              {/* Multiple choice options */}
               {personalizedQuestion.type === 'choice' && (
                 <div className="choice-selection">
                   {personalizedQuestion.options.map(option => (
@@ -523,14 +720,12 @@ const LeadCaptureScreen = ({ onNext }) => {
                 </div>
               )}
 
-              {/* Controls that appear after typing is complete */}
               {!isTyping && (
                 <>
-                  {/* Text & email inputs */}
-                  {(personalizedQuestion.type === 'text' || personalizedQuestion.type === 'email') && (
+                  {personalizedQuestion.type === 'text' && (
                     <>
                       <input
-                        type={personalizedQuestion.type}
+                        type="text"
                         value={inputValue}
                         onChange={e => setInputValue(e.target.value)}
                         placeholder={personalizedQuestion.placeholder}
@@ -547,22 +742,45 @@ const LeadCaptureScreen = ({ onNext }) => {
                       </button>
                     </>
                   )}
-
-                  {/* Checkbox for consent */}
-                  {personalizedQuestion.type === 'checkbox' && (
+                  
+                  {personalizedQuestion.type === 'email' && (
                     <>
-                      <label className="consent-checkbox">
-                        <input
-                          type="checkbox"
-                          checked={leadInfo[personalizedQuestion.key]}
-                          onChange={handleCheckboxChange}
-                        />
-                        I consent
-                      </label>
+                      <input
+                        type="email"
+                        value={inputValue}
+                        onChange={e => setInputValue(e.target.value)}
+                        placeholder={personalizedQuestion.placeholder}
+                        onKeyDown={e => {
+                          if (e.key === 'Enter') handleInputSubmit();
+                        }}
+                      />
+                      <div className="optional-field-note">This field is optional. You can leave it blank and click Next.</div>
+                      <button 
+                        className="next-button" 
+                        onClick={handleInputSubmit}
+                      >
+                        Next →
+                      </button>
                     </>
                   )}
 
-                  {/* Tone selection */}
+                  {personalizedQuestion.type === 'checkbox' && (
+                    <div className="consent-options">
+                      <button 
+                        className={`consent-button ${leadInfo[personalizedQuestion.key] ? 'consent-yes-selected' : ''}`}
+                        onClick={() => handleCheckboxChange({ target: { checked: true } })}
+                      >
+                        Yes
+                      </button>
+                      <button 
+                        className={`consent-button ${leadInfo[personalizedQuestion.key] === false && leadInfo[personalizedQuestion.key] !== undefined ? 'consent-no-selected' : ''}`}
+                        onClick={() => handleCheckboxChange({ target: { checked: false } })}
+                      >
+                        No
+                      </button>
+                    </div>
+                  )}
+
                   {personalizedQuestion.type === 'tone' && (
                     <div className="tone-selection">
                       {tones.map(tone => (
@@ -577,7 +795,6 @@ const LeadCaptureScreen = ({ onNext }) => {
                     </div>
                   )}
                   
-                  {/* Message-only screen with Next button */}
                   {personalizedQuestion.type === 'message' && (
                     <button 
                       className="next-button" 
@@ -589,7 +806,6 @@ const LeadCaptureScreen = ({ onNext }) => {
                 </>
               )}
               
-              {/* Camera view - only show when consent is given AND photo not yet taken */}
               {personalizedQuestion.key === 'consentToPhoto' && leadInfo.consentToPhoto && !photoTaken && (
                 <div className="camera-container">
                   <div className="camera-status">
@@ -603,14 +819,6 @@ const LeadCaptureScreen = ({ onNext }) => {
                     playsInline 
                     muted
                     className="camera-video"
-                    style={{
-                      width: '100%',
-                      height: '300px',
-                      objectFit: 'cover',
-                      borderRadius: '8px',
-                      display: 'block',
-                      background: '#000'
-                    }}
                   />
                   {cameraError && (
                     <div className="camera-error">
@@ -620,10 +828,8 @@ const LeadCaptureScreen = ({ onNext }) => {
                 </div>
               )}
               
-              {/* Canvas for photo capture - hidden from view */}
               <canvas ref={canvasRef} style={{ display: 'none' }} />
               
-              {/* Processing indicator */}
               {isProcessingImage && (
                 <div className="processing-indicator">
                   <div className="spinner"></div>
@@ -631,7 +837,6 @@ const LeadCaptureScreen = ({ onNext }) => {
                 </div>
               )}
               
-              {/* API error */}
               {apiError && (
                 <div className="api-error">
                   {apiError}
@@ -641,10 +846,8 @@ const LeadCaptureScreen = ({ onNext }) => {
           )}
         </div>
         
-        {/* Audio element for playing welcome message */}
-        <audio ref={audioRef} style={{ display: 'none' }}></audio>
+        <audio ref={audioRef} style={{ display: 'none' }} />
         
-        {/* Start Over button */}
         <div className="start-over-container">
           <button 
             className="start-over-button" 
@@ -654,6 +857,23 @@ const LeadCaptureScreen = ({ onNext }) => {
             ↺ Start Over
           </button>
         </div>
+        
+        {isThinking && (
+          <div className="thinking-box">
+            <div className="thinking-indicator">
+              <span className="thinking-dot"></span>
+              <span className="thinking-dot"></span>
+              <span className="thinking-dot"></span>
+            </div>
+            <div className="thinking-text">{thinkingText}</div>
+            <div className="thinking-progress-container">
+              <div 
+                className="thinking-progress-bar" 
+                style={{ width: `${thinkingProgress * 100}%` }}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
