@@ -17,6 +17,7 @@ const DemoMicListener = ({
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
 
+
   const startAudioRecording = () => {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       console.error('Media recording is not supported in this browser');

@@ -4,12 +4,15 @@ import Orb from './OrbBackground';
 import Typewriter from 'typewriter-effect';
 import axios from 'axios';
 import * as faceapi from '@vladmandic/face-api';
-
 import MicListener from './DemoMicListener';
+import RAGQuestScreen from './RAGQuestScreen';
+import './styles/RAGQuestScreen.css';
 import { sendQuery, processAudio } from './api';
 
 const MODEL_URL = "/models";
-const API_BASE_URL = "https://model-api-dev.bytesized.com.au";
+//const API_BASE_URL = "https://model-api-dev.bytesized.com.au";
+const API_BASE_URL = "http://localhost:8000";
+
 
 const initSpeechSynthesis = () => {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
@@ -71,14 +74,12 @@ const buildSynthAPI = (synth, voices) => {
         synth.speak(utterance);
     };
 
-    const speakTalking = (text, onEnd = () => { }) => {
+    const speakTalking = (text, onEnd = () => { }, onStart = () => { }) => {
         if (!text) return;
         synth.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.voice = getTalkingVoice();
-        utterance.rate = 1.0;
-        utterance.pitch = 1.0;
-        utterance.volume = 1.0;
+        utterance.onstart = onStart;
         utterance.onend = onEnd;
         synth.speak(utterance);
     };
@@ -105,6 +106,7 @@ const questions = [
     { key: 'email', promptTemplate: "Thanks {name}! Mind sharing your email? Totally optional...just in case you'd like a follow-up later.", prompt: "Mind sharing your email? Totally optional...just in case you'd like a follow-up later.", type: 'email', placeholder: 'you@example.com' },
     { key: 'consentToPhoto', promptTemplate: "Quick one, {name}: if you smile, can I snap a picture? Only if you're cool with it.", prompt: "Quick one: if you smile, can I snap a picture? Only if you're cool with it.", type: 'checkbox' },
     { key: 'welcomeMessage', prompt: "", type: 'message' },
+    { key: 'questFlow', promptTemplate: "Perfect! One last thing, {name} - would you like to try our interactive quest to learn about company policies?", prompt: "Perfect! One last thing - would you like to try our interactive quest to learn about company policies?", type: 'choice', options: ['Yes, let\'s do it!', 'Skip to finish'] },
     { key: 'tone', promptTemplate: "Lastly, {name}, how should I sound? Pick a tone that matches your vibe.", prompt: "Lastly, how should I sound? Pick a tone that matches your vibe.", type: 'tone' }
 ];
 
@@ -172,14 +174,33 @@ const thinkingVariants = {
             `Not taking a photo. I'll pivot to the tone question.`
         ],
     welcomeMessage: () => [
-        `Intro done. Time to ask how I should sound.`,
-        `Now that we've met, let's talk tone.`,
-        `We're almost set — just need to pick a voice style.`,
-        `One last bit: picking a tone for how I'll respond.`,
-        `We've covered the basics. Now let's personalize the voice.`,
-        `Great progress. Final step: tone of voice.`,
-        `Now I just need to know how I should *sound*.`
+        `Intro done. Time to ask about the quest.`,
+        `Now that we've met, let's see if they want to try the quest.`,
+        `We're almost set — just need to see if they want the interactive experience.`,
+        `One last bit: asking about the policy quest.`,
+        `We've covered the basics. Now let's see if they want to explore.`,
+        `Great progress. Next: the quest question.`,
+        `Now I just need to know if they want the full experience.`
     ],
+    questFlow: (value) => value === 'Yes, let\'s do it!'
+        ? [
+            `They're excited for the quest! Let's launch the RAG interactive experience.`,
+            `Adventure time! They chose the quest — loading RAG up now.`,
+            `Perfect! They want the full experience. Quest mode activated to demonstrate RAG.`,
+            `Great choice! The quest will show them how RAG Works.`,
+            `They're up for it! Time to start the reimbursement riddle to demonstrate RAG.`,
+            `Quest selected. This will be fun and educational with our RAG Implementation.`,
+            `Loading the policy quest — they're going to love this interactive RAG approach.`
+        ]
+        : [
+            `They want to skip to the end — that's totally fine.`,
+            `No quest today. Let's wrap up with tone selection.`,
+            `They prefer the quick route. Moving to tone selection.`,
+            `Fair enough! Some people prefer efficiency. Let's finish up.`,
+            `Skipping the quest — straight to the final step.`,
+            `No worries about the quest. Let's pick a tone and finish.`,
+            `Quick and simple it is! Just need to select the tone.`
+        ],
     default: () => [
         `Thinking about the next best step to keep this flowing...`,
         `Hmm... figuring out what makes sense to ask next.`,
@@ -225,6 +246,9 @@ const LeadCaptureScreen = ({ onNext }) => {
     const [speechInputReady, setSpeechInputReady] = useState(false);
     const [questionSpoken, setQuestionSpoken] = useState(false);
     const [lastSpokenStep, setLastSpokenStep] = useState(-1);
+    const [showQuestFlow, setShowQuestFlow] = useState(false);
+    const [questCompleted, setQuestCompleted] = useState(false);
+    const [voiceStarted, setVoiceStarted] = useState(false);
 
     const [step, setStep] = useState(0);
     const [leadInfo, setLeadInfo] = useState({
@@ -233,7 +257,8 @@ const LeadCaptureScreen = ({ onNext }) => {
         consentToPhoto: false,
         tone: '',
         inputMethod: '',
-        welcomeMessage: ''
+        welcomeMessage: '',
+        questFlow: ''
     });
     const [inputValue, setInputValue] = useState('');
     const [isTyping, setIsTyping] = useState(true);
@@ -283,6 +308,14 @@ const LeadCaptureScreen = ({ onNext }) => {
 
         return currentQuestion;
     })();
+    const handleQuestComplete = (finalData) => {
+        console.log('Quest completed with data:', finalData);
+        setQuestCompleted(true);
+        setShowQuestFlow(false);
+        setIsThinking(false);
+        setThinkingText('');
+        setStep(questions.length);
+    };
 
     const debugSpeechState = () => {
         console.log("Speech State Debug:", {
@@ -299,33 +332,31 @@ const LeadCaptureScreen = ({ onNext }) => {
     };
 
     useEffect(() => {
-        const handleAudioEnded = () => {
+        const audio = audioRef.current;
+        if (!audio) return;
+
+        const handleEnded = () => {
             console.log('Backend audio playback ended');
             setIsBackendAudioPlaying(false);
             setIsSpeechBlocked(false);
         };
 
-        const handleCanPlayThrough = () => {
+        const handleReady = () => {
             console.log('Backend audio ready to play');
+            setVoiceStarted(true);
             setIsBackendAudioPlaying(true);
         };
-
-        const currentAudio = audioRef.current;
-        currentAudio.removeEventListener('ended', handleAudioEnded);
-        currentAudio.removeEventListener('canplaythrough', handleCanPlayThrough);
-
-        currentAudio.addEventListener('ended', handleAudioEnded);
-        currentAudio.addEventListener('canplaythrough', handleCanPlayThrough);
-
+        audio.addEventListener('ended', handleEnded);
+        audio.addEventListener('canplaythrough', handleReady);
         return () => {
-            currentAudio.removeEventListener('ended', handleAudioEnded);
-            currentAudio.removeEventListener('canplaythrough', handleCanPlayThrough);
+            audio.removeEventListener('ended', handleEnded);
+            audio.removeEventListener('canplaythrough', handleReady);
         };
     }, []);
 
     const moveToToneStep = () => {
         console.log("Moving to tone selection step (step 5)");
-        setStep(5);
+        setStep(6);
     };
 
     useEffect(() => {
@@ -466,9 +497,9 @@ const LeadCaptureScreen = ({ onNext }) => {
 
     const executePendingAction = () => {
         if (pendingActionRef.current) {
-            const action = pendingActionRef.current;
+            const fn = pendingActionRef.current;
             pendingActionRef.current = null;
-            action();
+            fn();
         }
     };
 
@@ -478,12 +509,18 @@ const LeadCaptureScreen = ({ onNext }) => {
             isBackendAudioPlaying,
             isSpeechBlocked,
             isSpeechMode,
-            hasSpeechRef: !!speechSynthRef.current
+            hasSpeechRef: !!speechSynthRef.current,
         });
 
-        if (isBackendAudioPlaying || isSpeechBlocked || !isSpeechMode || !speechSynthRef.current) {
-            console.log("Cannot speak due to conditions, executing action anyway");
-            if (action) action();
+        if (
+            isBackendAudioPlaying ||
+            isSpeechBlocked ||
+            !isSpeechMode ||
+            !speechSynthRef.current
+        ) {
+            setVoiceStarted(true);
+            console.log("TTS not allowed/available – execute action immediately");
+            action?.();
             return;
         }
 
@@ -491,24 +528,27 @@ const LeadCaptureScreen = ({ onNext }) => {
         audioRef.current.currentTime = 0;
         setIsBackendAudioPlaying(false);
 
-        if (!speechSynthRef.current || typeof speechSynthRef.current.speakTalking !== 'function') {
-            console.log("Speech synthesis not available");
-            if (action) action();
+        if (typeof speechSynthRef.current.speakTalking !== "function") {
+            console.log("Speech synthesis API missing");
+            action?.();
             return;
         }
 
-        console.log("Speaking:", text);
         setIsSpeaking(true);
+        setVoiceStarted(false);
 
-        if (action) {
-            pendingActionRef.current = action;
-        }
+        if (action) pendingActionRef.current = action;
 
-        speechSynthRef.current.speakTalking(text, () => {
-            console.log("Speech completed for:", text);
-            setIsSpeaking(false);
-            executePendingAction();
-        });
+        speechSynthRef.current.speakTalking(
+            text,
+            () => {
+                setIsSpeaking(false);
+                executePendingAction();
+            },
+            () => {
+                setVoiceStarted(true);
+            }
+        );
     };
 
     const simulateThinkingTyping = (text) => {
@@ -585,9 +625,12 @@ const LeadCaptureScreen = ({ onNext }) => {
     };
 
     useEffect(() => {
-        if (isThinking && canProceedToNextStep()) {
-            console.log('Thinking and API operations complete, proceeding to next step');
+        setVoiceStarted(false);
+    }, [step]);
 
+    useEffect(() => {
+        if (isThinking && canProceedToNextStep()) {
+            console.log('Thinking done – leaving thinking state');
             const visibilityDelay = 1000;
 
             setTimeout(() => {
@@ -595,64 +638,86 @@ const LeadCaptureScreen = ({ onNext }) => {
                 setThinkingComplete(false);
                 setThinkingProgress(0);
                 setIsTyping(true);
+
+                executePendingAction();
             }, visibilityDelay);
         }
-    }, [isThinking, thinkingComplete, apiOperationComplete, isSpeaking, waitingForSpeechToEnd]);
+    }, [isThinking, thinkingComplete, apiOperationComplete,
+        isSpeaking, waitingForSpeechToEnd]);
 
-    const handleInputSubmit = () => {
-        if (!personalizedQuestion) return;
-        const key = personalizedQuestion.key;
-        const submittedValue = inputValue.trim();
-
-        setInputValue('');
-        setLeadInfo(prev => {
-            const newState = { ...prev, [key]: submittedValue };
-
-            const thinkingMsg = getUniqueThinkingMessage(key, submittedValue);
-
-            setThinkingText('');
-            setIsThinking(true);
-            setWaitingForSpeechToEnd(false);
-            simulateThinkingTyping(thinkingMsg);
-
-            setTimeout(() => {
-                setStep(step + 1);
-            }, 100);
-
-            return newState;
-        });
-    };
+        const handleInputSubmit = async () => {
+            if (!personalizedQuestion) return;
+        
+            const key = personalizedQuestion.key;
+            const submittedValue = inputValue.trim();
+            setInputValue('');
+        
+            console.log(`Submitting value for key: ${key} = "${submittedValue}"`);
+        
+            let finalValue = submittedValue;
+        
+            if (key === 'name' && submittedValue) {
+                try {
+                    console.log("Calling extract-names API...");
+                    const response = await axios.post(`${API_BASE_URL}/extract-names`, { text: submittedValue });
+                    if (response.data.name) {
+                        finalValue = response.data.name;
+                        console.log(`Name refined from "${submittedValue}" to "${finalValue}"`);
+                    }
+                } catch (error) {
+                    console.error("Name extraction API error:", error);
+                }
+            }
+        
+            setLeadInfo(prev => {
+                const newState = { ...prev, [key]: finalValue };
+        
+                const thinkingMsg = getUniqueThinkingMessage(key, finalValue);
+        
+                setThinkingText('');
+                setIsThinking(true);
+                setWaitingForSpeechToEnd(false);
+                simulateThinkingTyping(thinkingMsg);
+        
+                setTimeout(() => {
+                    setStep(step + 1);
+                }, 100);
+        
+                return newState;
+            });
+        };
+        
 
     const handleCheckboxChange = async (e) => {
         if (!personalizedQuestion) return;
         const key = personalizedQuestion.key;
         const isChecked = e.target.checked;
-    
+
         setLeadInfo(prev => ({ ...prev, [key]: isChecked }));
-    
+
         if (key === 'consentToPhoto') {
             if (isChecked) {
                 setApiOperationComplete(false);
                 initializeCamera();
             } else {
                 const thinkingMsg = getUniqueThinkingMessage(key, isChecked);
-                
+
                 const defaultMsg = "Thanks for letting me know! Let's continue.";
                 setLeadInfo(prev => ({
                     ...prev,
                     welcomeMessage: defaultMsg
                 }));
                 questions[4].prompt = defaultMsg;
-                
+
                 setThinkingText('');
                 setIsThinking(true);
                 setWaitingForSpeechToEnd(false);
                 simulateThinkingTyping(thinkingMsg);
-                
+
                 setTimeout(() => {
                     console.log("Moving to welcome after declining photo");
                     setStep(4);
-                    
+
                     setTimeout(() => {
                         console.log("Moving to tone after welcome");
                         setStep(5);
@@ -661,18 +726,18 @@ const LeadCaptureScreen = ({ onNext }) => {
             }
         } else {
             const thinkingMsg = getUniqueThinkingMessage(key, isChecked);
-            
+
             setThinkingText('');
             setIsThinking(true);
             setWaitingForSpeechToEnd(false);
             simulateThinkingTyping(thinkingMsg);
-            
+
             setTimeout(() => {
                 setStep(step + 1);
             }, 100);
         }
     };
-    
+
     const logStateDebug = () => {
         console.log("Current State:", {
             step,
@@ -687,7 +752,7 @@ const LeadCaptureScreen = ({ onNext }) => {
             welcomeMessage: leadInfo.welcomeMessage
         });
     };
-    
+
 
     const handleChoiceSelect = (value) => {
         if (!personalizedQuestion) return;
@@ -695,8 +760,22 @@ const LeadCaptureScreen = ({ onNext }) => {
 
         if (key === 'inputMethod' && value === 'Talk') {
             setIsSpeechMode(true);
-        } else {
+        } else if (key === 'inputMethod') {
             setIsSpeechMode(false);
+        }
+
+        if (key === 'questFlow') {
+            setLeadInfo(prev => ({ ...prev, [key]: value }));
+
+            if (value === 'Yes, let\'s do it!') {
+                const thinkingMsg = getUniqueThinkingMessage(key, value);
+                pendingActionRef.current = () => setShowQuestFlow(true);
+                setThinkingText('');
+                setIsThinking(true);
+                setWaitingForSpeechToEnd(false);
+                simulateThinkingTyping(thinkingMsg);
+                return;
+            }
         }
 
         setLeadInfo(prev => {
@@ -757,7 +836,8 @@ const LeadCaptureScreen = ({ onNext }) => {
             consentToPhoto: false,
             tone: '',
             inputMethod: '',
-            welcomeMessage: ''
+            welcomeMessage: '',
+            questFlow: ''
         });
         setStep(0);
         setInputValue('');
@@ -780,6 +860,8 @@ const LeadCaptureScreen = ({ onNext }) => {
         setLastSpokenStep(-1);
         setIsSpeechBlocked(false);
         setIsBackendAudioPlaying(false);
+        setShowQuestFlow(false);
+        setQuestCompleted(false);
     };
 
     const initializeCamera = async () => {
@@ -1004,8 +1086,8 @@ const LeadCaptureScreen = ({ onNext }) => {
                     setIsSpeechBlocked(false);
 
                     setTimeout(() => {
-                        console.log("Moving to tone selection after audio");
-                        setStep(5); 
+                        console.log("Moving to quest flow after audio");
+                        setStep(5);
                     }, 1000);
 
                     audioRef.current.removeEventListener('ended', handleAudioComplete);
@@ -1032,7 +1114,7 @@ const LeadCaptureScreen = ({ onNext }) => {
                         setIsSpeechBlocked(false);
 
                         if (step !== 5) {
-                            console.log("Moving to tone selection after timeout");
+                            console.log("Moving to quest flow after timeout");
                             setStep(5);
                         }
                     }
@@ -1046,7 +1128,7 @@ const LeadCaptureScreen = ({ onNext }) => {
                 setStep(4);
 
                 setTimeout(() => {
-                    console.log("Moving to tone selection with no audio");
+                    console.log("Moving to quest flow with no audio");
                     setStep(5);
                 }, 3000);
             }
@@ -1070,7 +1152,7 @@ const LeadCaptureScreen = ({ onNext }) => {
             setStep(4);
 
             setTimeout(() => {
-                console.log("Moving to tone selection after error");
+                console.log("Moving to quest flow after error");
                 setStep(5);
             }, 3000);
         } finally {
@@ -1117,6 +1199,53 @@ const LeadCaptureScreen = ({ onNext }) => {
         }
     };
 
+    if (showQuestFlow && !questCompleted) {
+        return (
+            <RAGQuestScreen
+                leadInfo={leadInfo}
+                onComplete={handleQuestComplete}
+            />
+        );
+    }
+
+    const showTypewriter =
+        personalizedQuestion &&
+        !isThinking &&
+        (
+            !isSpeechMode
+            || voiceStarted);
+
+    if (questCompleted) {
+        return (
+            <div className="lead-capture-layout">
+                <div className="orb-column">
+                    <Orb hoverIntensity={0.5} rotateOnHover={true} hue={0} />
+                </div>
+
+                <div className="text-column">
+                    <h1 className="byte-heading">Hi, I'm Byte. Let's play a quick game!</h1>
+
+                    <div className="quest-completed-message">
+                        <h2>🎉 Quest Completed!</h2>
+                        <p>Great job exploring the BytesizedAI Model Experience, {leadInfo.name}! Log in to https://bytesized.com.au/beta to enroll in our beta program.</p>
+                    </div>
+
+                    {photoTaken && photoData && (
+                        <div className="captured-photo-container">
+                            <img src={photoData} alt="Captured" className="captured-photo-thumbnail" />
+                        </div>
+                    )}
+                </div>
+
+                <div className="start-over-container">
+                    <button className="start-over-button" onClick={handleReset} title="Start over from the beginning">
+                        ↺ Start Over
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="lead-capture-layout">
             <div className="orb-column">
@@ -1130,6 +1259,12 @@ const LeadCaptureScreen = ({ onNext }) => {
 
             <div className="text-column">
                 <h1 className="byte-heading">Hi, I'm Byte. Let's play a quick game!</h1>
+                {questCompleted && (
+                    <div className="quest-completed-message">
+                        <h2>🎉 Quest Completed!</h2>
+                        <p>Great job exploring our policies, {leadInfo.name}!</p>
+                    </div>
+                )}
 
                 {photoTaken && photoData && (
                     <div className="captured-photo-container">
@@ -1142,299 +1277,244 @@ const LeadCaptureScreen = ({ onNext }) => {
                 )}
 
                 <div className="lead-form">
-                    {personalizedQuestion && !isThinking ? (
+                    {showTypewriter ? (
                         <div className={`byte-question ${isSpeaking ? 'speaking' : ''}`}>
                             <Typewriter
-                                key={`typewriter-${step}-${personalizedQuestion.prompt.substring(0, 10)}`}
-                                options={{
-                                    delay: 40,
-                                    cursor: '|',
-                                    deleteSpeed: 0,
-                                }}
-                                onInit={(typewriter) => {
-                                    console.log(`Initializing typewriter for step ${step}: ${personalizedQuestion.key}`);
+                                key={`tw-${step}`}
+                                options={{ delay: 40, cursor: '|', deleteSpeed: 0 }}
+                                onInit={(tw) => {
                                     setIsTyping(true);
-                                    setTypingComplete(false);
-
-                                    let typingDelay = 200;
-
-                                    if (step === 4 && personalizedQuestion.key === 'welcomeMessage') {
-                                        console.log("Welcome message typewriter - audio playing:", isBackendAudioPlaying);
-
-                                        if (isBackendAudioPlaying) {
-                                            typingDelay = 2000;
-
-                                            setTimeout(() => {
-                                                if (isBackendAudioPlaying) {
-                                                    console.log("Audio still playing, delaying typewriter more");
-                                                    const checkAudio = setInterval(() => {
-                                                        if (!isBackendAudioPlaying) {
-                                                            clearInterval(checkAudio);
-                                                            console.log("Audio finished, now typing welcome message");
-                                                            typewriter
-                                                                .typeString(personalizedQuestion.prompt)
-                                                                .callFunction(() => {
-                                                                    setIsTyping(false);
-                                                                    setTypingComplete(true);
-                                                                })
-                                                                .start();
-                                                        }
-                                                    }, 500);
-
-                                                    setTimeout(() => {
-                                                        clearInterval(checkAudio);
-                                                        if (isTyping && !typingComplete) {
-                                                            console.log("Failsafe: typing welcome message after timeout");
-                                                            typewriter
-                                                                .typeString(personalizedQuestion.prompt)
-                                                                .callFunction(() => {
-                                                                    setIsTyping(false);
-                                                                    setTypingComplete(true);
-                                                                })
-                                                                .start();
-                                                        }
-                                                    }, 5000);
-
-                                                    return;
-                                                }
-                                            }, typingDelay);
-                                        }
-                                    }
-
-                                    setTimeout(() => {
-                                        console.log(`Starting typewriter for step ${step} after delay`);
-                                        typewriter
-                                            .typeString(personalizedQuestion.prompt)
-                                            .callFunction(() => {
-                                                console.log(`Typing complete for step ${step}`);
-                                                setIsTyping(false);
-                                                setTypingComplete(true);
-                                                setSpeechInputReady(true);
-                                            })
-                                            .start();
-                                    }, typingDelay);
+                                    tw.typeString(personalizedQuestion.prompt)
+                                        .callFunction(() => {
+                                            setIsTyping(false);
+                                            setTypingComplete(true);
+                                            setSpeechInputReady(true);
+                                        })
+                                        .start();
                                 }}
                             />
                         </div>
                     ) : (
                         <div className="byte-question-loading">
                             <div className="spinner-container">
-                                <div className="spinner"></div>
+                                <div className="spinner" />
                                 <p>Thinking...</p>
                             </div>
                         </div>
                     )}
+                </div>
 
-                    {personalizedQuestion && !isThinking && (
-                        <>
-                            {personalizedQuestion.type === 'choice' && (
-                                <div className="choice-selection">
-                                    {personalizedQuestion.options.map(option => (
-                                        <button
-                                            key={option}
-                                            onClick={() => handleChoiceSelect(option)}
-                                            className="choice-button"
-                                        >
-                                            {option}
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
+                {personalizedQuestion && !isThinking && (
+                    <>
+                        {personalizedQuestion.type === 'choice' && (
+                            <div className="choice-selection">
+                                {personalizedQuestion.options.map(option => (
+                                    <button
+                                        key={option}
+                                        onClick={() => handleChoiceSelect(option)}
+                                        className="choice-button"
+                                    >
+                                        {option}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
 
-                            {!isTyping && (
-                                <>
-                                    {personalizedQuestion.type === 'text' && (
-                                        <>
-                                            {isSpeechMode ? (
-                                                <div className="speech-input-container">
-                                                    <MicListener
-                                                        onTranscript={handleTranscript}
-                                                        customerId="lead_capture"
-                                                        namespace="LeadCapture"
-                                                        isAutoStart={!isTyping && !isSpeaking}
-                                                        onListeningStateChange={setIsListening}
-                                                    />
-                                                    <div className="transcript-display">
-                                                        {isListening ? (
-                                                            <p>Listening... {currentTranscript}</p>
-                                                        ) : (
-                                                            <p>{currentTranscript || "Please speak your name..."}</p>
-                                                        )}
-                                                    </div>
+                        {!isTyping && (
+                            <>
+                                {personalizedQuestion.type === 'text' && (
+                                    <>
+                                        {isSpeechMode ? (
+                                            <div className="speech-input-container">
+                                                <MicListener
+                                                    onTranscript={handleTranscript}
+                                                    customerId="lead_capture"
+                                                    namespace="LeadCapture"
+                                                    isAutoStart={!isTyping && !isSpeaking}
+                                                    onListeningStateChange={setIsListening}
+                                                />
+                                                <div className="transcript-display">
+                                                    {isListening ? (
+                                                        <p>Listening... {currentTranscript}</p>
+                                                    ) : (
+                                                        <p>{currentTranscript || "Please speak your name..."}</p>
+                                                    )}
                                                 </div>
-                                            ) : (
-                                                <>
-                                                    <input
-                                                        type="text"
-                                                        value={inputValue}
-                                                        onChange={e => setInputValue(e.target.value)}
-                                                        placeholder={personalizedQuestion.placeholder}
-                                                        onKeyDown={e => {
-                                                            if (e.key === 'Enter' && inputValue.trim() !== '') handleInputSubmit();
-                                                        }}
-                                                    />
-                                                    <button
-                                                        className="next-button"
-                                                        onClick={handleInputSubmit}
-                                                        disabled={!inputValue.trim()}
-                                                    >
-                                                        Next →
-                                                    </button>
-                                                </>
-                                            )}
-                                        </>
-                                    )}
-
-                                    {personalizedQuestion.type === 'email' && (
-                                        <>
-                                            <input
-                                                type="email"
-                                                value={inputValue}
-                                                onChange={e => setInputValue(e.target.value)}
-                                                placeholder={personalizedQuestion.placeholder}
-                                                onKeyDown={e => {
-                                                    if (e.key === 'Enter') handleInputSubmit();
-                                                }}
-                                            />
-                                            <div className="optional-field-note">
-                                                {isSpeechMode ?
-                                                    "For better accuracy, please type your email. This field is optional." :
-                                                    "This field is optional. You can leave it blank and click Next."}
                                             </div>
-                                            <button
-                                                className="next-button"
-                                                onClick={handleInputSubmit}
-                                            >
-                                                Next →
-                                            </button>
-                                        </>
-                                    )}
-
-                                    {personalizedQuestion.type === 'checkbox' && (
-                                        <div className="consent-options">
-                                            <button
-                                                className={`consent-button ${leadInfo[personalizedQuestion.key] ? 'consent-yes-selected' : ''}`}
-                                                onClick={() => handleCheckboxChange({ target: { checked: true } })}
-                                            >
-                                                Yes
-                                            </button>
-                                            <button
-                                                className={`consent-button ${leadInfo[personalizedQuestion.key] === false && leadInfo[personalizedQuestion.key] !== undefined ? 'consent-no-selected' : ''}`}
-                                                onClick={() => handleCheckboxChange({ target: { checked: false } })}
-                                            >
-                                                No
-                                            </button>
-                                        </div>
-                                    )}
-
-                                    {personalizedQuestion.type === 'tone' && (
-                                        <div className="tone-selection">
-                                            {tones.map(tone => (
+                                        ) : (
+                                            <>
+                                                <input
+                                                    type="text"
+                                                    value={inputValue}
+                                                    onChange={e => setInputValue(e.target.value)}
+                                                    placeholder={personalizedQuestion.placeholder}
+                                                    onKeyDown={e => {
+                                                        if (e.key === 'Enter' && inputValue.trim() !== '') handleInputSubmit();
+                                                    }}
+                                                />
                                                 <button
-                                                    key={tone}
-                                                    className={leadInfo.tone === tone ? 'selected-tone' : ''}
-                                                    onClick={() => handleToneSelect(tone)}
+                                                    className="next-button"
+                                                    onClick={handleInputSubmit}
+                                                    disabled={!inputValue.trim()}
                                                 >
-                                                    {tone}
+                                                    Next →
                                                 </button>
-                                            ))}
-                                        </div>
-                                    )}
+                                            </>
+                                        )}
+                                    </>
+                                )}
 
-                                    {personalizedQuestion.type === 'message' && (
+                                {personalizedQuestion.type === 'email' && (
+                                    <>
+                                        <input
+                                            type="email"
+                                            value={inputValue}
+                                            onChange={e => setInputValue(e.target.value)}
+                                            placeholder={personalizedQuestion.placeholder}
+                                            onKeyDown={e => {
+                                                if (e.key === 'Enter') handleInputSubmit();
+                                            }}
+                                        />
+                                        <div className="optional-field-note">
+                                            {isSpeechMode ?
+                                                "Totally optional! Drop your email if you’d like updates or support no spam, no nonsense, just the good stuff. Or skip it and hit Next" :
+                                                "This field is optional. You can leave it blank and click Next."}
+                                        </div>
                                         <button
                                             className="next-button"
-                                            onClick={() => {
-                                                if (step === 4) {
-                                                    moveToToneStep();
-                                                } else {
-                                                    goToNextStep();
-                                                }
-                                            }}
+                                            onClick={handleInputSubmit}
                                         >
                                             Next →
                                         </button>
-                                    )}
+                                    </>
+                                )}
 
-                                </>
-                            )}
-
-                            {personalizedQuestion.key === 'consentToPhoto' && leadInfo.consentToPhoto && !photoTaken && (
-                                <div className="camera-container">
-                                    <div className="camera-status">
-                                        {isModelLoading ? 'Loading face detection...' :
-                                            smileDetected ? 'Great smile! Capturing photo...' :
-                                                'Please smile for the camera!'}
+                                {personalizedQuestion.type === 'checkbox' && (
+                                    <div className="consent-options">
+                                        <button
+                                            className={`consent-button ${leadInfo[personalizedQuestion.key] ? 'consent-yes-selected' : ''}`}
+                                            onClick={() => handleCheckboxChange({ target: { checked: true } })}
+                                        >
+                                            Yes
+                                        </button>
+                                        <button
+                                            className={`consent-button ${leadInfo[personalizedQuestion.key] === false && leadInfo[personalizedQuestion.key] !== undefined ? 'consent-no-selected' : ''}`}
+                                            onClick={() => handleCheckboxChange({ target: { checked: false } })}
+                                        >
+                                            No
+                                        </button>
                                     </div>
-                                    <video
-                                        ref={videoRef}
-                                        autoPlay
-                                        playsInline
-                                        muted
-                                        className="camera-video"
-                                    />
-                                    {cameraError && (
-                                        <div className="camera-error">
-                                            {cameraError}
-                                        </div>
-                                    )}
+                                )}
+
+                                {personalizedQuestion.type === 'tone' && (
+                                    <div className="tone-selection">
+                                        {tones.map(tone => (
+                                            <button
+                                                key={tone}
+                                                className={leadInfo.tone === tone ? 'selected-tone' : ''}
+                                                onClick={() => handleToneSelect(tone)}
+                                            >
+                                                {tone}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+
+                                {personalizedQuestion.type === 'message' && (
+                                    <button
+                                        className="next-button"
+                                        onClick={() => {
+                                            if (step === 4) {
+                                                moveToToneStep();
+                                            } else {
+                                                goToNextStep();
+                                            }
+                                        }}
+                                    >
+                                        Next →
+                                    </button>
+                                )}
+
+                            </>
+                        )}
+
+                        {personalizedQuestion.key === 'consentToPhoto' && leadInfo.consentToPhoto && !photoTaken && (
+                            <div className="camera-container">
+                                <div className="camera-status">
+                                    {isModelLoading ? 'Loading face detection...' :
+                                        smileDetected ? 'Great smile! Capturing photo...' :
+                                            'Please smile for the camera!'}
                                 </div>
-                            )}
+                                <video
+                                    ref={videoRef}
+                                    autoPlay
+                                    playsInline
+                                    muted
+                                    className="camera-video"
+                                />
+                                {cameraError && (
+                                    <div className="camera-error">
+                                        {cameraError}
+                                    </div>
+                                )}
+                            </div>
+                        )}
 
-                            <canvas ref={canvasRef} style={{ display: 'none' }} />
+                        <canvas ref={canvasRef} style={{ display: 'none' }} />
 
-                            {isProcessingImage && (
-                                <div className="processing-indicator">
-                                    <div className="spinner"></div>
-                                    <div>Analyzing your photo...</div>
-                                </div>
-                            )}
+                        {isProcessingImage && (
+                            <div className="processing-indicator">
+                                <div className="spinner"></div>
+                                <div>Analyzing your photo...</div>
+                            </div>
+                        )}
 
-                            {apiError && (
-                                <div className="api-error">
-                                    {apiError}
-                                </div>
-                            )}
-                        </>
-                    )}
-                </div>
-
-                <audio
-                    ref={audioRef}
-                    style={{ display: 'none' }}
-                    onError={(e) => console.error('Audio playback error:', e)}
-                />
-
-                <div className="start-over-container">
-                    <button
-                        className="start-over-button"
-                        onClick={handleReset}
-                        title="Start over from the beginning"
-                    >
-                        ↺ Start Over
-                    </button>
-                </div>
-
-                {isThinking && (
-                    <div className={`thinking-box ${isSpeechMode && isSpeaking ? 'speaking' : ''}`}>
-                        <div className="thinking-header">This is what I'm thinking...</div>
-                        <div className="thinking-indicator">
-                            <span className="thinking-dot"></span>
-                            <span className="thinking-dot"></span>
-                            <span className="thinking-dot"></span>
-                        </div>
-                        <div className="thinking-text">{thinkingText}</div>
-                        <div className="thinking-progress-container">
-                            <div
-                                className="thinking-progress-bar"
-                                style={{ width: `${thinkingProgress * 100}%` }}
-                            />
-                        </div>
-                    </div>
+                        {apiError && (
+                            <div className="api-error">
+                                {apiError}
+                            </div>
+                        )}
+                    </>
                 )}
-
             </div>
+
+            <audio
+                ref={audioRef}
+                style={{ display: 'none' }}
+                onError={(e) => console.error('Audio playback error:', e)}
+            />
+
+            <div className="start-over-container">
+                <button
+                    className="start-over-button"
+                    onClick={handleReset}
+                    title="Start over from the beginning"
+                >
+                    ↺ Start Over
+                </button>
+            </div>
+
+            {isThinking && (
+                <div className={`thinking-box ${isSpeechMode && isSpeaking ? 'speaking' : ''}`}>
+                    <div className="thinking-header">This is what I'm thinking...</div>
+                    <div className="thinking-indicator">
+                        <span className="thinking-dot"></span>
+                        <span className="thinking-dot"></span>
+                        <span className="thinking-dot"></span>
+                    </div>
+                    <div className="thinking-text">{thinkingText}</div>
+                    <div className="thinking-progress-container">
+                        <div
+                            className="thinking-progress-bar"
+                            style={{ width: `${thinkingProgress * 100}%` }}
+                        />
+                    </div>
+                </div>
+            )}
+
+
         </div>
+
     );
 };
 

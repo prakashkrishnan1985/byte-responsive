@@ -1,0 +1,186 @@
+/* QuestionRenderer.css */
+
+.question-container {
+  width: 100%;
+}
+
+.byte-question {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.byte-question.speaking:after {
+  content: '🔊';
+  display: inline-block;
+  margin-left: 8px;
+  animation: pulse 1s infinite;
+  position: relative;
+  top: 2px;
+  font-size: 20px;
+}
+
+.input-container {
+  margin-top: 1rem;
+}
+
+.choice-selection {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.choice-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #f3f4f6;
+  border: 1px solid #888;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.choice-button:hover {
+  background-color: #e5e7eb;
+  border-color: #6b7280;
+}
+
+.choice-button:active {
+  background-color: #6366f1;
+  color: white;
+  border-color: #4f46e5;
+}
+
+.consent-options {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.consent-button {
+  padding: 0.75rem 2rem;
+  border: 2px solid #d1d5db;
+  border-radius: 8px;
+  background-color: #f9fafb;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.consent-button:hover {
+  border-color: #6366f1;
+  background-color: #f3f4f6;
+}
+
+.consent-yes-selected {
+  background-color: #10b981;
+  color: white;
+  border-color: #059669;
+}
+
+.consent-no-selected {
+  background-color: #ef4444;
+  color: white;
+  border-color: #dc2626;
+}
+
+.tone-selection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.tone-selection button {
+  padding: 0.75rem 1rem;
+  border: 1px solid #888;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #f3f4f6;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.tone-selection button:hover {
+  background-color: #e5e7eb;
+  border-color: #6b7280;
+}
+
+.tone-selection .selected-tone {
+  background-color: #6366f1;
+  color: white;
+  border-color: #4f46e5;
+}
+
+.lead-form input[type="text"],
+.lead-form input[type="email"] {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  border: 2px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.lead-form input[type="text"]:focus,
+.lead-form input[type="email"]:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  outline: none;
+}
+
+.lead-form input[type="email"] {
+  border-color: #3498db;
+}
+
+.lead-form input[type="email"]:focus {
+  border-color: #2980b9;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3);
+}
+
+.optional-field-note {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 10px;
+  text-align: center;
+  padding: 8px;
+  background-color: #121213;
+  border-radius: 4px;
+  border-left: 3px solid #3498db;
+  margin-top: "2rem"
+}
+
+.next-button {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.next-button:hover {
+  background-color: #4338ca;
+}
+
+.next-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
