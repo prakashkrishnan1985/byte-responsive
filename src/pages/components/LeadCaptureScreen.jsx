@@ -10,8 +10,8 @@ import './styles/RAGQuestScreen.css';
 import { sendQuery, processAudio } from './api';
 
 const MODEL_URL = "/models";
-//const API_BASE_URL = "https://model-api-dev.bytesized.com.au";
-const API_BASE_URL = "http://localhost:8000";
+const API_BASE_URL = "https://model-api-dev.bytesized.com.au";
+//const API_BASE_URL = "http://localhost:8000";
 
 
 const initSpeechSynthesis = () => {
@@ -646,6 +646,7 @@ const LeadCaptureScreen = ({ onNext }) => {
         isSpeaking, waitingForSpeechToEnd]);
 
         const handleInputSubmit = async () => {
+            debugger
             if (!personalizedQuestion) return;
         
             const key = personalizedQuestion.key;
@@ -655,7 +656,7 @@ const LeadCaptureScreen = ({ onNext }) => {
             console.log(`Submitting value for key: ${key} = "${submittedValue}"`);
         
             let finalValue = submittedValue;
-        
+            debugger
             if (key === 'name' && submittedValue) {
                 try {
                     console.log("Calling extract-names API...");
@@ -1167,32 +1168,50 @@ const LeadCaptureScreen = ({ onNext }) => {
     };
 
 
-    const handleTranscript = (text, isFinal = false) => {
+    const handleTranscript = async (text, isFinal = false) => {
         if (!speechInputReady) return;
-
+   
         setIsListening(true);
         setCurrentTranscript(text);
-
+   
         if (isFinal && text.trim()) {
             setIsListening(false);
-            setInputValue(text);
-            setSpeechInputReady(false);
 
+          setInputValue(text);
+         let finalValue = text.trim();
+   
+         // Run name-extraction ONLY for the “name” question
+           if (personalizedQuestion?.key === 'name') {
+               try {
+                   const { data } = await axios.post(
+                       `${API_BASE_URL}/extract-names`,
+                       { text: finalValue }
+                   );
+                   if (data?.name) finalValue = data.name;
+               } catch (err) {
+                   console.error('Name extraction API error:', err);
+               }
+           }
+   
+            setSpeechInputReady(false);
+   
             if (personalizedQuestion) {
                 const key = personalizedQuestion.key;
                 setLeadInfo(prev => {
-                    const newState = { ...prev, [key]: text };
-                    const thinkingMsg = getUniqueThinkingMessage(key, text);
+   
+                   const newState = { ...prev, [key]: finalValue };
+   
+                    const thinkingMsg = getUniqueThinkingMessage(key, finalValue);
                     setThinkingText('');
                     setIsThinking(true);
                     setWaitingForSpeechToEnd(false);
                     simulateThinkingTyping(thinkingMsg);
-
+   
                     setTimeout(() => {
                         setStep(step + 1);
                         setCurrentTranscript('');
                     }, 100);
-
+   
                     return newState;
                 });
             }
