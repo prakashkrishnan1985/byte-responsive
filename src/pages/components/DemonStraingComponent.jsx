@@ -48,6 +48,7 @@ const DemonstratingNER = () => {
         py: 6,
         width: "100%",
         margin: "auto",
+        paddingTop: "0px !important"
       }}
     >
       <Grid
