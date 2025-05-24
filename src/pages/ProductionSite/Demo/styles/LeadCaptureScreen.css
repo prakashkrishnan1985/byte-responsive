@@ -147,4 +147,8 @@ body, html {
     .lead-form {
     text-align: center;
   }
+
+  .start-over-container {
+    top: -40px;
+  }
   }

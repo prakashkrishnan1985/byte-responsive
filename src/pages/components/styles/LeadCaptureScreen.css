@@ -117,7 +117,7 @@ input[type="email"]::placeholder {
 
 .demo-message-container {
   position: absolute;
-  top: 75px;
+  top: 30px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1000;
@@ -191,7 +191,7 @@ input[type="email"]::placeholder {
 
 @media (max-width: 768px) {
   .demo-message-container {
-      top: 75px;
+      top: 50px;
       left: 50%;
       right: auto;
       transform: translateX(-50%);

@@ -5,7 +5,7 @@ import MicListener from "./DemoMicListener";
 import "./styles/RAGQuestScreen.css";
 import { Typography, useMediaQuery, useTheme } from "@mui/material";
 
-const QUEST_API_BASE_URL = "http://localhost:8000";
+const QUEST_API_BASE_URL = "https://model-api-dev.bytesized.com.au";
 
 // Single state to track exactly what phase we're in
 const PHASES = {
