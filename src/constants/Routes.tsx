@@ -38,6 +38,7 @@ export const ROUTES = {
     TEST: "/test",
     DEMO: "/byte-demo",
     LEADCAPTURESCREEN: "/intro",
-    DEMOSITE: "/try"
+    DEMOSITE: "/try",
+    LOCALDEMO: "/local"
   };
   

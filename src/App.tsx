@@ -60,7 +60,8 @@ import PurchaseCreditsPage from "./components/Stripe/PurchaseCreditsPage";
 import { ROUTES } from "./constants/Routes";
 import AutoFaceCapture from "./pages/components/AutoFaceCapture";
 import LeadCaptureScreen from "./pages/components/LeadCaptureScreen";
-import DEMOSITE from "./pages/ProductionSite/Demo/components/LeadCaptureScreen";
+import DEMOSITE from "./pages/ProductionSite/Demo/components/LeadCaptureScreen"
+import LOCALDEMO from "./pages/local-demo/LocalLeadCaptureScreen"
 
 {
   /* <Route path="/" element={<AutoFaceCapture />} /> */
@@ -173,11 +174,9 @@ const apiResponse = {
   ],
 };
 
-// Function to map apiResponse to KBar actions
 const mapApiResponseToActions = (response: any) => {
   const actions = [...actionsInit];
 
-  // Add the relevant response as an action
   actions.push({
     id: "relevantResponse",
     name: response.relevantResponses.response,
@@ -187,11 +186,11 @@ const mapApiResponseToActions = (response: any) => {
     type: response.relevantResponses.type,
     perform: () => {
       console.log("Performing relevant response action");
-      // Add logic for this action if needed
+    
     },
   });
 
-  // Map reference materials to actions
+
   response.referenceMaterial.forEach((item: any) => {
     actions.push({
       id: item.url,
@@ -210,7 +209,7 @@ const mapApiResponseToActions = (response: any) => {
       url: item.url,
       perform: () => {
         console.log(`Opening ${item.type} at ${item.url}`);
-        //  window.open(item.url, '_blank');
+       
       },
     });
   });
@@ -218,7 +217,7 @@ const mapApiResponseToActions = (response: any) => {
   return actions;
 };
 
-// Generate actions
+
 const actions = mapApiResponseToActions(apiResponse);
 
 function App() {
@@ -281,12 +280,9 @@ function App() {
             <Route path={ROUTES.ARTICLE} element={<ArticlePage />} />
             <Route path={ROUTES.CALL_TO_ACTIONS} element={<CallToActions />} />
             <Route path={ROUTES.BETA} element={<CallToActions />} />
-            {/* <Route path={ROUTES.DEMO} element={<AutoFaceCapture />} /> */}
-            <Route
-              path={ROUTES.LEADCAPTURESCREEN}
-              element={<LeadCaptureScreen />}
-            />
+            <Route path={ROUTES.LEADCAPTURESCREEN} element={<LeadCaptureScreen />} />
             <Route path={ROUTES.DEMOSITE} element={<DEMOSITE />} />
+            <Route path={ROUTES.LOCALDEMO} element={<LOCALDEMO />} />
           </Routes>
 
           {pathname != "/eoi" &&
