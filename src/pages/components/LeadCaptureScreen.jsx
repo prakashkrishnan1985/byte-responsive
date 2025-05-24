@@ -27,40 +27,47 @@ const API_BASE_URL = "https://model-api-dev.bytesized.com.au";
 
 // Demo messages for different stages
 const getDemoMessage = (stage, additionalContext = {}) => {
-    const messages = {
-        // Input method selection
-        inputMethod_choice: "🎯 Demonstrating: User Interface Adaptability",
+  const messages = {
+    // Input method selection
+    inputMethod_choice: "🎯 Demonstrating: User Interface Adaptability",
 
-        // Speech-related demos
-        speech_listening: "🎤 Demonstrating: Speech-to-Text (STT) + Real-time Audio Processing",
-        speech_processing: "🧠 Demonstrating: Natural Language Processing (NLP) + Name Extraction API",
+    // Speech-related demos
+    speech_listening:
+      "🎤 Demonstrating: Speech-to-Text (STT) + Real-time Audio Processing",
+    speech_processing:
+      "🧠 Demonstrating: Natural Language Processing (NLP) + Name Extraction API",
 
-        // Text-related demos  
-        text_input: "⌨️ Demonstrating: Text Processing + API Integration",
+    // Text-related demos
+    text_input: "⌨️ Demonstrating: Text Processing + API Integration",
 
-        // Email processing
-        email_processing: "📧 Demonstrating: Email Validation + Data Processing",
+    // Email processing
+    email_processing: "📧 Demonstrating: Email Validation + Data Processing",
 
-        // Camera and vision
-        camera_init: "📷 Demonstrating: Computer Vision Setup + Face Detection Models",
-        face_detection: "👁️ Demonstrating: Real-time Face Detection + Expression Recognition",
-        smile_detection: "😊 Demonstrating: Emotion AI + Facial Expression Analysis",
-        photo_capture: "📸 Demonstrating: Image Capture + Base64 Encoding",
-        image_processing: "🤖 Demonstrating: Vision AI (GPT-4o) + Image Analysis + TTS Generation",
+    // Camera and vision
+    camera_init:
+      "📷 Demonstrating: Computer Vision Setup + Face Detection Models",
+    face_detection:
+      "👁️ Demonstrating: Real-time Face Detection + Expression Recognition",
+    smile_detection:
+      "😊 Demonstrating: Emotion AI + Facial Expression Analysis",
+    photo_capture: "📸 Demonstrating: Image Capture + Base64 Encoding",
+    image_processing:
+      "🤖 Demonstrating: Vision AI (GPT-4o) + Image Analysis + TTS Generation",
 
-        // Speech synthesis
-        tts_thinking: "💭 Demonstrating: Text-to-Speech (TTS) + Voice Synthesis",
-        tts_talking: "🗣️ Demonstrating: Advanced TTS + Voice Modulation",
+    // Speech synthesis
+    tts_thinking: "💭 Demonstrating: Text-to-Speech (TTS) + Voice Synthesis",
+    tts_talking: "🗣️ Demonstrating: Advanced TTS + Voice Modulation",
 
-        // Quest/RAG
-        quest_launch: "🎮 Demonstrating: Retrieval-Augmented Generation (RAG) + Interactive AI",
+    // Quest/RAG
+    quest_launch:
+      "🎮 Demonstrating: Retrieval-Augmented Generation (RAG) + Interactive AI",
 
-        // General processing
-        api_call: "🌐 Demonstrating: API Integration + Backend Processing",
-        data_processing: "⚙️ Demonstrating: Data Processing + State Management"
-    };
+    // General processing
+    api_call: "🌐 Demonstrating: API Integration + Backend Processing",
+    data_processing: "⚙️ Demonstrating: Data Processing + State Management",
+  };
 
-    return messages[stage] || "🔄 Demonstrating: AI Processing";
+  return messages[stage] || "🔄 Demonstrating: AI Processing";
 };
 
 const initSpeechSynthesis = () => {
@@ -355,20 +362,20 @@ const LeadCaptureScreen = ({ onNext }) => {
   const [demoMessage, setDemoMessage] = useState("");
   const [showDemoMessage, setShowDemoMessage] = useState(false);
 
-    const [step, setStep] = useState(0);
-    const [leadInfo, setLeadInfo] = useState({
-        name: '',
-        email: '',
-        consentToPhoto: false,
-        tone: '',
-        inputMethod: '',
-        welcomeMessage: '',
-        questFlow: ''
-    });
-    const leadInfoRef = useRef(leadInfo);
+  const [step, setStep] = useState(0);
+  const [leadInfo, setLeadInfo] = useState({
+    name: "",
+    email: "",
+    consentToPhoto: false,
+    tone: "",
+    inputMethod: "",
+    welcomeMessage: "",
+    questFlow: "",
+  });
+  const leadInfoRef = useRef(leadInfo);
 
-    const [inputValue, setInputValue] = useState('');
-    const [isTyping, setIsTyping] = useState(true);
+  const [inputValue, setInputValue] = useState("");
+  const [isTyping, setIsTyping] = useState(true);
 
   const [isThinking, setIsThinking] = useState(false);
   const [thinkingText, setThinkingText] = useState("");
@@ -406,13 +413,12 @@ const LeadCaptureScreen = ({ onNext }) => {
 
   const currentQuestion = step < questions.length ? questions[step] : null;
 
+  useEffect(() => {
+    leadInfoRef.current = leadInfo;
+  });
 
-    useEffect(() => {
-        leadInfoRef.current = leadInfo;
-    });
-
-    const personalizedQuestion = (() => {
-        if (!currentQuestion) return null;
+  const personalizedQuestion = (() => {
+    if (!currentQuestion) return null;
 
     if (currentQuestion.promptTemplate && leadInfo.name) {
       return {
@@ -424,14 +430,14 @@ const LeadCaptureScreen = ({ onNext }) => {
     return currentQuestion;
   })();
 
-    // Function to show demo message that persists until stage changes
-    const showDemoTech = (stage, additionalContext = {}) => {
-        const message = getDemoMessage(stage, additionalContext);
-        console.log(`Showing demo message: ${message}`);
+  // Function to show demo message that persists until stage changes
+  const showDemoTech = (stage, additionalContext = {}) => {
+    const message = getDemoMessage(stage, additionalContext);
+    console.log(`Showing demo message: ${message}`);
 
-        setDemoMessage(message);
-        setShowDemoMessage(true);
-    };
+    setDemoMessage(message);
+    setShowDemoMessage(true);
+  };
 
   // Function to hide demo message when stage changes
   const hideDemoMessage = () => {
@@ -439,20 +445,20 @@ const LeadCaptureScreen = ({ onNext }) => {
     setDemoMessage("");
   };
 
-    // Enhanced thinking simulation with demo messages
-    const simulateThinkingTyping = (text) => {
-        console.log('Simulating thinking typing with text:', text);
+  // Enhanced thinking simulation with demo messages
+  const simulateThinkingTyping = (text) => {
+    console.log("Simulating thinking typing with text:", text);
 
-        // Hide previous demo message when thinking starts
-        hideDemoMessage();
+    // Hide previous demo message when thinking starts
+    hideDemoMessage();
 
-        // Show TTS demo when thinking starts
-        if (isSpeechMode) {
-            showDemoTech('tts_thinking');
-        }
+    // Show TTS demo when thinking starts
+    if (isSpeechMode) {
+      showDemoTech("tts_thinking");
+    }
 
-        let i = 0;
-        const length = text.length;
+    let i = 0;
+    const length = text.length;
 
     setThinkingProgress(0);
     setThinkingComplete(false);
@@ -555,16 +561,15 @@ const LeadCaptureScreen = ({ onNext }) => {
     setStep(6);
   };
 
-    useEffect(() => {
-        if (step === 4) {
-            if (!leadInfo.welcomeMessage && !questions[4].prompt) {
-                questions[4].prompt =
-                    leadInfo.consentToPhoto
-                        ? "Welcome! Thanks for the photo."
-                        : "Thanks for letting me know! Let's continue.";
-            }
-        }
-    }, [step, leadInfo.welcomeMessage]);
+  useEffect(() => {
+    if (step === 4) {
+      if (!leadInfo.welcomeMessage && !questions[4].prompt) {
+        questions[4].prompt = leadInfo.consentToPhoto
+          ? "Welcome! Thanks for the photo."
+          : "Thanks for letting me know! Let's continue.";
+      }
+    }
+  }, [step, leadInfo.welcomeMessage]);
 
   useEffect(() => {
     const shouldSpeak =
@@ -770,10 +775,10 @@ const LeadCaptureScreen = ({ onNext }) => {
     );
   };
 
-    const goToNextStep = () => {
-        if (step + 1 < questions.length) {
-            const key = currentQuestion.key;
-            const value = leadInfoRef.current[key];
+  const goToNextStep = () => {
+    if (step + 1 < questions.length) {
+      const key = currentQuestion.key;
+      const value = leadInfoRef.current[key];
 
       let thinking;
       if (key === "consentToPhoto" && value === true && photoTaken) {
@@ -839,26 +844,30 @@ const LeadCaptureScreen = ({ onNext }) => {
 
     console.log(`Submitting value for key: ${key} = "${submittedValue}"`);
 
-        let finalValue = submittedValue;
+    let finalValue = submittedValue;
 
-        if (key === 'name' && submittedValue) {
-            try {
-                console.log("Calling extract-names API...");
-                showDemoTech('speech_processing');
+    if (key === "name" && submittedValue) {
+      try {
+        console.log("Calling extract-names API...");
+        showDemoTech("speech_processing");
 
-                const response = await axios.post(`${API_BASE_URL}/extract-names`, { text: submittedValue });
-                if (response.data.name) {
-                    finalValue = response.data.name;
-                    console.log(`Name refined from "${submittedValue}" to "${finalValue}"`);
-                }
-            } catch (error) {
-                console.error("Name extraction API error:", error);
-            }
-        } else if (key === 'email') {
-            showDemoTech('email_processing');
-        } else {
-            showDemoTech('text_input');
+        const response = await axios.post(`${API_BASE_URL}/extract-names`, {
+          text: submittedValue,
+        });
+        if (response.data.name) {
+          finalValue = response.data.name;
+          console.log(
+            `Name refined from "${submittedValue}" to "${finalValue}"`
+          );
         }
+      } catch (error) {
+        console.error("Name extraction API error:", error);
+      }
+    } else if (key === "email") {
+      showDemoTech("email_processing");
+    } else {
+      showDemoTech("text_input");
+    }
 
     setLeadInfo((prev) => {
       const newState = { ...prev, [key]: finalValue };
@@ -878,58 +887,57 @@ const LeadCaptureScreen = ({ onNext }) => {
     });
   };
 
-    const handleCheckboxChange = (e) => {
-        if (!personalizedQuestion) return;
+  const handleCheckboxChange = (e) => {
+    if (!personalizedQuestion) return;
 
-        const { key } = personalizedQuestion;
-        const isChecked = e.target.checked;
-        console.log(`Checkbox changed: ${key} = ${isChecked}`);
+    const { key } = personalizedQuestion;
+    const isChecked = e.target.checked;
+    console.log(`Checkbox changed: ${key} = ${isChecked}`);
 
-        if (key === 'consentToPhoto') {
-            if (isChecked) {
-                // ONE place where we update state and kick off the camera
-                setLeadInfo(prev => {
-                    const updated = { ...prev, consentToPhoto: true };
+    if (key === "consentToPhoto") {
+      if (isChecked) {
+        // ONE place where we update state and kick off the camera
+        setLeadInfo((prev) => {
+          const updated = { ...prev, consentToPhoto: true };
 
-                    // block “next-step” logic until camera work finishes
-                    setApiOperationComplete(false);
-                    showDemoTech('camera_init');
-                    initializeCamera();
+          // block “next-step” logic until camera work finishes
+          setApiOperationComplete(false);
+          showDemoTech("camera_init");
+          initializeCamera();
 
-                    return updated;
-                });
-                return;
-            }
+          return updated;
+        });
+        return;
+      }
 
-            const thinkingMsg = getUniqueThinkingMessage(key, false);
+      const thinkingMsg = getUniqueThinkingMessage(key, false);
 
-            const defaultMsg = "Thanks for letting me know! Let's continue.";
-            setLeadInfo(prev => ({ ...prev, welcomeMessage: defaultMsg }));
-            questions[4].prompt = defaultMsg;
+      const defaultMsg = "Thanks for letting me know! Let's continue.";
+      setLeadInfo((prev) => ({ ...prev, welcomeMessage: defaultMsg }));
+      questions[4].prompt = defaultMsg;
 
-            setThinkingText('');
-            setIsThinking(true);
-            setWaitingForSpeechToEnd(false);
-            simulateThinkingTyping(thinkingMsg);
+      setThinkingText("");
+      setIsThinking(true);
+      setWaitingForSpeechToEnd(false);
+      simulateThinkingTyping(thinkingMsg);
 
-            setTimeout(() => {
-                setStep(4);
-                setTimeout(() => setStep(5), 3000);
-            }, 1500);
-            return;
-        }
+      setTimeout(() => {
+        setStep(4);
+        setTimeout(() => setStep(5), 3000);
+      }, 1500);
+      return;
+    }
 
-        setLeadInfo(prev => ({ ...prev, [key]: isChecked }));
-        const thinkingMsg = getUniqueThinkingMessage(key, isChecked);
+    setLeadInfo((prev) => ({ ...prev, [key]: isChecked }));
+    const thinkingMsg = getUniqueThinkingMessage(key, isChecked);
 
-        setThinkingText('');
-        setIsThinking(true);
-        setWaitingForSpeechToEnd(false);
-        simulateThinkingTyping(thinkingMsg);
+    setThinkingText("");
+    setIsThinking(true);
+    setWaitingForSpeechToEnd(false);
+    simulateThinkingTyping(thinkingMsg);
 
-        setTimeout(() => setStep(step + 1), 100);
-    };
-
+    setTimeout(() => setStep(step + 1), 100);
+  };
 
   const logStateDebug = () => {
     console.log("Current State:", {
@@ -1001,13 +1009,13 @@ const LeadCaptureScreen = ({ onNext }) => {
     });
   };
 
-    const handleToneSelect = (tone) => {
-        showDemoTech('data_processing');
+  const handleToneSelect = (tone) => {
+    showDemoTech("data_processing");
 
-        const updatedInfo = {
-            ...leadInfo,
-            tone
-        };
+    const updatedInfo = {
+      ...leadInfo,
+      tone,
+    };
 
     setLeadInfo(updatedInfo);
 
@@ -1079,30 +1087,32 @@ const LeadCaptureScreen = ({ onNext }) => {
     setDemoMessage("");
   };
 
-    const initializeCamera = async () => {
-        try {
-            console.log('Starting camera initialization...');
-            setIsModelLoading(true);
-            setCameraError('');
+  const initializeCamera = async () => {
+    try {
+      console.log("Starting camera initialization...");
+      setIsModelLoading(true);
+      setCameraError("");
 
-            try {
-                console.log('Loading face detection models...');
-                showDemoTech('camera_init');
-                await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
-                await faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL);
-                console.log('Face detection models loaded successfully');
-            } catch (modelErr) {
-                console.error('Error loading face detection models:', modelErr);
-                setCameraError(`Could not load face detection models: ${modelErr.message}`);
-                setApiOperationComplete(true);
-                setIsModelLoading(false);
+      try {
+        console.log("Loading face detection models...");
+        showDemoTech("camera_init");
+        await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
+        await faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL);
+        console.log("Face detection models loaded successfully");
+      } catch (modelErr) {
+        console.error("Error loading face detection models:", modelErr);
+        setCameraError(
+          `Could not load face detection models: ${modelErr.message}`
+        );
+        setApiOperationComplete(true);
+        setIsModelLoading(false);
 
-                // Continue without camera after 3 seconds
-                setTimeout(() => {
-                    goToNextStep();
-                }, 3000);
-                return;
-            }
+        // Continue without camera after 3 seconds
+        setTimeout(() => {
+          goToNextStep();
+        }, 3000);
+        return;
+      }
 
       console.log("Requesting camera access...");
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -1110,70 +1120,73 @@ const LeadCaptureScreen = ({ onNext }) => {
         audio: false,
       });
 
-            console.log('Camera access granted, setting up video stream...');
+      console.log("Camera access granted, setting up video stream...");
 
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         streamRef.current = stream;
 
-                videoRef.current.onloadedmetadata = () => {
-                    console.log('Video metadata loaded, starting playback...');
-                    videoRef.current.play()
-                        .then(() => {
-                            console.log('Video playback started successfully');
-                            setIsModelLoading(false);
-                            showDemoTech('face_detection');
+        videoRef.current.onloadedmetadata = () => {
+          console.log("Video metadata loaded, starting playback...");
+          videoRef.current
+            .play()
+            .then(() => {
+              console.log("Video playback started successfully");
+              setIsModelLoading(false);
+              showDemoTech("face_detection");
 
-                            // Start face detection after a short delay
-                            setTimeout(() => {
-                                startFaceDetection();
-                            }, 500);
-                        })
-                        .catch(playErr => {
-                            console.error('Error starting video playback:', playErr);
-                            setCameraError(`Error starting video playback: ${playErr.message}`);
-                            setIsModelLoading(false);
-                            setApiOperationComplete(true);
+              // Start face detection after a short delay
+              setTimeout(() => {
+                startFaceDetection();
+              }, 500);
+            })
+            .catch((playErr) => {
+              console.error("Error starting video playback:", playErr);
+              setCameraError(
+                `Error starting video playback: ${playErr.message}`
+              );
+              setIsModelLoading(false);
+              setApiOperationComplete(true);
 
-                            setTimeout(() => {
-                                goToNextStep();
-                            }, 3000);
-                        });
-                };
-
-                // Add error handler for video element
-                videoRef.current.onerror = (err) => {
-                    console.error('Video element error:', err);
-                    setCameraError('Video playback error occurred');
-                    setIsModelLoading(false);
-                    setApiOperationComplete(true);
-
-                    setTimeout(() => {
-                        goToNextStep();
-                    }, 3000);
-                };
-            } else {
-                console.error('Video ref is not available');
-                setCameraError('Video element not found');
-                setIsModelLoading(false);
-                setApiOperationComplete(true);
-
-                setTimeout(() => {
-                    goToNextStep();
-                }, 3000);
-            }
-        } catch (err) {
-            console.error('Error initializing camera:', err);
-            setCameraError(`Could not access camera: ${err.message}`);
-            setIsModelLoading(false);
-            setApiOperationComplete(true);
-
-            // Continue without camera after showing error
-            setTimeout(() => {
+              setTimeout(() => {
                 goToNextStep();
-            }, 3000);
-        }
-    };
+              }, 3000);
+            });
+        };
+
+        // Add error handler for video element
+        videoRef.current.onerror = (err) => {
+          console.error("Video element error:", err);
+          setCameraError("Video playback error occurred");
+          setIsModelLoading(false);
+          setApiOperationComplete(true);
+
+          setTimeout(() => {
+            goToNextStep();
+          }, 3000);
+        };
+      } else {
+        console.error("Video ref is not available");
+        setCameraError("Video element not found");
+        setIsModelLoading(false);
+        setApiOperationComplete(true);
+
+        setTimeout(() => {
+          goToNextStep();
+        }, 3000);
+      }
+    } catch (err) {
+      console.error("Error initializing camera:", err);
+      setCameraError(`Could not access camera: ${err.message}`);
+      setIsModelLoading(false);
+      setApiOperationComplete(true);
+
+      // Continue without camera after showing error
+      setTimeout(() => {
+        goToNextStep();
+      }, 3000);
+    }
+  };
 
   const startFaceDetection = () => {
     console.log("Starting face detection...");
@@ -1655,24 +1668,33 @@ const LeadCaptureScreen = ({ onNext }) => {
             />
           </Box>
 
-            <div className="text-column">
-                <h1 className="byte-heading">Hi, I'm Byte. Let's play a quick game!</h1>
+          <div className="text-column">
+            <h1 className="byte-heading">
+              Hi, I'm Byte. Let's play a quick game!
+            </h1>
 
-                {/* Demo Message Display */}
-                {showDemoMessage && (
-                    <div className="demo-message-container">
-                        <div className="demo-message">
-                            {demoMessage}
-                        </div>
-                    </div>
-                )}
+            {/* Demo Message Display */}
+            {showDemoMessage && (
+              <div className="demo-message-container">
+                <div className="demo-message">
+                  <Typography
+                    sx={{
+                      fontSize: isTablet ? "0.8rem" : "1.2rem",
+                      textAlign: "center",
+                    }}
+                  >
+                    {demoMessage}
+                  </Typography>
+                </div>
+              </div>
+            )}
 
-                {questCompleted && (
-                    <div className="quest-completed-message">
-                        <h2>🎉 Quest Completed!</h2>
-                        <p>Great job exploring our policies, {leadInfo.name}!</p>
-                    </div>
-                )}
+            {questCompleted && (
+              <div className="quest-completed-message">
+                <h2>🎉 Quest Completed!</h2>
+                <p>Great job exploring our policies, {leadInfo.name}!</p>
+              </div>
+            )}
 
             {photoTaken && photoData && (
               <div className="captured-photo-container">
