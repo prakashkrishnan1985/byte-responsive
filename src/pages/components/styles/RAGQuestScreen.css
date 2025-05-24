@@ -1,7 +1,7 @@
 .rag-quest-layout {
     min-height: 100vh;
     padding: 2rem;
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    background: black;
     color: white;
     font-family: 'Inter', sans-serif;
   }

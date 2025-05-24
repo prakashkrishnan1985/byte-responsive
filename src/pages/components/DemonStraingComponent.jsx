@@ -74,10 +74,10 @@ const DemonstratingNER = () => {
               sx={{
                 px: 2,
                 py: 4,
-                background:
-                  index === 2
-                    ? "linear-gradient(0deg, rgba(94, 8, 134, 0.85), rgba(20, 19, 19, 0.95))"
-                    : "transparent",
+                ":hover": {
+                  background:
+                    "linear-gradient(0deg, rgba(94, 8, 134, 0.85), rgba(20, 19, 19, 0.95))",
+                },
                 height: "100%",
                 borderRight: isTablet
                   ? "1px solid #353434d7"

@@ -599,6 +599,9 @@ const LeadCaptureScreen = ({ onNext }) => {
       // Show TTS demo when about to speak
       showDemoTech("tts_talking");
 
+      // Show TTS demo when about to speak
+      showDemoTech("tts_talking");
+
       if (step === 4 && personalizedQuestion.key === "welcomeMessage") {
         if (!isBackendAudioPlaying) {
           console.log("Speaking welcome message with speech synthesis");
@@ -949,6 +952,11 @@ const LeadCaptureScreen = ({ onNext }) => {
   const handleChoiceSelect = (value) => {
     if (!personalizedQuestion) return;
     const key = personalizedQuestion.key;
+
+    // Show demo message for input method selection
+    if (key === "inputMethod") {
+      showDemoTech("inputMethod_choice");
+    }
 
     // Show demo message for input method selection
     if (key === "inputMethod") {
@@ -1468,8 +1476,6 @@ const LeadCaptureScreen = ({ onNext }) => {
     return (
       <Box
         sx={{
-          borderRadius: "20px",
-          borderStyle: "solid",
           padding: "2rem",
           margin: "40px auto",
           maxWidth: "100%",
