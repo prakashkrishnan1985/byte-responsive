@@ -23,7 +23,6 @@
   }
   
   .thinking-header {
-    font-size: 1rem;
     font-weight: 500;
     margin-bottom: 0.5rem;
     color: #888;
@@ -53,7 +52,6 @@
   }
   
   .thinking-text {
-    font-size: 15px;
     line-height: 1.5;
     color: #555;
     white-space: pre-wrap;

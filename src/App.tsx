@@ -58,11 +58,13 @@ import CreditDashboard from "./components/StripeDashboard/CreditDashboard";
 import CreditUsageHistory from "./components/Stripe/CreditUsageHistory";
 import PurchaseCreditsPage from "./components/Stripe/PurchaseCreditsPage";
 import { ROUTES } from "./constants/Routes";
-import AutoFaceCapture from "./pages/components/AutoFaceCapture"
+import AutoFaceCapture from "./pages/components/AutoFaceCapture";
 import LeadCaptureScreen from "./pages/components/LeadCaptureScreen";
-import DEMOSITE from "./pages/ProductionSite/Demo/components/LeadCaptureScreen"
+import DEMOSITE from "./pages/ProductionSite/Demo/components/LeadCaptureScreen";
 
-{/* <Route path="/" element={<AutoFaceCapture />} /> */}
+{
+  /* <Route path="/" element={<AutoFaceCapture />} /> */
+}
 
 function normalizePath(pathname) {
   return pathname.toLowerCase();
@@ -252,6 +254,7 @@ function App() {
     <ThemeProvider theme={theme}>
       {(normalizedPath === ROUTES.HOME ||
         normalizedPath === ROUTES.ARTICLE ||
+        normalizedPath === ROUTES.LEADCAPTURESCREEN ||
         normalizedPath === ROUTES.USE_CASES_PAGE ||
         normalizedPath === ROUTES.PRIVACY_PAGE ||
         normalizedPath === ROUTES.PRIVACY ||
@@ -269,7 +272,6 @@ function App() {
           <KbarSearch pills={pills} setPills={setPills} />
 
           <Routes>
-           
             <Route path={ROUTES.HOME} element={<ProductionSite />} />
             <Route path={ROUTES.USE_CASES_PAGE} element={<UseCaseSite />} />
             <Route path={ROUTES.PRIVACY_PAGE} element={<PrivacyPage />} />
@@ -280,7 +282,10 @@ function App() {
             <Route path={ROUTES.CALL_TO_ACTIONS} element={<CallToActions />} />
             <Route path={ROUTES.BETA} element={<CallToActions />} />
             {/* <Route path={ROUTES.DEMO} element={<AutoFaceCapture />} /> */}
-            <Route path={ROUTES.LEADCAPTURESCREEN} element={<LeadCaptureScreen />} />
+            <Route
+              path={ROUTES.LEADCAPTURESCREEN}
+              element={<LeadCaptureScreen />}
+            />
             <Route path={ROUTES.DEMOSITE} element={<DEMOSITE />} />
           </Routes>
 
@@ -302,6 +307,7 @@ function App() {
         normalizedPath === ROUTES.CALL_TO_ACTIONS ||
         normalizedPath === ROUTES.BETA ||
         normalizedPath === ROUTES.BLOGS ||
+        normalizedPath === ROUTES.LEADCAPTURESCREEN ||
         normalizedPath.startsWith("/blog/")) && <AIJourney />}
     </ThemeProvider>
   );

@@ -19,7 +19,7 @@ const Navbar: React.FC = () => {
   const location = useLocation();
   const widgetRef = useRef<HTMLDivElement | null>(null);
 
-  const isMobile = useMediaQuery(theme.breakpoints.down("lg")); // Check if mobile screen
+  const isMobile = useMediaQuery(theme.breakpoints.down("xl")); // Check if mobile screen
   const headerColor = isMobile ? "#bb86fc0a" : "white"; // Set color based on screen size
 
   useEffect(() => {
@@ -66,7 +66,7 @@ const Navbar: React.FC = () => {
             widget.style.bottom = "auto";
             widget.style.right = "0";
             widget.style.left = "auto";
-            widget.style.zIndex = "9999";
+            widget.style.zIndex = "666";
             if (innerContainer) {
               if (isMobile) {
                 el.style.position = "fixed";
@@ -75,14 +75,14 @@ const Navbar: React.FC = () => {
                 el.style.right = "auto";
                 el.style.left = "50%";
                 el.style.transform = "translateX(-50%)";
-                el.style.zIndex = "9999";
+                el.style.zIndex = "666";
               } else {
                 el.style.position = "fixed";
                 el.style.top = "-20px";
                 el.style.bottom = "auto";
                 el.style.right = "20px";
                 el.style.left = "auto";
-                el.style.zIndex = "9999";
+                el.style.zIndex = "666";
               }
             }
           }
@@ -127,6 +127,7 @@ const Navbar: React.FC = () => {
               location.pathname === "/privacy" ||
               location.pathname === "/calltoactions" ||
               location.pathname === "/beta" ||
+              location.pathname === "/intro" ||
               location.pathname.startsWith("/blog/")
                 ? "#000"
                 : "#fff",
@@ -150,6 +151,7 @@ const Navbar: React.FC = () => {
                 location.pathname === "/privacy" ||
                 location.pathname === "/calltoactions" ||
                 location.pathname === "/beta" ||
+                location.pathname === "/intro" ||
                 location.pathname.startsWith("/blog/")
                   ? "#fff"
                   : "black"

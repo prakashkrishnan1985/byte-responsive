@@ -1,7 +1,8 @@
-import React from 'react';
-import Typewriter from 'typewriter-effect';
-import SpeechInput from './SpeechInput';
-import "../styles/QuestionRenderer.css"
+import React from "react";
+import Typewriter from "typewriter-effect";
+import SpeechInput from "./SpeechInput";
+import "../styles/QuestionRenderer.css";
+import { Typography, useMediaQuery, useTheme } from "@mui/material";
 
 const QuestionRenderer = ({
   question,
@@ -19,8 +20,11 @@ const QuestionRenderer = ({
   typingComplete,
   onTypingComplete,
   step,
-  tones
+  tones,
 }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("xl")); // Check if mobile screen
+
   if (!question) return null;
 
   const handleSubmit = (value, type = question.type) => {
@@ -28,23 +32,24 @@ const QuestionRenderer = ({
   };
 
   const handleKeyDown = (e, submitValue = inputValue.trim()) => {
-    if (e.key === 'Enter' && submitValue !== '') {
+    if (e.key === "Enter" && submitValue !== "") {
       handleSubmit(submitValue);
     }
   };
 
   return (
     <div className="question-container">
-      <div className={`byte-question ${isSpeaking ? 'speaking' : ''}`}>
+      <div className={`byte-question ${isSpeaking ? "speaking" : ""}`}>
         <Typewriter
           key={`typewriter-${step}-${question.prompt.substring(0, 10)}`}
           options={{
             delay: 40,
-            cursor: '|',
+            cursor: "|",
             deleteSpeed: 0,
           }}
           onInit={(typewriter) => {
-            let typingDelay = step === 4 && question.key === 'welcomeMessage' ? 2000 : 200;
+            let typingDelay =
+              step === 4 && question.key === "welcomeMessage" ? 2000 : 200;
 
             setTimeout(() => {
               typewriter
@@ -60,12 +65,12 @@ const QuestionRenderer = ({
 
       {!isTyping && typingComplete && (
         <div className="input-container">
-          {question.type === 'choice' && (
+          {question.type === "choice" && (
             <div className="choice-selection">
-              {question.options.map(option => (
+              {question.options.map((option) => (
                 <button
                   key={option}
-                  onClick={() => handleSubmit(option, 'choice')}
+                  onClick={() => handleSubmit(option, "choice")}
                   className="choice-button"
                 >
                   {option}
@@ -74,7 +79,7 @@ const QuestionRenderer = ({
             </div>
           )}
 
-          {question.type === 'text' && (
+          {question.type === "text" && (
             <>
               {isSpeechMode ? (
                 <SpeechInput
@@ -90,7 +95,7 @@ const QuestionRenderer = ({
                   <input
                     type="text"
                     value={inputValue}
-                    onChange={e => onInputChange(e.target.value)}
+                    onChange={(e) => onInputChange(e.target.value)}
                     placeholder={question.placeholder}
                     onKeyDown={handleKeyDown}
                   />
@@ -106,20 +111,19 @@ const QuestionRenderer = ({
             </>
           )}
 
-          {question.type === 'email' && (
+          {question.type === "email" && (
             <>
               <input
                 type="email"
                 value={inputValue}
-                onChange={e => onInputChange(e.target.value)}
+                onChange={(e) => onInputChange(e.target.value)}
                 placeholder={question.placeholder}
-                onKeyDown={e => handleKeyDown(e, inputValue)}
+                onKeyDown={(e) => handleKeyDown(e, inputValue)}
               />
               <div className="optional-field-note">
-                {isSpeechMode 
+                {isSpeechMode
                   ? "For better accuracy, please type your email. This field is optional."
-                  : "This field is optional. You can leave it blank and click Next."
-                }
+                  : "This field is optional. You can leave it blank and click Next."}
               </div>
               <button
                 className="next-button"
@@ -130,41 +134,52 @@ const QuestionRenderer = ({
             </>
           )}
 
-          {question.type === 'checkbox' && (
+          {question.type === "checkbox" && (
             <div className="consent-options">
               <button
-                className={`consent-button ${leadInfo[question.key] ? 'consent-yes-selected' : ''}`}
-                onClick={() => handleSubmit(true, 'checkbox')}
+                className={`consent-button ${
+                  leadInfo[question.key] ? "consent-yes-selected" : ""
+                }`}
+                onClick={() => handleSubmit(true, "checkbox")}
               >
                 Yes
               </button>
               <button
-                className={`consent-button ${leadInfo[question.key] === false ? 'consent-no-selected' : ''}`}
-                onClick={() => handleSubmit(false, 'checkbox')}
+                className={`consent-button ${
+                  leadInfo[question.key] === false ? "consent-no-selected" : ""
+                }`}
+                onClick={() => handleSubmit(false, "checkbox")}
               >
                 No
               </button>
             </div>
           )}
 
-          {question.type === 'tone' && (
+          {question.type === "tone" && (
             <div className="tone-selection">
-              {tones.map(tone => (
+              {tones.map((tone) => (
                 <button
                   key={tone}
-                  className={leadInfo.tone === tone ? 'selected-tone' : ''}
-                  onClick={() => handleSubmit(tone, 'tone')}
+                  className={leadInfo.tone === tone ? "selected-tone" : ""}
+                  onClick={() => handleSubmit(tone, "tone")}
                 >
-                  {tone}
+                  {" "}
+                  <Typography
+                    sx={{
+                      fontSize: isMobile ? "1.2rem" : "1.8rem",
+                    }}
+                  >
+                    {tone}
+                  </Typography>
                 </button>
               ))}
             </div>
           )}
 
-          {question.type === 'message' && (
+          {question.type === "message" && (
             <button
               className="next-button"
-              onClick={() => handleSubmit('', 'message')}
+              onClick={() => handleSubmit("", "message")}
             >
               Next →
             </button>

@@ -36,6 +36,7 @@ const HomeLogo: React.FC = () => {
         src={
           location.pathname === "/privacy" ||
           location.pathname === "/calltoactions" ||
+          location.pathname === "/intro" ||
           location.pathname.startsWith("/blog/")
             ? logoWithText2
             : logoWithText1
