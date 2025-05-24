@@ -1595,6 +1595,7 @@ const LeadCaptureScreen = ({ onNext }) => {
                         sx={{
                           fontSize: isMobile ? "1rem" : "1.5rem",
                           paddingTop: "3rem",
+                          minWidth: "100%",
                         }}
                       >
                         {thinkingText}
