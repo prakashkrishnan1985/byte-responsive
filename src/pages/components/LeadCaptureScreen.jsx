@@ -1525,6 +1525,7 @@ const LeadCaptureScreen = ({ onNext }) => {
           sx={{
             display: "flex",
             flexDirection: isTablet ? "column" : "row",
+            paddingTop: "20px",
           }}
         >
           <div className="orb-column">
@@ -1643,10 +1644,10 @@ const LeadCaptureScreen = ({ onNext }) => {
           sx={{
             display: "flex",
             flexDirection: isTablet ? "column" : "row",
-            justifyContent: "center",
+            justifyContent: isTablet ? "start" : "center",
             gap: "2rem",
             minWidth: isTablet ? "" : "960px",
-            alignItems: isMobile ? "center" : "start",
+            alignItems: isTablet ? "center" : "start",
             width: "100%",
           }}
         >
