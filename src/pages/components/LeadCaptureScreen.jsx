@@ -1087,106 +1087,119 @@ const LeadCaptureScreen = ({ onNext }) => {
     setDemoMessage("");
   };
 
-  const initializeCamera = async () => {
-    try {
-      console.log("Starting camera initialization...");
-      setIsModelLoading(true);
-      setCameraError("");
-
-      try {
-        console.log("Loading face detection models...");
-        showDemoTech("camera_init");
-        await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
-        await faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL);
-        console.log("Face detection models loaded successfully");
-      } catch (modelErr) {
-        console.error("Error loading face detection models:", modelErr);
-        setCameraError(
-          `Could not load face detection models: ${modelErr.message}`
-        );
-        setApiOperationComplete(true);
-        setIsModelLoading(false);
-
-        // Continue without camera after 3 seconds
-        setTimeout(() => {
-          goToNextStep();
-        }, 3000);
-        return;
-      }
-
-      console.log("Requesting camera access...");
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "user" },
-        audio: false,
-      });
-
-      console.log("Camera access granted, setting up video stream...");
-
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        streamRef.current = stream;
-
-        videoRef.current.onloadedmetadata = () => {
-          console.log("Video metadata loaded, starting playback...");
-          videoRef.current
-            .play()
-            .then(() => {
-              console.log("Video playback started successfully");
-              setIsModelLoading(false);
-              showDemoTech("face_detection");
-
-              // Start face detection after a short delay
-              setTimeout(() => {
-                startFaceDetection();
-              }, 500);
-            })
-            .catch((playErr) => {
-              console.error("Error starting video playback:", playErr);
-              setCameraError(
-                `Error starting video playback: ${playErr.message}`
-              );
-              setIsModelLoading(false);
-              setApiOperationComplete(true);
-
-              setTimeout(() => {
-                goToNextStep();
-              }, 3000);
+    const initializeCamera = async () => {
+        try {
+            console.log('Starting camera initialization...');
+            setIsModelLoading(true);
+            setCameraError('');
+    
+            try {
+                console.log('Loading face detection models...');
+                showDemoTech('camera_init');
+                await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
+                await faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL);
+                console.log('Face detection models loaded successfully');
+            } catch (modelErr) {
+                console.error('Error loading face detection models:', modelErr);
+                setCameraError(`Could not load face detection models: ${modelErr.message}`);
+                setApiOperationComplete(true);
+                setIsModelLoading(false);
+    
+                setTimeout(() => {
+                    const defaultMsg = "Thanks for letting me know! Let's continue.";
+                    setLeadInfo(prev => ({ ...prev, welcomeMessage: defaultMsg }));
+                    questions[4].prompt = defaultMsg;
+                    setStep(4);
+                    setTimeout(() => setStep(5), 2000);
+                }, 3000);
+                return; // Exit early on model loading error
+            }
+    
+            console.log('Requesting camera access...');
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: 'user' },
+                audio: false
             });
-        };
-
-        // Add error handler for video element
-        videoRef.current.onerror = (err) => {
-          console.error("Video element error:", err);
-          setCameraError("Video playback error occurred");
-          setIsModelLoading(false);
-          setApiOperationComplete(true);
-
-          setTimeout(() => {
-            goToNextStep();
-          }, 3000);
-        };
-      } else {
-        console.error("Video ref is not available");
-        setCameraError("Video element not found");
-        setIsModelLoading(false);
-        setApiOperationComplete(true);
-
-        setTimeout(() => {
-          goToNextStep();
-        }, 3000);
-      }
-    } catch (err) {
-      console.error("Error initializing camera:", err);
-      setCameraError(`Could not access camera: ${err.message}`);
-      setIsModelLoading(false);
-      setApiOperationComplete(true);
-
-      // Continue without camera after showing error
-      setTimeout(() => {
-        goToNextStep();
-      }, 3000);
-    }
-  };
+    
+            console.log('Camera access granted, setting up video stream...');
+    
+            if (videoRef.current) {
+                videoRef.current.srcObject = stream;
+                streamRef.current = stream;
+    
+                videoRef.current.onloadedmetadata = () => {
+                    console.log('Video metadata loaded, starting playback...');
+                    videoRef.current.play()
+                        .then(() => {
+                            console.log('Video playback started successfully');
+                            setIsModelLoading(false);
+                            showDemoTech('face_detection');
+    
+                            // Start face detection after a short delay
+                            setTimeout(() => {
+                                startFaceDetection();
+                            }, 500);
+                        })
+                        .catch(playErr => {
+                            console.error('Error starting video playback:', playErr);
+                            setCameraError(`Error starting video playback: ${playErr.message}`);
+                            setIsModelLoading(false);
+                            setApiOperationComplete(true);
+    
+                            setTimeout(() => {
+                                const defaultMsg = "Thanks for letting me know! Let's continue.";
+                                setLeadInfo(prev => ({ ...prev, welcomeMessage: defaultMsg }));
+                                questions[4].prompt = defaultMsg;
+                                setStep(4);
+                                setTimeout(() => setStep(5), 2000);
+                            }, 3000);
+                        });
+                };
+    
+                // Add error handler for video element
+                videoRef.current.onerror = (err) => {
+                    console.error('Video element error:', err);
+                    setCameraError('Video playback error occurred');
+                    setIsModelLoading(false);
+                    setApiOperationComplete(true);
+    
+                    setTimeout(() => {
+                        const defaultMsg = "Thanks for letting me know! Let's continue.";
+                        setLeadInfo(prev => ({ ...prev, welcomeMessage: defaultMsg }));
+                        questions[4].prompt = defaultMsg;
+                        setStep(4);
+                        setTimeout(() => setStep(5), 2000);
+                    }, 3000);
+                };
+            } else {
+                console.error('Video ref is not available');
+                setCameraError('Video element not found');
+                setIsModelLoading(false);
+                setApiOperationComplete(true);
+    
+                setTimeout(() => {
+                    const defaultMsg = "Thanks for letting me know! Let's continue.";
+                    setLeadInfo(prev => ({ ...prev, welcomeMessage: defaultMsg }));
+                    questions[4].prompt = defaultMsg;
+                    setStep(4);
+                    setTimeout(() => setStep(5), 2000); 
+                }, 3000);
+            }
+        } catch (err) {
+            console.error('Error initializing camera:', err);
+            setCameraError(`Could not access camera: ${err.message}`);
+            setIsModelLoading(false);
+            setApiOperationComplete(true);
+    
+            setTimeout(() => {
+                const defaultMsg = "Thanks for letting me know! Let's continue.";
+                setLeadInfo(prev => ({ ...prev, welcomeMessage: defaultMsg }));
+                questions[4].prompt = defaultMsg;
+                setStep(4);
+                setTimeout(() => setStep(5), 2000); 
+            }, 3000);
+        }
+    };
 
   const startFaceDetection = () => {
     console.log("Starting face detection...");
@@ -1250,14 +1263,18 @@ const LeadCaptureScreen = ({ onNext }) => {
         clearInterval(detectionRef.current);
         detectionRef.current = null;
 
-        if (!smileDetected) {
-          setCameraError("Could not detect a smile. Moving on...");
-          setApiOperationComplete(true);
-          goToNextStep();
-        }
-      }
-    }, 20000);
-  };
+                if (!smileDetected) {
+                    setCameraError('Could not detect a smile. Moving on...');
+                    setApiOperationComplete(true);
+                    const defaultMsg = "Thanks for letting me know! Let's continue.";
+                    setLeadInfo(prev => ({ ...prev, welcomeMessage: defaultMsg }));
+                    questions[4].prompt = defaultMsg;
+                    setStep(4); 
+                    setTimeout(() => setStep(5), 2000); 
+                }
+            }
+        }, 20000);
+    };
 
   const capturePhoto = () => {
     console.log("Capturing photo...");
