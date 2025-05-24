@@ -192,7 +192,7 @@ const ProductionSite: React.FC = () => {
       <MovingBackground />
       <Box
         sx={{
-          marginTop: { xs: "50px", md: "250px" },
+          marginTop: { xs: "50px", md: "150px", xl: "250px" },
         }}
       >
         <Suspense
@@ -208,7 +208,7 @@ const ProductionSite: React.FC = () => {
             </Box>
           }
         >
-          {widthSize < 800 ? (
+          {widthSize < 1441 ? (
             <DynamicDescriptionGeneratorNM />
           ) : (
             <DynamicDescriptionGenerator />

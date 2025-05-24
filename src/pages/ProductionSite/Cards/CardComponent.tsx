@@ -15,7 +15,7 @@ const CardComponent = ({ title, description, imageSrc }: CardProps) => {
       <Box
         sx={{
           display: "flex",
-          flexDirection: { xs: "column", sm: "row" },
+          flexDirection: { xs: "column", xl: "row" },
           justifyContent: { xs: "start", sm: "center", md: "start" },
           alignItems: { xs: "center", sm: "center" },
           gap: 2,

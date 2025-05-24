@@ -19,7 +19,7 @@ const Navbar: React.FC = () => {
   const location = useLocation();
   const widgetRef = useRef<HTMLDivElement | null>(null);
 
-  const isMobile = useMediaQuery(theme.breakpoints.down("lg")); // Check if mobile screen
+  const isMobile = useMediaQuery(theme.breakpoints.down("xl")); // Check if mobile screen
   const headerColor = isMobile ? "#bb86fc0a" : "white"; // Set color based on screen size
 
   useEffect(() => {
@@ -133,6 +133,7 @@ const Navbar: React.FC = () => {
             border: "none",
             boxShadow: "none",
             padding: "10px 10px 10px 20px",
+            backgroundColor: "rgb(245 245 245)",
           }}
         >
           <Toolbar

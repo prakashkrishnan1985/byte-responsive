@@ -142,7 +142,7 @@ const WritingRelatedFlow: React.FC<cardProps> = (props: cardProps) => {
             display: "flex",
             justifyContent: "start",
             alignItems: "center",
-            flexDirection: { xs: "column", md: "row" },
+            flexDirection: { xs: "column", md: "column", lg: "row" },
           }}
         >
           {item?.articles.map((card: any, index: any) => (

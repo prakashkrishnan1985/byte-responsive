@@ -52,13 +52,13 @@ const CircleButton = ({
     <div
       className="circle-button-container"
       style={{
-        height: isMob ? "160px" : "500px",
-        width: isMob ? "160px" : "500px",
+        height: isMob ? "160px" : "300px",
+        width: isMob ? "160px" : "300px",
       }}
     >
       <button
         ref={buttonRef}
-        className=" circle-button"
+        className="circle-button"
         style={{
           width: `${size}px`,
           height: `${size}px`,

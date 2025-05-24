@@ -125,9 +125,9 @@ const DynamicDescriptionGeneratorNM: React.FC = () => {
             justifyContent="center"
             sx={{
               width: "100%",
-              marginTop: { xs: "1rem", sm: "7rem", md: "10rem" },
-              marginBottom: { xs: "3rem", sm: "4rem", md: "5rem" },
-              marginLeft: { xs: "-8px", sm: "-10px", md: "-15px" },
+              marginTop: { xs: "1rem", sm: "7rem", xl: "10rem" },
+              marginBottom: { xs: "3rem", sm: "4rem", xl: "5rem" },
+              marginLeft: { xs: "-8px", sm: "-10px", xl: "-15px" },
             }}
           >
             {data.map((card: any, index: any) => (

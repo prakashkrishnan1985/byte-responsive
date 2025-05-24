@@ -161,7 +161,7 @@ const Header: React.FC = () => {
       >
         <Box
           sx={{
-            width: isMobile ? "100%" : "30%",
+            width: isMobile ? "100%" : "50%",
             textAlign: isMobile ? "center" : "left",
             marginLeft: isMobile ? "0" : "30px",
             marginTop: isMobile ? "0" : "-11rem",
@@ -203,7 +203,7 @@ const Header: React.FC = () => {
 
         <Box
           sx={{
-            width: isMobile ? "100%" : "60%",
+            width: isMobile ? "100%" : "40%",
             display: "flex",
             flexDirection: isMobile ? "column" : "row",
             justifyContent: "flex-end",
@@ -220,14 +220,14 @@ const Header: React.FC = () => {
             }}
           >
             <MagneticCircleButton
-              size={isMobile ? 120 : 270}
+              size={isMobile ? 140 : 240}
               name="Apply for Beta"
               defaultColor="#800080"
               actionEvent={actionEvent1}
               isMob={isMobile}
             />
             <MagneticCircleButton
-              size={isMobile ? 90 : 200}
+              size={isMobile ? 110 : 180}
               name="Interested as AI Dev"
               defaultColor="#000000"
               actionEvent={actionEvent2}

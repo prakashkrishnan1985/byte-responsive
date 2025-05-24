@@ -98,7 +98,7 @@ const UseCaseSite = () => {
               display: "flex",
               justifyContent: "end",
               alignItems: "center",
-              flexDirection: { xs: "column", lg: "row" },
+              flexDirection: { xs: "column", xl: "row" },
               width: "100%",
             }}
           >
@@ -116,7 +116,7 @@ const UseCaseSite = () => {
                 },
                 width: "100%",
                 margin: "0 auto",
-                paddingLeft: { lg: "220px" },
+                paddingLeft: { xl: "220px" },
               }}
             >
               <AIOptimization />
@@ -129,9 +129,9 @@ const UseCaseSite = () => {
                 },
                 right: {
                   xs: "auto",
-                  md: "15rem",
-                  lg: "20rem",
-                  xl: "25rem",
+                  md: "auto",
+                  lg: "auto",
+                  xl: "20rem",
                 },
                 zIndex: { xs: "auto", md: 0 },
               }}
