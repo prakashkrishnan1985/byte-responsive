@@ -1591,12 +1591,14 @@ const LeadCaptureScreen = ({ onNext }) => {
                       Thinking...
                     </Typography>
                     {isThinking && (
-                      <ThinkingBox
-                        thinkingText={thinkingText}
-                        thinkingProgress={thinkingProgress}
-                        isSpeechMode={isSpeechMode}
-                        isSpeaking={isSpeaking}
-                      />
+                      <Typography
+                        sx={{
+                          fontSize: isMobile ? "1rem" : "1.5rem",
+                          paddingTop: "5rem",
+                        }}
+                      >
+                        {thinkingText}
+                      </Typography>
                     )}
                   </div>
                 </div>
@@ -1962,7 +1964,7 @@ const LeadCaptureScreen = ({ onNext }) => {
           </button>
         </div>
 
-        {isThinking && (
+        {/* {isThinking && (
           <Box
             className={`thinking-box ${
               isSpeechMode && isSpeaking ? "speaking" : ""
@@ -1985,45 +1987,8 @@ const LeadCaptureScreen = ({ onNext }) => {
               />
             </div>
           </Box>
-        )}
+        )} */}
       </Box>
-      {/* <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          padding: "2rem",
-          justifyContent: "start",
-          width: "90%",
-          margin: "auto",
-          alignItems: "start",
-        }}
-      >
-        <Typography
-          sx={{
-            minWidth: "120px",
-            fontSize: isMobile ? "1.5rem" : "1.8rem",
-          }}
-        >
-          Title 1
-        </Typography>
-
-        <Typography
-          sx={{
-            minWidth: "120px",
-            fontSize: isMobile ? "1.2rem" : "1.8rem",
-          }}
-        >
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting,
-          remaining essentially unchanged. It was popularised in the 1960s with
-          the release of Letraset sheets containing Lorem Ipsum passages, and
-          more recently with desktop publishing software like Aldus PageMaker
-          including versions of Lorem Ipsum.
-        </Typography>
-      </Box> */}
       <DemonstratingNER />
     </Box>
   );

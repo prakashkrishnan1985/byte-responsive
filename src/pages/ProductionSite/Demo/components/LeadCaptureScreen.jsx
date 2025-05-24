@@ -220,14 +220,14 @@ const LeadCaptureScreen = ({ onNext }) => {
         </div>
 
         {/* Thinking Box */}
-        {isThinking && (
+        {/* {isThinking && (
           <ThinkingBox
             thinkingText={thinkingText}
             thinkingProgress={thinkingProgress}
             isSpeechMode={isSpeechMode}
             isSpeaking={isSpeaking}
           />
-        )}
+        )} */}
       </div>
     </Box>
   );
