@@ -971,7 +971,7 @@ const LeadCaptureScreen = ({ onNext }) => {
             console.log('Starting camera initialization...');
             setIsModelLoading(true);
             setCameraError('');
-
+    
             try {
                 console.log('Loading face detection models...');
                 showDemoTech('camera_init');
@@ -983,26 +983,29 @@ const LeadCaptureScreen = ({ onNext }) => {
                 setCameraError(`Could not load face detection models: ${modelErr.message}`);
                 setApiOperationComplete(true);
                 setIsModelLoading(false);
-
-                // Continue without camera after 3 seconds
+    
                 setTimeout(() => {
-                    goToNextStep();
+                    const defaultMsg = "Thanks for letting me know! Let's continue.";
+                    setLeadInfo(prev => ({ ...prev, welcomeMessage: defaultMsg }));
+                    questions[4].prompt = defaultMsg;
+                    setStep(4);
+                    setTimeout(() => setStep(5), 2000);
                 }, 3000);
-                return;
+                return; // Exit early on model loading error
             }
-
+    
             console.log('Requesting camera access...');
             const stream = await navigator.mediaDevices.getUserMedia({
                 video: { facingMode: 'user' },
                 audio: false
             });
-
+    
             console.log('Camera access granted, setting up video stream...');
-
+    
             if (videoRef.current) {
                 videoRef.current.srcObject = stream;
                 streamRef.current = stream;
-
+    
                 videoRef.current.onloadedmetadata = () => {
                     console.log('Video metadata loaded, starting playback...');
                     videoRef.current.play()
@@ -1010,7 +1013,7 @@ const LeadCaptureScreen = ({ onNext }) => {
                             console.log('Video playback started successfully');
                             setIsModelLoading(false);
                             showDemoTech('face_detection');
-
+    
                             // Start face detection after a short delay
                             setTimeout(() => {
                                 startFaceDetection();
@@ -1021,22 +1024,30 @@ const LeadCaptureScreen = ({ onNext }) => {
                             setCameraError(`Error starting video playback: ${playErr.message}`);
                             setIsModelLoading(false);
                             setApiOperationComplete(true);
-
+    
                             setTimeout(() => {
-                                goToNextStep();
+                                const defaultMsg = "Thanks for letting me know! Let's continue.";
+                                setLeadInfo(prev => ({ ...prev, welcomeMessage: defaultMsg }));
+                                questions[4].prompt = defaultMsg;
+                                setStep(4);
+                                setTimeout(() => setStep(5), 2000);
                             }, 3000);
                         });
                 };
-
+    
                 // Add error handler for video element
                 videoRef.current.onerror = (err) => {
                     console.error('Video element error:', err);
                     setCameraError('Video playback error occurred');
                     setIsModelLoading(false);
                     setApiOperationComplete(true);
-
+    
                     setTimeout(() => {
-                        goToNextStep();
+                        const defaultMsg = "Thanks for letting me know! Let's continue.";
+                        setLeadInfo(prev => ({ ...prev, welcomeMessage: defaultMsg }));
+                        questions[4].prompt = defaultMsg;
+                        setStep(4);
+                        setTimeout(() => setStep(5), 2000);
                     }, 3000);
                 };
             } else {
@@ -1044,9 +1055,13 @@ const LeadCaptureScreen = ({ onNext }) => {
                 setCameraError('Video element not found');
                 setIsModelLoading(false);
                 setApiOperationComplete(true);
-
+    
                 setTimeout(() => {
-                    goToNextStep();
+                    const defaultMsg = "Thanks for letting me know! Let's continue.";
+                    setLeadInfo(prev => ({ ...prev, welcomeMessage: defaultMsg }));
+                    questions[4].prompt = defaultMsg;
+                    setStep(4);
+                    setTimeout(() => setStep(5), 2000); 
                 }, 3000);
             }
         } catch (err) {
@@ -1054,10 +1069,13 @@ const LeadCaptureScreen = ({ onNext }) => {
             setCameraError(`Could not access camera: ${err.message}`);
             setIsModelLoading(false);
             setApiOperationComplete(true);
-
-            // Continue without camera after showing error
+    
             setTimeout(() => {
-                goToNextStep();
+                const defaultMsg = "Thanks for letting me know! Let's continue.";
+                setLeadInfo(prev => ({ ...prev, welcomeMessage: defaultMsg }));
+                questions[4].prompt = defaultMsg;
+                setStep(4);
+                setTimeout(() => setStep(5), 2000); 
             }, 3000);
         }
     };
@@ -1117,7 +1135,11 @@ const LeadCaptureScreen = ({ onNext }) => {
                 if (!smileDetected) {
                     setCameraError('Could not detect a smile. Moving on...');
                     setApiOperationComplete(true);
-                    goToNextStep();
+                    const defaultMsg = "Thanks for letting me know! Let's continue.";
+                    setLeadInfo(prev => ({ ...prev, welcomeMessage: defaultMsg }));
+                    questions[4].prompt = defaultMsg;
+                    setStep(4); 
+                    setTimeout(() => setStep(5), 2000); 
                 }
             }
         }, 20000);
