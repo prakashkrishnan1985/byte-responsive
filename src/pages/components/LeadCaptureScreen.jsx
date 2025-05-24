@@ -8,15 +8,67 @@ import MicListener from "./DemoMicListener";
 import RAGQuestScreen from "./RAGQuestScreen";
 import "./styles/RAGQuestScreen.css";
 import { sendQuery, processAudio } from "./api";
-import { Box, Button, Input, Typography, useMediaQuery } from "@mui/material";
-import micIcon from "../../assets/icons/mic.svg";
-import penIcon from "../../assets/icons/pen.svg";
-import { useTheme } from "@emotion/react";
+import {
+  Box,
+  Button,
+  Input,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import DemonstratingNER from "./DemonStraingComponent";
-import ThinkingBox from "../ProductionSite/Demo/components/ThinkingBox";
+
+import micIcon from "../../../src/assets/icons/mic.svg";
+import penIcon from "../../../src/assets/icons/pen.svg";
+
 const MODEL_URL = "/models";
 const API_BASE_URL = "https://model-api-dev.bytesized.com.au";
 //const API_BASE_URL = "http://localhost:8000";
+
+// Demo messages for different stages
+const getDemoMessage = (stage, additionalContext = {}) => {
+  const messages = {
+    // Input method selection
+    inputMethod_choice: "🎯 Demonstrating: User Interface Adaptability",
+
+    // Speech-related demos
+    speech_listening:
+      "🎤 Demonstrating: Speech-to-Text (STT) + Real-time Audio Processing",
+    speech_processing:
+      "🧠 Demonstrating: Natural Language Processing (NLP) + Name Extraction API",
+
+    // Text-related demos
+    text_input: "⌨️ Demonstrating: Text Processing + API Integration",
+
+    // Email processing
+    email_processing: "📧 Demonstrating: Email Validation + Data Processing",
+
+    // Camera and vision
+    camera_init:
+      "📷 Demonstrating: Computer Vision Setup + Face Detection Models",
+    face_detection:
+      "👁️ Demonstrating: Real-time Face Detection + Expression Recognition",
+    smile_detection:
+      "😊 Demonstrating: Emotion AI + Facial Expression Analysis",
+    photo_capture: "📸 Demonstrating: Image Capture + Base64 Encoding",
+    image_processing:
+      "🤖 Demonstrating: Vision AI (GPT-4o) + Image Analysis + TTS Generation",
+
+    // Speech synthesis
+    tts_thinking: "💭 Demonstrating: Text-to-Speech (TTS) + Voice Synthesis",
+    tts_talking: "🗣️ Demonstrating: Advanced TTS + Voice Modulation",
+
+    // Quest/RAG
+    quest_launch:
+      "🎮 Demonstrating: Retrieval-Augmented Generation (RAG) + Interactive AI",
+
+    // General processing
+    api_call: "🌐 Demonstrating: API Integration + Backend Processing",
+    data_processing: "⚙️ Demonstrating: Data Processing + State Management",
+  };
+
+  return messages[stage] || "🔄 Demonstrating: AI Processing";
+};
 
 const initSpeechSynthesis = () => {
   if (typeof window !== "undefined" && "speechSynthesis" in window) {
@@ -305,10 +357,10 @@ const LeadCaptureScreen = ({ onNext }) => {
   const [showQuestFlow, setShowQuestFlow] = useState(false);
   const [questCompleted, setQuestCompleted] = useState(false);
   const [voiceStarted, setVoiceStarted] = useState(false);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("xl")); // Check if mobile screen
-  const isTablet = useMediaQuery("(max-width:800px)");
-  // Check if mobile screen
+
+  // Demo message state
+  const [demoMessage, setDemoMessage] = useState("");
+  const [showDemoMessage, setShowDemoMessage] = useState(false);
 
   const [step, setStep] = useState(0);
   const [leadInfo, setLeadInfo] = useState({
@@ -339,6 +391,9 @@ const LeadCaptureScreen = ({ onNext }) => {
   const [apiError, setApiError] = useState("");
   const [apiOperationComplete, setApiOperationComplete] = useState(true);
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("xl")); // Check if mobile screen
+  const isTablet = useMediaQuery("(max-width:800px)");
   const [isSpeechMode, setIsSpeechMode] = useState(false);
   const [currentTranscript, setCurrentTranscript] = useState("");
   const [isListening, setIsListening] = useState(false);
@@ -368,6 +423,87 @@ const LeadCaptureScreen = ({ onNext }) => {
 
     return currentQuestion;
   })();
+
+  // Function to show demo message that persists until stage changes
+  const showDemoTech = (stage, additionalContext = {}) => {
+    const message = getDemoMessage(stage, additionalContext);
+    console.log(`Showing demo message: ${message}`);
+
+    setDemoMessage(message);
+    setShowDemoMessage(true);
+  };
+
+  // Function to hide demo message when stage changes
+  const hideDemoMessage = () => {
+    setShowDemoMessage(false);
+    setDemoMessage("");
+  };
+
+  // Enhanced thinking simulation with demo messages
+  const simulateThinkingTyping = (text) => {
+    console.log("Simulating thinking typing with text:", text);
+
+    // Hide previous demo message when thinking starts
+    hideDemoMessage();
+
+    // Show TTS demo when thinking starts
+    if (isSpeechMode) {
+      showDemoTech("tts_thinking");
+    }
+
+    let i = 0;
+    const length = text.length;
+
+    setThinkingProgress(0);
+    setThinkingComplete(false);
+
+    if (thinkingTimerRef.current) {
+      clearInterval(thinkingTimerRef.current);
+    }
+
+    if (
+      speechSynthRef.current &&
+      typeof speechSynthRef.current.stopSpeaking === "function"
+    ) {
+      speechSynthRef.current.stopSpeaking();
+      setIsSpeaking(true);
+
+      setWaitingForSpeechToEnd(true);
+
+      speechSynthRef.current.speakThinking(text, () => {
+        setIsSpeaking(false);
+        setWaitingForSpeechToEnd(false);
+        setThinkingComplete(true);
+      });
+    }
+
+    const typeNextChar = () => {
+      if (i <= length) {
+        setThinkingText(text.substring(0, i));
+        setThinkingProgress(i / length);
+        i++;
+      } else {
+        clearInterval(thinkingTimerRef.current);
+        if (!isSpeechMode) {
+          const elapsedTime = length * THINKING_TYPING_DURATION;
+          const remainingTime = Math.max(
+            0,
+            THINKING_MIN_DURATION - elapsedTime
+          );
+
+          setTimeout(() => {
+            setThinkingComplete(true);
+          }, remainingTime);
+        }
+      }
+    };
+
+    thinkingTimerRef.current = setInterval(
+      typeNextChar,
+      THINKING_TYPING_DURATION
+    );
+  };
+
   const handleQuestComplete = (finalData) => {
     console.log("Quest completed with data:", finalData);
     setQuestCompleted(true);
@@ -460,6 +596,9 @@ const LeadCaptureScreen = ({ onNext }) => {
         `Speaking prompt for step ${step}: "${personalizedQuestion.prompt}"`
       );
 
+      // Show TTS demo when about to speak
+      showDemoTech("tts_talking");
+
       if (step === 4 && personalizedQuestion.key === "welcomeMessage") {
         if (!isBackendAudioPlaying) {
           console.log("Speaking welcome message with speech synthesis");
@@ -478,6 +617,8 @@ const LeadCaptureScreen = ({ onNext }) => {
           speakWithAction(personalizedQuestion.prompt, () => {
             if (personalizedQuestion.type === "text") {
               setIsListening(true);
+              // Show STT demo when listening starts
+              showDemoTech("speech_listening");
             }
           });
         }, 300);
@@ -627,61 +768,6 @@ const LeadCaptureScreen = ({ onNext }) => {
     );
   };
 
-  const simulateThinkingTyping = (text) => {
-    console.log("Simulating thinking typing with text:", text);
-    let i = 0;
-    const length = text.length;
-
-    setThinkingProgress(0);
-    setThinkingComplete(false);
-
-    if (thinkingTimerRef.current) {
-      clearInterval(thinkingTimerRef.current);
-    }
-
-    if (
-      speechSynthRef.current &&
-      typeof speechSynthRef.current.stopSpeaking === "function"
-    ) {
-      speechSynthRef.current.stopSpeaking();
-      setIsSpeaking(true);
-
-      setWaitingForSpeechToEnd(true);
-
-      speechSynthRef.current.speakThinking(text, () => {
-        setIsSpeaking(false);
-        setWaitingForSpeechToEnd(false);
-        setThinkingComplete(true);
-      });
-    }
-
-    const typeNextChar = () => {
-      if (i <= length) {
-        setThinkingText(text.substring(0, i));
-        setThinkingProgress(i / length);
-        i++;
-      } else {
-        clearInterval(thinkingTimerRef.current);
-        if (!isSpeechMode) {
-          const elapsedTime = length * THINKING_TYPING_DURATION;
-          const remainingTime = Math.max(
-            0,
-            THINKING_MIN_DURATION - elapsedTime
-          );
-
-          setTimeout(() => {
-            setThinkingComplete(true);
-          }, remainingTime);
-        }
-      }
-    };
-
-    thinkingTimerRef.current = setInterval(
-      typeNextChar,
-      THINKING_TYPING_DURATION
-    );
-  };
-
   const goToNextStep = () => {
     if (step + 1 < questions.length) {
       const key = currentQuestion.key;
@@ -716,6 +802,8 @@ const LeadCaptureScreen = ({ onNext }) => {
 
   useEffect(() => {
     setVoiceStarted(false);
+    // Hide demo messages when step changes
+    hideDemoMessage();
   }, [step]);
 
   useEffect(() => {
@@ -741,7 +829,6 @@ const LeadCaptureScreen = ({ onNext }) => {
   ]);
 
   const handleInputSubmit = async () => {
-    debugger;
     if (!personalizedQuestion) return;
 
     const key = personalizedQuestion.key;
@@ -751,10 +838,12 @@ const LeadCaptureScreen = ({ onNext }) => {
     console.log(`Submitting value for key: ${key} = "${submittedValue}"`);
 
     let finalValue = submittedValue;
-    debugger;
+
     if (key === "name" && submittedValue) {
       try {
         console.log("Calling extract-names API...");
+        showDemoTech("speech_processing");
+
         const response = await axios.post(`${API_BASE_URL}/extract-names`, {
           text: submittedValue,
         });
@@ -767,6 +856,10 @@ const LeadCaptureScreen = ({ onNext }) => {
       } catch (error) {
         console.error("Name extraction API error:", error);
       }
+    } else if (key === "email") {
+      showDemoTech("email_processing");
+    } else {
+      showDemoTech("text_input");
     }
 
     setLeadInfo((prev) => {
@@ -797,6 +890,7 @@ const LeadCaptureScreen = ({ onNext }) => {
     if (key === "consentToPhoto") {
       if (isChecked) {
         setApiOperationComplete(false);
+        showDemoTech("camera_init");
         initializeCamera();
       } else {
         const thinkingMsg = getUniqueThinkingMessage(key, isChecked);
@@ -856,6 +950,11 @@ const LeadCaptureScreen = ({ onNext }) => {
     if (!personalizedQuestion) return;
     const key = personalizedQuestion.key;
 
+    // Show demo message for input method selection
+    if (key === "inputMethod") {
+      showDemoTech("inputMethod_choice");
+    }
+
     if (key === "inputMethod" && value === "Talk") {
       setIsSpeechMode(true);
     } else if (key === "inputMethod") {
@@ -867,7 +966,10 @@ const LeadCaptureScreen = ({ onNext }) => {
 
       if (value === "Yes, let's do it!") {
         const thinkingMsg = getUniqueThinkingMessage(key, value);
-        pendingActionRef.current = () => setShowQuestFlow(true);
+        pendingActionRef.current = () => {
+          showDemoTech("quest_launch");
+          setShowQuestFlow(true);
+        };
         setThinkingText("");
         setIsThinking(true);
         setWaitingForSpeechToEnd(false);
@@ -895,6 +997,8 @@ const LeadCaptureScreen = ({ onNext }) => {
   };
 
   const handleToneSelect = (tone) => {
+    showDemoTech("data_processing");
+
     const updatedInfo = {
       ...leadInfo,
       tone,
@@ -966,6 +1070,8 @@ const LeadCaptureScreen = ({ onNext }) => {
     setIsBackendAudioPlaying(false);
     setShowQuestFlow(false);
     setQuestCompleted(false);
+    setShowDemoMessage(false);
+    setDemoMessage("");
   };
 
   const initializeCamera = async () => {
@@ -974,6 +1080,7 @@ const LeadCaptureScreen = ({ onNext }) => {
       setIsModelLoading(true);
 
       try {
+        showDemoTech("camera_init");
         await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
         await faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL);
         console.log("Face detection models loaded successfully");
@@ -1006,7 +1113,7 @@ const LeadCaptureScreen = ({ onNext }) => {
             .then(() => {
               console.log("Video playback started");
               setIsModelLoading(false);
-
+              showDemoTech("face_detection");
               startFaceDetection();
             })
             .catch((playErr) => {
@@ -1077,7 +1184,11 @@ const LeadCaptureScreen = ({ onNext }) => {
             if (isSmiling && !smileDetected) {
               console.log("Smile confirmed! Capturing photo...");
               setSmileDetected(true);
-              capturePhoto();
+              showDemoTech("smile_detection");
+              setTimeout(() => {
+                showDemoTech("photo_capture");
+                capturePhoto();
+              }, 500);
               clearInterval(detectionRef.current);
               detectionRef.current = null;
             }
@@ -1135,6 +1246,7 @@ const LeadCaptureScreen = ({ onNext }) => {
       setTimeout(() => {
         const base64DataPart = base64Image.split(",")[1];
         console.log("Processing image with API...");
+        showDemoTech("image_processing");
         processImageWithAPI(base64DataPart);
       }, 500);
     } catch (err) {
@@ -1302,11 +1414,12 @@ const LeadCaptureScreen = ({ onNext }) => {
 
     if (isFinal && text.trim()) {
       setIsListening(false);
+      showDemoTech("speech_processing");
 
       setInputValue(text);
       let finalValue = text.trim();
 
-      // Run name-extraction ONLY for the “name” question
+      // Run name-extraction ONLY for the "name" question
       if (personalizedQuestion?.key === "name") {
         try {
           const { data } = await axios.post(`${API_BASE_URL}/extract-names`, {
@@ -1357,10 +1470,7 @@ const LeadCaptureScreen = ({ onNext }) => {
         sx={{
           borderRadius: "20px",
           borderStyle: "solid",
-          padding: "40px",
-          borderWidth: "1px",
           padding: "2rem",
-          borderColor: "#353434d7",
           margin: "40px auto",
           maxWidth: "100%",
           minHeight: "100vh",
@@ -1504,6 +1614,7 @@ const LeadCaptureScreen = ({ onNext }) => {
               justifyContent: "center",
               width: isTablet ? "100%" : "auto",
               paddingBottom: "20px",
+              paddingTop: "50px",
             }}
           >
             <Orb
@@ -1515,12 +1626,27 @@ const LeadCaptureScreen = ({ onNext }) => {
           </Box>
 
           <div className="text-column">
+            {/* Demo Message Display */}
+            {showDemoMessage && (
+              <div className="demo-message-container">
+                <div className="demo-message">
+                  <Typography
+                    sx={{
+                      fontSize: isTablet ? "0.8rem" : "1.2rem",
+                      textAlign: "center",
+                    }}
+                  >
+                    {demoMessage}
+                  </Typography>
+                </div>
+              </div>
+            )}
             <Typography
               className="byte-heading"
               sx={{
                 fontSize: isMobile ? "1.5rem" : "2rem",
-                paddingTop: "5rem",
                 textAlign: "center",
+                paddingTop: "40px",
               }}
             >
               Hi, I'm Byte. Let's play a quick game!
