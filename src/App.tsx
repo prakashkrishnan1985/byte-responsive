@@ -58,12 +58,14 @@ import CreditDashboard from "./components/StripeDashboard/CreditDashboard";
 import CreditUsageHistory from "./components/Stripe/CreditUsageHistory";
 import PurchaseCreditsPage from "./components/Stripe/PurchaseCreditsPage";
 import { ROUTES } from "./constants/Routes";
-import AutoFaceCapture from "./pages/components/AutoFaceCapture"
+import AutoFaceCapture from "./pages/components/AutoFaceCapture";
 import LeadCaptureScreen from "./pages/components/LeadCaptureScreen";
 import DEMOSITE from "./pages/ProductionSite/Demo/components/LeadCaptureScreen"
 import LOCALDEMO from "./pages/local-demo/LocalLeadCaptureScreen"
 
-{/* <Route path="/" element={<AutoFaceCapture />} /> */}
+{
+  /* <Route path="/" element={<AutoFaceCapture />} /> */
+}
 
 function normalizePath(pathname) {
   return pathname.toLowerCase();
@@ -251,6 +253,7 @@ function App() {
     <ThemeProvider theme={theme}>
       {(normalizedPath === ROUTES.HOME ||
         normalizedPath === ROUTES.ARTICLE ||
+        normalizedPath === ROUTES.LEADCAPTURESCREEN ||
         normalizedPath === ROUTES.USE_CASES_PAGE ||
         normalizedPath === ROUTES.PRIVACY_PAGE ||
         normalizedPath === ROUTES.PRIVACY ||
@@ -300,6 +303,7 @@ function App() {
         normalizedPath === ROUTES.CALL_TO_ACTIONS ||
         normalizedPath === ROUTES.BETA ||
         normalizedPath === ROUTES.BLOGS ||
+        normalizedPath === ROUTES.LEADCAPTURESCREEN ||
         normalizedPath.startsWith("/blog/")) && <AIJourney />}
     </ThemeProvider>
   );

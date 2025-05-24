@@ -1,17 +1,20 @@
-import React from 'react';
-import Orb from './OrbBackground';
-import QuestionRenderer from './QuestionRenderer';
-import ThinkingBox from './ThinkingBox';
-import CameraCapture from './CameraCapture';
-import { useLeadCaptureForm } from '../hooks/useLeadCaptureForm';
-import { useSpeechSynthesis } from '../hooks/useSpeechSynthesis';
-import { useCamera } from '../hooks/useCamera';
-import { useFaceDetection } from '../hooks/useFaceDetection';
-import { useThinkingAnimation } from '../hooks/useThinkingAnimation';
-import { questions, tones } from '../utils/questions';
-import "../styles/LeadCaptureScreen.css"
+import React from "react";
+import Orb from "./OrbBackground";
+import QuestionRenderer from "./QuestionRenderer";
+import ThinkingBox from "./ThinkingBox";
+import CameraCapture from "./CameraCapture";
+import { useLeadCaptureForm } from "../hooks/useLeadCaptureForm";
+import { useSpeechSynthesis } from "../hooks/useSpeechSynthesis";
+import { useCamera } from "../hooks/useCamera";
+import { useFaceDetection } from "../hooks/useFaceDetection";
+import { useThinkingAnimation } from "../hooks/useThinkingAnimation";
+import { questions, tones } from "../utils/questions";
+import "../styles/LeadCaptureScreen.css";
+import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 
 const LeadCaptureScreen = ({ onNext }) => {
+  const isTablet = useMediaQuery("(max-width:800px)");
+
   // Form state management
   const {
     step,
@@ -28,16 +31,13 @@ const LeadCaptureScreen = ({ onNext }) => {
     currentTranscript,
     setCurrentTranscript,
     isListening,
-    setIsListening
+    setIsListening,
   } = useLeadCaptureForm({ onNext, questions, tones });
 
   // Speech synthesis
-  const {
-    isSpeaking,
-    speakWithAction,
-    stopSpeaking
-  } = useSpeechSynthesis();
-
+  const { isSpeaking, speakWithAction, stopSpeaking } = useSpeechSynthesis();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("xl")); //
   // Camera and face detection
   const {
     isModelLoading,
@@ -47,16 +47,13 @@ const LeadCaptureScreen = ({ onNext }) => {
     videoRef,
     canvasRef,
     initializeCamera,
-    capturePhoto
+    capturePhoto,
   } = useCamera();
 
-  const {
-    smileDetected,
-    startFaceDetection
-  } = useFaceDetection({ 
-    videoRef, 
-    capturePhoto, 
-    onSmileDetected: () => {} 
+  const { smileDetected, startFaceDetection } = useFaceDetection({
+    videoRef,
+    capturePhoto,
+    onSmileDetected: () => {},
   });
 
   // Thinking animation
@@ -68,7 +65,7 @@ const LeadCaptureScreen = ({ onNext }) => {
     startThinking,
     isTyping,
     typingComplete,
-    setTypingComplete
+    setTypingComplete,
   } = useThinkingAnimation({ isSpeechMode, speakWithAction });
 
   // Current question logic
@@ -79,7 +76,7 @@ const LeadCaptureScreen = ({ onNext }) => {
     if (currentQuestion.promptTemplate && leadInfo.name) {
       return {
         ...currentQuestion,
-        prompt: currentQuestion.promptTemplate.replace('{name}', leadInfo.name)
+        prompt: currentQuestion.promptTemplate.replace("{name}", leadInfo.name),
       };
     }
 
@@ -89,21 +86,21 @@ const LeadCaptureScreen = ({ onNext }) => {
   // Handle different input types
   const handleFormSubmit = (value, type) => {
     switch (type) {
-      case 'text':
-      case 'email':
+      case "text":
+      case "email":
         handleInputSubmit(value);
         break;
-      case 'choice':
+      case "choice":
         handleChoiceSelect(value);
         break;
-      case 'checkbox':
+      case "checkbox":
         handleCheckboxChange(value);
         break;
-      case 'tone':
+      case "tone":
         handleToneSelect(value);
         break;
       default:
-        console.warn('Unknown form type:', type);
+        console.warn("Unknown form type:", type);
     }
   };
 
@@ -113,13 +110,19 @@ const LeadCaptureScreen = ({ onNext }) => {
 
     if (isFinal && text.trim()) {
       setIsListening(false);
-      handleFormSubmit(text, 'text');
-      setCurrentTranscript('');
+      handleFormSubmit(text, "text");
+      setCurrentTranscript("");
     }
   };
 
   return (
-    <div className="lead-capture-layout">
+    <Box
+      className="lead-capture-layout"
+      sx={{
+        display: "flex",
+        flexDirection: isTablet ? "column" : "row",
+      }}
+    >
       {/* Orb Column */}
       <div className="orb-column">
         <Orb
@@ -132,7 +135,15 @@ const LeadCaptureScreen = ({ onNext }) => {
 
       {/* Main Content Column */}
       <div className="text-column">
-        <h1 className="byte-heading">Hi, I'm Byte. Let's play a quick game!</h1>
+        <Typography
+          className="byte-heading"
+          sx={{
+            fontSize: isMobile ? "1.5rem" : "2rem",
+            textAlign: "center",
+          }}
+        >
+          Hi, I'm Byte. Let's play a quick game!
+        </Typography>
 
         {/* Photo Preview */}
         {photoTaken && photoData && (
@@ -170,25 +181,31 @@ const LeadCaptureScreen = ({ onNext }) => {
             <div className="byte-question-loading">
               <div className="spinner-container">
                 <div className="spinner"></div>
-                <p>Thinking...</p>
+                <Typography
+                  sx={{
+                    fontSize: isMobile ? "1.2rem" : "1.8rem",
+                  }}
+                >
+                  Thinking...
+                </Typography>
               </div>
             </div>
           )}
 
           {/* Camera Component */}
-          {personalizedQuestion?.key === 'consentToPhoto' && 
-           leadInfo.consentToPhoto && 
-           !photoTaken && (
-            <CameraCapture
-              isModelLoading={isModelLoading}
-              smileDetected={smileDetected}
-              cameraError={cameraError}
-              videoRef={videoRef}
-              canvasRef={canvasRef}
-              onInitialize={initializeCamera}
-              onStartDetection={startFaceDetection}
-            />
-          )}
+          {personalizedQuestion?.key === "consentToPhoto" &&
+            leadInfo.consentToPhoto &&
+            !photoTaken && (
+              <CameraCapture
+                isModelLoading={isModelLoading}
+                smileDetected={smileDetected}
+                cameraError={cameraError}
+                videoRef={videoRef}
+                canvasRef={canvasRef}
+                onInitialize={initializeCamera}
+                onStartDetection={startFaceDetection}
+              />
+            )}
         </div>
 
         {/* Start Over Button */}
@@ -203,16 +220,16 @@ const LeadCaptureScreen = ({ onNext }) => {
         </div>
 
         {/* Thinking Box */}
-        {isThinking && (
+        {/* {isThinking && (
           <ThinkingBox
             thinkingText={thinkingText}
             thinkingProgress={thinkingProgress}
             isSpeechMode={isSpeechMode}
             isSpeaking={isSpeaking}
           />
-        )}
+        )} */}
       </div>
-    </div>
+    </Box>
   );
 };
 
