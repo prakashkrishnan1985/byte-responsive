@@ -48,9 +48,20 @@ const DemonstratingNER = () => {
         py: 6,
         width: "100%",
         margin: "auto",
-        paddingTop: "0px !important"
+        paddingTop: "0px !important",
       }}
     >
+      <Typography
+        align="center"
+        sx={{
+          color: "#800080",
+          fontWeight: 600,
+          mb: 2,
+          fontSize: isMobile ? "1.2rem" : "2.6rem",
+        }}
+      >
+        Powered by ByteSized AI
+      </Typography>
       <Grid
         container
         spacing={0}

@@ -4,6 +4,7 @@ import Typewriter from "typewriter-effect";
 import MicListener from "./DemoMicListener";
 import "./styles/RAGQuestScreen.css";
 import { Typography, useMediaQuery, useTheme } from "@mui/material";
+import DemonstratingNER from "./DemonStraingComponent";
 
 const QUEST_API_BASE_URL = "https://model-api-dev.bytesized.com.au";
 
@@ -508,7 +509,17 @@ const RAGQuestScreen = ({ leadInfo, onComplete }) => {
       )}
 
       <div className="quest-header">
-        <h1>Quest: Reimbursement Riddle Powered by BytesizedAI RAG</h1>
+        <Typography
+          variant="h2"
+          sx={{
+            color: "#800080",
+            fontSize: '2rem',
+            fontWeight: 500,
+
+          }}
+        >
+          Quest: Reimbursement Riddle Powered by BytesizedAI RAG
+        </Typography>
         <p>
           Welcome {leadInfo?.name || "Adventurer"}! Let's explore the policies
           together.
@@ -586,11 +597,27 @@ const RAGQuestScreen = ({ leadInfo, onComplete }) => {
           {/* Demonstrating badges */}
           {currentStep.demonstrating && (
             <div className="demo-badges">
-              <span className="demo-label">Demonstrating:</span>
+              <Typography
+                sx={{
+                  fontSize: isMobile ? "1.2rem" : "1.5rem",
+                }}
+              >
+                Demonstrating:
+              </Typography>
               {currentStep.demonstrating.map((tech) => (
-                <span key={tech} className="demo-badge">
+                <Typography
+                  sx={{
+                    fontSize: isMobile ? "1.2rem" : "1.2rem",
+                    background: "linear-gradient(0deg, #6E00FF, #3E9EFF)",
+                    color: "white",
+                    padding: "0.25rem 0.75rem",
+                    borderRadius: "20px",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.5px",
+                  }}
+                >
                   {tech}
-                </span>
+                </Typography>
               ))}
             </div>
           )}
@@ -647,7 +674,7 @@ const RAGQuestScreen = ({ leadInfo, onComplete }) => {
                                 background:
                                   isSpeaking || isProcessing || isTyping
                                     ? "#6b7280"
-                                    : "#10b981",
+                                    : "linear-gradient(0deg, #6E00FF, #3E9EFF)",
                                 color: "white",
                                 border: "none",
                                 padding: "12px 24px",
@@ -777,7 +804,7 @@ const RAGQuestScreen = ({ leadInfo, onComplete }) => {
               onClick={handleComplete}
               className="complete-button"
               style={{
-                background: "linear-gradient(45deg, #10b981, #059669)",
+                background: "linear-gradient(-95deg, #6E00FF, #3E9EFF)",
                 color: "white",
                 border: "none",
                 padding: "0.75rem 1.5rem",
@@ -847,6 +874,8 @@ const RAGQuestScreen = ({ leadInfo, onComplete }) => {
           </div>
         </div>
       )}
+
+      <DemonstratingNER />
 
       <audio ref={audioRef} style={{ display: "none" }} />
     </div>
