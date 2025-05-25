@@ -1546,6 +1546,18 @@ const LeadCaptureScreen = ({ onNext }) => {
           position: "relative",
         }}
       >
+        <Typography
+          align="center"
+          sx={{
+            color: "#800080",
+            fontWeight: 600,
+            mb: 2,
+            fontSize: isTablet ? "1.2rem" : "2.6rem",
+            paddingLeft: "5rem",
+          }}
+        >
+          Experience the Power of AI With BytesizedAI
+        </Typography>
         <Box
           className="lead-capture-layout"
           sx={{
@@ -1645,6 +1657,18 @@ const LeadCaptureScreen = ({ onNext }) => {
         position: "relative",
       }}
     >
+      <Typography
+        align="center"
+        sx={{
+          color: "#800080",
+          fontWeight: 600,
+          mb: 2,
+          fontSize: isTablet ? "1.5rem" : "2.6rem",
+          paddingLeft: !isMobile ? "5rem" : "",
+        }}
+      >
+        Experience the Power of AI With BytesizedAI
+      </Typography>
       <Box
         // className="lead-capture-layout"
         sx={{

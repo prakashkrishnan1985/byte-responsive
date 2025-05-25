@@ -57,7 +57,8 @@ const DemonstratingNER = () => {
           color: "#800080",
           fontWeight: 600,
           mb: 2,
-          fontSize: isMobile ? "1.2rem" : "2.6rem",
+          fontSize: isMobile ? "1.5rem" : "2.6rem",
+          paddingLeft: !isMobile ? "5rem" : "",
         }}
       >
         Powered by ByteSized AI
