@@ -1706,7 +1706,7 @@ const LeadCaptureScreen = ({ onNext }) => {
                 <div className="demo-message">
                   <Typography
                     sx={{
-                      fontSize: isTablet ? "1.2rem" : "1.4rem",
+                      fontSize: isTablet ? "1.2rem" : "1.3rem",
                       textAlign: "center",
                     }}
                   >

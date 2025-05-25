@@ -1,7 +1,7 @@
 .rag-quest-layout {
     min-height: 100vh;
     padding: 2rem;
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    background: #000;
     color: white;
     font-family: 'Inter', sans-serif;
   }
@@ -12,6 +12,7 @@
   }
   
   .quest-header h1 {
+    color: #800080 !important;
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
@@ -101,11 +102,11 @@
   
   .history-entry.system {
     background: rgba(255, 255, 255, 0.1);
-    border-left: 4px solid #10b981;
+    border-left: 4px solid #e03bf6;
   }
   
   .user-message, .system-message {
-    font-size: 0.95rem;
+    font-size: 1.25rem;
     line-height: 1.5;
   }
   
@@ -149,12 +150,12 @@
   }
   
   .demo-badge {
-    background: linear-gradient(45deg, #10b981, #059669);
+    background: linear-gradient(180deg, #6E00FF, #3E9EFF);
     color: white;
     padding: 0.25rem 0.75rem;
     border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
+    font-size: 1rem;
+    font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
@@ -271,7 +272,7 @@
   }
   
   .suggestions-label {
-    font-size: 0.9rem;
+    font-size: 1.2rem;
     opacity: 0.8;
     margin-bottom: 0.75rem;
   }
@@ -288,7 +289,7 @@
     border: 1px solid rgba(255, 255, 255, 0.3);
     padding: 0.5rem 1rem;
     border-radius: 20px;
-    font-size: 0.9rem;
+    font-size: 1.2rem;
     cursor: pointer;
     transition: all 0.2s ease;
   }
