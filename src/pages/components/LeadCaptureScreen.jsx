@@ -100,7 +100,7 @@ const initSpeechSynthesis = () => {
       console.log("[TTS fallback] Talking:", text);
       if (onEnd) onEnd();
     },
-    stopSpeaking: () => {},
+    stopSpeaking: () => { },
     getVoices: () => [],
   });
 };
@@ -118,7 +118,7 @@ const buildSynthAPI = (synth, voices) => {
     voices.find((v) => v.lang.includes("en")) ||
     voices[0];
 
-  const speakThinking = (text, onEnd = () => {}) => {
+  const speakThinking = (text, onEnd = () => { }) => {
     if (!text) return;
     synth.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
@@ -130,7 +130,7 @@ const buildSynthAPI = (synth, voices) => {
     synth.speak(utterance);
   };
 
-  const speakTalking = (text, onEnd = () => {}, onStart = () => {}) => {
+  const speakTalking = (text, onEnd = () => { }, onStart = () => { }) => {
     if (!text) return;
     synth.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
@@ -174,7 +174,7 @@ const questions = [
   {
     key: "email",
     promptTemplate:
-      "Thanks {name}! Mind sharing your email? Totally optional...just in case you'd like a follow-up later.",
+      "Thanks {name}! Mind sharing your email? Totally optional...just in case you'd like a follow-up later. Speech isn't effective for this, just Key in your email.",
     prompt:
       "Mind sharing your email? Totally optional...just in case you'd like a follow-up later.",
     type: "email",
@@ -216,8 +216,7 @@ const tones = [
 
 const thinkingVariants = {
   inputMethod: (value) => [
-    `They chose to ${
-      value?.toLowerCase() || "..."
+    `They chose to ${value?.toLowerCase() || "..."
     } — next up, get their name for a more human touch.`,
     `${value} selected. Now, what's their name? Makes everything less robotic.`,
     `Input method locked in: ${value}. Time to ask who I'm talking to.`,
@@ -228,8 +227,7 @@ const thinkingVariants = {
     `The user prefers to ${value.toLowerCase()}. Now I should get their name so I can personalize our conversation.`,
   ],
   name: (value) => [
-    `They go by ${
-      value || "..."
+    `They go by ${value || "..."
     } — that's a start! Email next, but no pressure.`,
     `Name captured: ${value}. A good moment to ask for an email.`,
     `Cool, ${value} it is. I'll casually ask for an email now.`,
@@ -263,23 +261,23 @@ const thinkingVariants = {
   consentToPhoto: (value) =>
     value
       ? [
-          `They agreed to the photo — setting up the camera now.`,
-          `Photo consent granted. Initiating smile detection.`,
-          `Perfect! They're up for a picture. Getting things ready.`,
-          `Got the go-ahead for a photo. Let's see that smile.`,
-          `Photo? Yes. Let's power up the camera.`,
-          `Permission confirmed. Preparing the snapshot sequence.`,
-          `They're okay with the photo. Time to make it work.`,
-        ]
+        `They agreed to the photo — setting up the camera now.`,
+        `Photo consent granted. Initiating smile detection.`,
+        `Perfect! They're up for a picture. Getting things ready.`,
+        `Got the go-ahead for a photo. Let's see that smile.`,
+        `Photo? Yes. Let's power up the camera.`,
+        `Permission confirmed. Preparing the snapshot sequence.`,
+        `They're okay with the photo. Time to make it work.`,
+      ]
       : [
-          `They'd rather skip the photo — totally fine.`,
-          `No photo? No problem. Let's move on.`,
-          `They declined the photo. Respect that and continue.`,
-          `Skipping the camera step. Plenty more to cover.`,
-          `No photo access — that's their call. Onward.`,
-          `They're not comfortable with a photo. All good.`,
-          `Not taking a photo. I'll pivot to the tone question.`,
-        ],
+        `They'd rather skip the photo — totally fine.`,
+        `No photo? No problem. Let's move on.`,
+        `They declined the photo. Respect that and continue.`,
+        `Skipping the camera step. Plenty more to cover.`,
+        `No photo access — that's their call. Onward.`,
+        `They're not comfortable with a photo. All good.`,
+        `Not taking a photo. I'll pivot to the tone question.`,
+      ],
   welcomeMessage: () => [
     `Intro done. Time to ask about the quest.`,
     `Now that we've met, let's see if they want to try the quest.`,
@@ -292,23 +290,23 @@ const thinkingVariants = {
   questFlow: (value) =>
     value === "Yes, let's do it!"
       ? [
-          `They're excited for the quest! Let's launch the RAG interactive experience.`,
-          `Adventure time! They chose the quest — loading RAG up now.`,
-          `Perfect! They want the full experience. Quest mode activated to demonstrate RAG.`,
-          `Great choice! The quest will show them how RAG Works.`,
-          `They're up for it! Time to start the reimbursement riddle to demonstrate RAG.`,
-          `Quest selected. This will be fun and educational with our RAG Implementation.`,
-          `Loading the policy quest — they're going to love this interactive RAG approach.`,
-        ]
+        `They're excited for the quest! Let's launch the RAG interactive experience.`,
+        `Adventure time! They chose the quest — loading RAG up now.`,
+        `Perfect! They want the full experience. Quest mode activated to demonstrate RAG.`,
+        `Great choice! The quest will show them how RAG Works.`,
+        `They're up for it! Time to start the reimbursement riddle to demonstrate RAG.`,
+        `Quest selected. This will be fun and educational with our RAG Implementation.`,
+        `Loading the policy quest — they're going to love this interactive RAG approach.`,
+      ]
       : [
-          `They want to skip to the end — that's totally fine.`,
-          `No quest today. Let's wrap up with tone selection.`,
-          `They prefer the quick route. Moving to tone selection.`,
-          `Fair enough! Some people prefer efficiency. Let's finish up.`,
-          `Skipping the quest — straight to the final step.`,
-          `No worries about the quest. Let's pick a tone and finish.`,
-          `Quick and simple it is! Just need to select the tone.`,
-        ],
+        `They want to skip to the end — that's totally fine.`,
+        `No quest today. Let's wrap up with tone selection.`,
+        `They prefer the quick route. Moving to tone selection.`,
+        `Fair enough! Some people prefer efficiency. Let's finish up.`,
+        `Skipping the quest — straight to the final step.`,
+        `No worries about the quest. Let's pick a tone and finish.`,
+        `Quick and simple it is! Just need to select the tone.`,
+      ],
   default: () => [
     `Thinking about the next best step to keep this flowing...`,
     `Hmm... figuring out what makes sense to ask next.`,
@@ -429,6 +427,13 @@ const LeadCaptureScreen = ({ onNext }) => {
 
     return currentQuestion;
   })();
+
+  useEffect(() => {
+    const key = questions[step]?.key;
+    if (key === "email" || key === "name" || key === "text") {
+      setInputValue("");
+    }
+  }, [step]);
 
   // Function to show demo message that persists until stage changes
   const showDemoTech = (stage, additionalContext = {}) => {
@@ -840,25 +845,17 @@ const LeadCaptureScreen = ({ onNext }) => {
 
     const key = personalizedQuestion.key;
     const submittedValue = inputValue.trim();
-    setInputValue("");
 
-    console.log(`Submitting value for key: ${key} = "${submittedValue}"`);
+    setInputValue("");
 
     let finalValue = submittedValue;
 
     if (key === "name" && submittedValue) {
       try {
-        console.log("Calling extract-names API...");
         showDemoTech("speech_processing");
-
-        const response = await axios.post(`${API_BASE_URL}/extract-names`, {
-          text: submittedValue,
-        });
+        const response = await axios.post(`${API_BASE_URL}/extract-names`, { text: submittedValue });
         if (response.data.name) {
           finalValue = response.data.name;
-          console.log(
-            `Name refined from "${submittedValue}" to "${finalValue}"`
-          );
         }
       } catch (error) {
         console.error("Name extraction API error:", error);
@@ -869,23 +866,24 @@ const LeadCaptureScreen = ({ onNext }) => {
       showDemoTech("text_input");
     }
 
-    setLeadInfo((prev) => {
-      const newState = { ...prev, [key]: finalValue };
+    setLeadInfo((prev) => ({ ...prev, [key]: finalValue }));
 
-      const thinkingMsg = getUniqueThinkingMessage(key, finalValue);
+    const thinkingMsg = getUniqueThinkingMessage(key, finalValue);
+    setThinkingText("");
+    setIsThinking(true);
+    setWaitingForSpeechToEnd(false);
+    simulateThinkingTyping(thinkingMsg);
 
-      setThinkingText("");
-      setIsThinking(true);
-      setWaitingForSpeechToEnd(false);
-      simulateThinkingTyping(thinkingMsg);
+    setTimeout(() => {
+      const nextStep = step + 1;
+      setStep(nextStep);
 
-      setTimeout(() => {
-        setStep(step + 1);
-      }, 100);
-
-      return newState;
-    });
+      if (questions[nextStep]?.type === "email" || questions[nextStep]?.type === "text") {
+        setInputValue("");
+      }
+    }, 100);
   };
+
 
   const handleCheckboxChange = (e) => {
     if (!personalizedQuestion) return;
@@ -1381,9 +1379,8 @@ const LeadCaptureScreen = ({ onNext }) => {
         setIsSpeechBlocked(true);
         console.log("Speech blocked for audio playback");
 
-        const audioUrl = `${API_BASE_URL}${
-          response.data.audio_path
-        }?t=${Date.now()}`;
+        const audioUrl = `${API_BASE_URL}${response.data.audio_path
+          }?t=${Date.now()}`;
         audioRef.current.src = audioUrl;
 
         setLastSpokenStep(4);
@@ -1403,7 +1400,7 @@ const LeadCaptureScreen = ({ onNext }) => {
           audioRef.current.removeEventListener("ended", handleAudioComplete);
         };
 
-        audioRef.current.removeEventListener("ended", () => {});
+        audioRef.current.removeEventListener("ended", () => { });
         audioRef.current.addEventListener("ended", handleAudioComplete);
 
         setTimeout(() => {
@@ -1487,10 +1484,11 @@ const LeadCaptureScreen = ({ onNext }) => {
       setIsListening(false);
       showDemoTech("speech_processing");
 
-      setInputValue(text);
-      let finalValue = text.trim();
+      const spokenValue = text.trim();
+      setInputValue(spokenValue);
 
-      // Run name-extraction ONLY for the "name" question
+      let finalValue = spokenValue;
+
       if (personalizedQuestion?.key === "name") {
         try {
           const { data } = await axios.post(`${API_BASE_URL}/extract-names`, {
@@ -1507,7 +1505,7 @@ const LeadCaptureScreen = ({ onNext }) => {
       if (personalizedQuestion) {
         const key = personalizedQuestion.key;
         setLeadInfo((prev) => {
-          const newState = { ...prev, [key]: finalValue };
+          const updated = { ...prev, [key]: finalValue };
 
           const thinkingMsg = getUniqueThinkingMessage(key, finalValue);
           setThinkingText("");
@@ -1516,11 +1514,18 @@ const LeadCaptureScreen = ({ onNext }) => {
           simulateThinkingTyping(thinkingMsg);
 
           setTimeout(() => {
-            setStep(step + 1);
+            const nextStep = step + 1;
+            setStep(nextStep);
+
+            if (questions[nextStep]?.type === "email" ||
+              questions[nextStep]?.type === "text") {
+              setInputValue("");
+            }
+
             setCurrentTranscript("");
           }, 100);
 
-          return newState;
+          return updated;
         });
       }
     }
@@ -1652,8 +1657,8 @@ const LeadCaptureScreen = ({ onNext }) => {
         maxWidth: "100%",
         borderColor: "#353434d7",
         margin: "auto",
-        marginY: "2rem",
-        paddingY: "2rem",
+        // marginY: "2rem",
+        // paddingY: "2rem",
         position: "relative",
       }}
     >
@@ -1934,17 +1939,40 @@ const LeadCaptureScreen = ({ onNext }) => {
                     {personalizedQuestion.type === "email" && (
                       <>
                         <Input
+                          disableUnderline
                           type="email"
                           value={inputValue}
                           onChange={(e) => setInputValue(e.target.value)}
-                          placeholder={personalizedQuestion.placeholder}
+                          placeholder={
+                            leadInfo.name
+                              ? `Please key in your email, ${leadInfo.name}`
+                              : "Please key in your email"
+                          }
                           onKeyDown={(e) => {
                             if (e.key === "Enter") handleInputSubmit();
                           }}
                           sx={{
-                            fontSize: isMobile ? "1.2rem" : "1.8rem",
+                            fontSize: isMobile ? "1rem" : "1.1rem",
+
+                            "& input": {
+                              paddingTop: isMobile ? "12px" : "16px",
+                              paddingBottom: isMobile ? "12px" : "16px",
+                              lineHeight: 1.4,
+                              height: "3rem",
+                              marginBottom: "3rem",
+                              color: "white",               
+                            },
+
+             
+                            "& input::placeholder": {
+                              color: "#00000",            
+                              opacity: 1,                  
+                            },
                           }}
                         />
+
+
+
                         <Typography
                           className="optional-field-note"
                           sx={{
@@ -1973,11 +2001,10 @@ const LeadCaptureScreen = ({ onNext }) => {
                     {personalizedQuestion.type === "checkbox" && (
                       <div className="consent-options">
                         <Button
-                          className={`consent-button ${
-                            leadInfo[personalizedQuestion.key]
-                              ? "consent-yes-selected"
-                              : ""
-                          }`}
+                          className={`consent-button ${leadInfo[personalizedQuestion.key]
+                            ? "consent-yes-selected"
+                            : ""
+                            }`}
                           onClick={() =>
                             handleCheckboxChange({ target: { checked: true } })
                           }
@@ -2015,12 +2042,11 @@ const LeadCaptureScreen = ({ onNext }) => {
                           </Typography>
                         </Button>
                         <Button
-                          className={`consent-button ${
-                            leadInfo[personalizedQuestion.key] === false &&
+                          className={`consent-button ${leadInfo[personalizedQuestion.key] === false &&
                             leadInfo[personalizedQuestion.key] !== undefined
-                              ? "consent-no-selected"
-                              : ""
-                          }`}
+                            ? "consent-no-selected"
+                            : ""
+                            }`}
                           onClick={() =>
                             handleCheckboxChange({ target: { checked: false } })
                           }
@@ -2112,8 +2138,8 @@ const LeadCaptureScreen = ({ onNext }) => {
                         {isModelLoading
                           ? "Loading face detection..."
                           : smileDetected
-                          ? "Great smile! Capturing photo..."
-                          : "Please smile for the camera!"}
+                            ? "Great smile! Capturing photo..."
+                            : "Please smile for the camera!"}
                       </Typography>
                       <video
                         ref={videoRef}

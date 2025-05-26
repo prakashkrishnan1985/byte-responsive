@@ -125,6 +125,7 @@ input[type="email"]::placeholder {
   z-index: 1000;
   animation: slideInFromTop 0.5s ease-out;
   max-width: 90%;
+  padding-top: 3rem
 }
 .demo-message {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);

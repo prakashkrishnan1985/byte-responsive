@@ -126,7 +126,7 @@ const Nav: React.FC<NavProps> = (props: NavProps) => {
           "&:hover::after": {
             backgroundColor: "#800080", // Show underline on hover
           },
-          fontSize: "1.5rem",
+          fontSize: "1.3rem",
         }}
         onClick={(e: any) => {
           e.preventDefault();

@@ -41,7 +41,7 @@ const HomeLogo: React.FC = () => {
             ? logoWithText2
             : logoWithText1
         }
-        height={isMobile ? "75" : "105"}
+        height={isMobile ? "75" : "65"}
         alt="logo"
       />
     </Typography>
