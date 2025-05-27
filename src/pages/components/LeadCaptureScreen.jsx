@@ -203,20 +203,6 @@ const questions = [
     type: "choice",
     options: ["Yes, let's do it!", "Skip to finish"],
   },
-  {
-    key: "tone",
-    promptTemplate:
-      "Lastly, {name}, how should I sound? Pick a tone that matches your vibe.",
-    prompt: "Lastly, how should I sound? Pick a tone that matches your vibe.",
-    type: "tone",
-  },
-];
-
-const tones = [
-  "Joker (Dark Knight)",
-  "David Attenborough",
-  "Corporate Assistant",
-  "GPT Mode",
 ];
 
 const thinkingVariants = {
@@ -281,7 +267,6 @@ const thinkingVariants = {
         `Skipping the camera step. Plenty more to cover.`,
         `No photo access — that's their call. Onward.`,
         `They're not comfortable with a photo. All good.`,
-        `Not taking a photo. I'll pivot to the tone question.`,
       ],
   welcomeMessage: () => [
     `Intro done. Time to ask about the quest.`,
@@ -370,7 +355,6 @@ const LeadCaptureScreen = ({ onNext }) => {
     name: "",
     email: "",
     consentToPhoto: false,
-    tone: "",
     inputMethod: "",
     welcomeMessage: "",
     questFlow: "",
@@ -565,11 +549,6 @@ const LeadCaptureScreen = ({ onNext }) => {
       audio.removeEventListener("canplaythrough", handleReady);
     };
   }, []);
-
-  const moveToToneStep = () => {
-    console.log("Moving to tone selection step (step 5)");
-    setStep(6);
-  };
 
   useEffect(() => {
     if (step === 4) {
@@ -1012,28 +991,6 @@ const LeadCaptureScreen = ({ onNext }) => {
     });
   };
 
-  const handleToneSelect = (tone) => {
-    showDemoTech("data_processing");
-
-    const updatedInfo = {
-      ...leadInfo,
-      tone,
-    };
-
-    setLeadInfo(updatedInfo);
-
-    if (typeof onNext === "function") {
-      console.log("Calling onNext with leadInfo:", updatedInfo);
-      onNext(updatedInfo);
-    } else {
-      console.log(
-        "onNext is not a function, cannot proceed. Final data:",
-        updatedInfo
-      );
-      goToNextStep();
-    }
-  };
-
   const handleReset = () => {
     if (streamRef.current) {
       streamRef.current.getTracks().forEach((track) => track.stop());
@@ -1058,7 +1015,6 @@ const LeadCaptureScreen = ({ onNext }) => {
       name: "",
       email: "",
       consentToPhoto: false,
-      tone: "",
       inputMethod: "",
       welcomeMessage: "",
       questFlow: "",
@@ -2103,31 +2059,12 @@ const LeadCaptureScreen = ({ onNext }) => {
                       </div>
                     )}
 
-                    {personalizedQuestion.type === "tone" && (
-                      <div className="tone-selection">
-                        {tones.map((tone) => (
-                          <button
-                            key={tone}
-                            className={
-                              leadInfo.tone === tone ? "selected-tone" : ""
-                            }
-                            onClick={() => handleToneSelect(tone)}
-                          >
-                            {tone}
-                          </button>
-                        ))}
-                      </div>
-                    )}
-
                     {personalizedQuestion.type === "message" && (
                       <button
                         className="next-button"
                         onClick={() => {
-                          if (step === 4) {
-                            moveToToneStep();
-                          } else {
                             goToNextStep();
-                          }
+                          
                         }}
                       >
                         <Typography
