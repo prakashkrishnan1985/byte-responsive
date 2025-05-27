@@ -4,7 +4,8 @@
   import MicListener from "./DemoMicListener";
   import "./styles/RAGQuestScreen.css";
   import { Typography, useMediaQuery, useTheme } from "@mui/material";
-  import DemonstratingNER from "./DemonStraingComponent";
+  // import DemonstratingNER from "./DemonStraingComponent";
+  import DemonstratingRagQuest from "./DemonstratingRagQuest"
 
   const QUEST_API_BASE_URL = "https://model-api-dev.bytesized.com.au";
 
@@ -875,7 +876,7 @@
           </div>
         )}
 
-        <DemonstratingNER />
+        <DemonstratingRagQuest />
 
         <audio ref={audioRef} style={{ display: "none" }} />
       </div>
