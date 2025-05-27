@@ -8,6 +8,10 @@ import MicListener from "./DemoMicListener";
 import RAGQuestScreen from "./RAGQuestScreen";
 import "./styles/RAGQuestScreen.css";
 import { sendQuery, processAudio } from "./api";
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import SendIcon from '@mui/icons-material/Send';
 import {
   Box,
   Button,
@@ -16,6 +20,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+
 import DemonstratingNER from "./DemonStraingComponent";
 
 import micIcon from "../../../src/assets/icons/mic.svg";
@@ -1540,12 +1545,18 @@ const LeadCaptureScreen = ({ onNext }) => {
   const showTypewriter =
     personalizedQuestion && !isThinking && (!isSpeechMode || voiceStarted);
 
+    const isCameraActive =
+    personalizedQuestion?.key === 'consentToPhoto' &&
+    leadInfo.consentToPhoto &&
+    (isModelLoading || isProcessingImage); 
+
   if (questCompleted) {
     return (
       <Box
         sx={{
           padding: "2rem",
-          margin: "40px auto",
+          // margin: "40px auto",
+          mt: { xs: 2, md: 0 },
           maxWidth: "100%",
           minHeight: "100vh",
           position: "relative",
@@ -1554,7 +1565,7 @@ const LeadCaptureScreen = ({ onNext }) => {
         <Typography
           align="center"
           sx={{
-            color: "#800080",
+            color: "#eb13eb",
             fontWeight: 600,
             mb: 2,
             fontSize: isTablet ? "1.2rem" : "2.6rem",
@@ -1662,7 +1673,7 @@ const LeadCaptureScreen = ({ onNext }) => {
         position: "relative",
       }}
     >
-      <Typography
+      {/* <Typography
         align="center"
         sx={{
           color: "#800080",
@@ -1673,7 +1684,7 @@ const LeadCaptureScreen = ({ onNext }) => {
         }}
       >
         Experience the Power of AI With BytesizedAI
-      </Typography>
+      </Typography> */}
       <Box
         // className="lead-capture-layout"
         sx={{
@@ -1687,7 +1698,9 @@ const LeadCaptureScreen = ({ onNext }) => {
           padding: "2rem",
           minHeight: "50vh",
           height: "100%",
-          margin: "40px auto",
+          // margin: "40px auto",
+          mx: "auto",
+          mt: { xs: 1, md: 3 },
           "@media (max-width: 800px)": {
             flexDirection: "column",
             gap: "2rem",
@@ -1712,8 +1725,10 @@ const LeadCaptureScreen = ({ onNext }) => {
               display: "flex",
               justifyContent: "center",
               width: isTablet ? "100%" : "auto",
-              paddingBottom: "20px",
-              paddingTop: "50px",
+              // paddingBottom: "20px",
+              // paddingTop: "50px",
+              pb: 2,
+              pt: { xs: 1, md: 0.5 }
             }}
           >
             <Orb
@@ -1902,72 +1917,88 @@ const LeadCaptureScreen = ({ onNext }) => {
                           </div>
                         ) : (
                           <>
-                            <Input
-                              type="text"
+                            <OutlinedInput
+                              fullWidth
                               value={inputValue}
-                              onChange={(e) => setInputValue(e.target.value)}
+                              onChange={e => setInputValue(e.target.value)}
                               placeholder={personalizedQuestion.placeholder}
-                              onKeyDown={(e) => {
-                                if (
-                                  e.key === "Enter" &&
-                                  inputValue.trim() !== ""
-                                )
-                                  handleInputSubmit();
-                              }}
+                              onKeyDown={e =>
+                                e.key === 'Enter' && inputValue.trim() && handleInputSubmit()
+                              }
+                              endAdornment={
+                                <InputAdornment position="end">
+                                  <IconButton
+                                    edge="end"
+                                    onClick={handleInputSubmit}
+                                    disabled={!inputValue.trim()}
+                                    sx={{
+                                      color: '#6E00FF',
+                                      '&.Mui-disabled': { color: '#6E00FF', opacity: .35 },
+                                    }}
+                                  >
+                                    <SendIcon fontSize="small" />
+                                  </IconButton>
+                                </InputAdornment>
+                              }
                               sx={{
-                                fontSize: isMobile ? "1.2rem" : "1.8rem",
+                                bgcolor: '#1f1f1f',
+                                borderRadius: 1.5,
+                                color: 'white',
+                                fontSize: isMobile ? '1.2rem' : '1.8rem',
+                                'input::placeholder': { opacity: .6 },
+
+                                '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
+                                '&:hover .MuiOutlinedInput-notchedOutline': { border: 'none' },
+                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': { border: 'none' },
                               }}
                             />
-                            <button
-                              className="next-button"
-                              onClick={handleInputSubmit}
-                              disabled={!inputValue.trim()}
-                            >
-                              <Typography
-                                sx={{
-                                  fontSize: isMobile ? "1.2rem" : "1.8rem",
-                                }}
-                              >
-                                Next →
-                              </Typography>
-                            </button>
+
                           </>
                         )}
                       </>
                     )}
 
-                    {personalizedQuestion.type === "email" && (
+                    {personalizedQuestion.type === 'email' && (
                       <>
-                        <Input
-                          disableUnderline
-                          type="email"
+                        <OutlinedInput
+                          fullWidth
                           value={inputValue}
-                          onChange={(e) => setInputValue(e.target.value)}
+                          onChange={e => setInputValue(e.target.value)}
                           placeholder={
                             leadInfo.name
                               ? `Please key in your email, ${leadInfo.name}`
-                              : "Please key in your email"
+                              : 'Please key in your email'
                           }
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") handleInputSubmit();
-                          }}
+                          onKeyDown={e =>
+                            e.key === 'Enter' && handleInputSubmit()       
+                          }
+                          endAdornment={
+                            <InputAdornment position="end">
+                              <IconButton
+                                edge="end"
+                                onClick={handleInputSubmit}
+                                disabled={!inputValue.trim()}
+                                sx={{
+                                  color: '#6E00FF',                        
+                                  '&.Mui-disabled': {
+                                    color: '#6E00FF',                      
+                                    opacity: .35,                          
+                                  },
+                                }}
+                              >
+                                <SendIcon fontSize="small" />
+                              </IconButton>
+                            </InputAdornment>
+                          }
                           sx={{
-                            fontSize: isMobile ? "1rem" : "1.1rem",
-
-                            "& input": {
-                              paddingTop: isMobile ? "12px" : "16px",
-                              paddingBottom: isMobile ? "12px" : "16px",
-                              lineHeight: 1.4,
-                              height: "3rem",
-                              marginBottom: "3rem",
-                              color: "white",               
-                            },
-
-             
-                            "& input::placeholder": {
-                              color: "#00000",            
-                              opacity: 1,                  
-                            },
+                            bgcolor: '#1f1f1f',
+                            borderRadius: 1.5,
+                            color: 'white',
+                            fontSize: isMobile ? '1.2rem' : '1.8rem',
+                            'input::placeholder': { opacity: .6 },
+                            '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
+                            '&:hover .MuiOutlinedInput-notchedOutline': { border: 'none' },
+                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': { border: 'none' },
                           }}
                         />
 
@@ -1975,30 +2006,16 @@ const LeadCaptureScreen = ({ onNext }) => {
 
                         <Typography
                           className="optional-field-note"
-                          sx={{
-                            fontSize: isMobile ? "1.2rem" : "1.5rem",
-                          }}
+                          sx={{ fontSize: isMobile ? '1.2rem' : '1.5rem', mt: 1.5 }}
                         >
                           {isSpeechMode
                             ? "Totally optional! Drop your email if you’d like updates or support no spam, no nonsense, just the good stuff. Or skip it and hit Next"
                             : "This field is optional. You can leave it blank and click Next."}
                         </Typography>
-                        <button
-                          className="next-button"
-                          onClick={handleInputSubmit}
-                        >
-                          <Typography
-                            sx={{
-                              fontSize: isMobile ? "1.2rem" : "1.8rem",
-                            }}
-                          >
-                            Next →
-                          </Typography>
-                        </button>
                       </>
                     )}
 
-                    {personalizedQuestion.type === "checkbox" && (
+                    {personalizedQuestion.type === "checkbox" && !isCameraActive &&  (
                       <div className="consent-options">
                         <Button
                           className={`consent-button ${leadInfo[personalizedQuestion.key]

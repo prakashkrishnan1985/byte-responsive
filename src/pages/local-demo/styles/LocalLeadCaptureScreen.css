@@ -90,6 +90,8 @@ input[type="email"] {
   background-color: #2a2a2a !important;
   color: #f2f2f2 !important;
   box-sizing: border-box !important;
+  height: 3rem;
+
 }
 
 input[type="text"]:focus,
@@ -119,7 +121,7 @@ input[type="email"]::placeholder {
 
 .demo-message-container {
   position: absolute;
-  top: 30px;
+  top: -72px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1000;

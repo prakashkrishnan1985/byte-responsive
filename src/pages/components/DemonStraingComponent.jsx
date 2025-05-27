@@ -11,58 +11,66 @@ import {
 const acts = [
   {
     title: "ACT 1",
-    desc: "Analyses customer feedback and social media comments to understand overall sentiment toward each product (positive, neutral, or negative)",
-    button: "Email Engine",
+    desc: "Converts spoken feedback or audio recordings into text format for analysis, capturing customer input efficiently for further processing.",
+    button: "Speech to Text",
   },
   {
     title: "ACT 2",
-    desc: "Analyses customer feedback and social media comments to understand overall sentiment toward each product (positive, neutral, or negative)",
-    button: "Sentiment analysis",
+    desc: "Converts the retrieved text-based insights into natural-sounding speech, making information accessible through voice interfaces.",
+    button: "Text To Speech",
   },
   {
     title: "ACT 3",
-    desc: 'Extracts relevant keywords and key phrases from customer feedback, identifying popular product attributes (e.g. "lightweight", “durable”)',
-    button: "Email Engine",
+    desc: "Extracts names and other key entities from text using named entity recognition, enabling precise personalization and data extraction.",
+    button: "NER",
   },
   {
     title: "ACT 4",
-    desc: "Synthesises the output of Sentiment Analysis and Keyword Extraction to generate a cohesive, engaging product description",
-    button: "LLM",
+    desc: "Detects facial expressions and emotions from customer images or videos, adding a visual layer to sentiment analysis.",
+    button: "Expression Recognition",
   },
   {
     title: "ACT 5",
-    desc: "Synthesises the output of Sentiment Analysis and Keyword Extraction to generate a cohesive, engaging product description",
+    desc: "Transforms raw customer feedback into a cohesive narrative, extracting key themes to tell the story of demo experience.",
     button: "LLM",
   },
 ];
 
+
 const DemonstratingNER = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("xl")); // Check if mobile screen
+  const isMobile = useMediaQuery(theme.breakpoints.down("xl")); 
   const isTablet = useMediaQuery("(max-width:800px)");
   return (
     <Box
-      sx={{
-        mt: 6,
-        px: 4,
-        py: 6,
-        width: "100%",
-        margin: "auto",
-        paddingTop: "0px !important",
-      }}
-    >
-      <Typography
-        align="center"
+    sx={{
+      mt: { xs: 2, md: -10 },  
+      px: 4,
+      py: { xs: 4, md: 6 },   
+      width: '100%',
+      margin: 'auto',
+    }}
+  >
+      <Box
         sx={{
-          color: "#800080",
-          fontWeight: 600,
-          mb: 2,
-          fontSize: isMobile ? "1.5rem" : "2.6rem",
-          paddingLeft: !isMobile ? "5rem" : "",
+          width: '100%',
+          backgroundColor: '#800080',   
+          py: 1,                        
+          textAlign: 'center',
         }}
       >
-        Powered by ByteSized AI
-      </Typography>
+        <Typography
+          sx={{
+            color: '#fff',
+            fontWeight: 400,
+            fontSize: isMobile ? '1.5rem' : '2.6rem',
+            m: 0,                     
+          }}
+        >
+          Powered by ByteSized AI
+        </Typography>
+      </Box>
+
       <Grid
         container
         spacing={0}
@@ -95,14 +103,14 @@ const DemonstratingNER = () => {
                 borderRight: isTablet
                   ? "1px solid #353434d7"
                   : index === acts.length - 1
-                  ? ""
-                  : "1px solid #353434d7",
+                    ? ""
+                    : "1px solid #353434d7",
                 borderTop: "1px solid #353434d7",
                 borderBottom: isTablet
                   ? "1px solid #353434d7"
                   : index === 0 || index === acts.length - 1
-                  ? ""
-                  : "1px solid #353434d7",
+                    ? ""
+                    : "1px solid #353434d7",
                 borderLeft: isTablet ? "0.5px solid #353434d7" : "",
                 position: "relative",
                 display: "flex",
